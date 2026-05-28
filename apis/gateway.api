@@ -1,0 +1,19 @@
+syntax = "v1"
+
+info (
+	title:  "gonna gateway api"
+	desc:   "Minimal gateway API for the gonna go-zero framework baseline"
+	author: "gonna"
+)
+
+type HealthReq {}
+
+type HealthResp {
+	Status string `json:"status"`
+}
+
+service gateway-api {
+	@handler Health
+	get /health (HealthReq) returns (HealthResp)
+}
+

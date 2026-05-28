@@ -1,0 +1,33 @@
+# Implementation Report
+
+Story: `STORY-X-XX`
+Status: `Implemented | Partially Implemented | Blocked`
+
+## Summary
+
+- {summary}
+
+## Generated Code
+
+- {path}: {reason}
+
+## Manual Implementation
+
+- {path}: {change}
+
+## Validation
+
+| Command | Result | Notes |
+| --- | --- | --- |
+| `go fmt ./...` | {result} | {notes} |
+| `go test ./...` | {result} | {notes} |
+| `go build ./...` | {result} | {notes} |
+
+## Acceptance Criteria
+
+- [ ] {criterion}
+- [ ] {criterion}
+
+## Gaps and Follow-Up
+
+- {gap or follow-up}

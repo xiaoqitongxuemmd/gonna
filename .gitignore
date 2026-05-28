@@ -1,0 +1,20 @@
+# Local environment
+.env
+.env.*
+!.env.example
+deploy/local/.env
+
+# Go build outputs
+bin/
+coverage.out
+*.test
+
+# Logs and reports
+logs/
+test_reports/
+
+# Editor and OS files
+.DS_Store
+.idea/
+.vscode/
+
