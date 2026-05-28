@@ -54,6 +54,12 @@ Prefer one of these inputs:
 
 When a Story is referenced, read it first. Extract acceptance criteria, validation plan, design references, source documents, dependencies, and expected go-zero boundaries.
 
+## Language Policy
+
+Produce human-facing test output in Simplified Chinese by default. This includes test plans, test reports, defect reports, completion recommendations, risk notes, validation summaries, and user-facing explanations.
+
+Keep test names, commands, paths, status enum values, severity values, coverage metrics, API/RPC names, and raw error output in their required technical form. Skill instructions and templates may remain in English.
+
 ## Internal References
 
 Use these project resources as internal references. The user should not need to invoke them directly.

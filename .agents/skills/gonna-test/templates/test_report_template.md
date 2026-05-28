@@ -1,5 +1,7 @@
 # Test Report
 
+When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep IDs, result values, commands, paths, coverage targets, and raw output in their required technical form.
+
 Story: `STORY-X-XX`
 Result: `Pass | Conditional Pass | Fail`
 Generated: `YYYY-MM-DD`

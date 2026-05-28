@@ -1,5 +1,7 @@
 # Defect Report
 
+When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep IDs, severity values, status values, test layer names, commands, paths, and raw output in their required technical form.
+
 Defect ID: `TEST-DEFECT-X`
 Severity: `P0 | P1 | P2 | P3`
 Status: `OPEN | FIXED | VERIFIED | WONT_FIX`

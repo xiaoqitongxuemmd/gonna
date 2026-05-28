@@ -1,5 +1,7 @@
 # Progress KANBAN
 
+When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep Story IDs, status column names, priority values, metadata keys, and paths in their required technical form.
+
 Source: `docs/scrum/story/`
 Generated: `YYYY-MM-DD`
 

@@ -51,6 +51,12 @@ Prefer one of these inputs:
 
 When input is incomplete, state assumptions and open questions rather than inventing hidden requirements.
 
+## Language Policy
+
+Produce human-facing planning output in Simplified Chinese by default. This includes planning breakdowns, Epic files, Story files, Sprint plans, KANBAN views, progress summaries, acceptance criteria, risks, and open questions.
+
+Keep Story IDs, Epic IDs, status enum values, priority values, tags, file paths, code identifiers, commands, and YAML metadata keys in their required technical form. Skill instructions and templates may remain in English.
+
 ## Internal go-zero References
 
 When splitting go-zero implementation work, use these references as needed so Stories align with real engineering boundaries:

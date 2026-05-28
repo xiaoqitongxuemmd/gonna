@@ -1,5 +1,7 @@
 # Local Environment Healthcheck Report
 
+When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep commands, paths, service names, status literals, ports, and config keys in their required technical form.
+
 Environment Profile: `minimal | integration | observability`
 Generated: `YYYY-MM-DD`
 

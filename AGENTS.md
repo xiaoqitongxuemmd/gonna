@@ -28,6 +28,14 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Do not ask the user to invoke `ai-context` or `zero-skills` directly for normal project work.
 - Load the specific go-zero reference files only when the architecture task needs that level of detail.
 
+## Language Policy
+
+- Human-facing artifacts produced inside this repository must be written in Simplified Chinese by default.
+- This includes README files, design documents, architecture handoffs, environment runbooks, Epic and Story files, KANBAN views, implementation reports, PR descriptions, test plans, test reports, defect reports, and user-facing summaries.
+- Keep code, commands, paths, identifiers, API/RPC field names, status enum values, commit messages, and configuration keys in their original language or required technical form.
+- Project skills, agent instructions, templates, and embedded reference/framework documentation may be written in English because they are AI/runtime guidance rather than final user-facing deliverables.
+- If an upstream source document is in English, preserve exact technical terms when needed, but explain decisions and generated project documents in Simplified Chinese.
+
 ## go-zero Conventions
 
 - Create or update `.api` or `.proto` specs before generating code.
@@ -71,4 +79,5 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Use `gonna-env` when integration or observability verification requires local dependencies.
 - Let `gonna-test` decide which go-zero and `zero-skills` verification references to load.
 - Project skills and agent instructions should be written in English.
+- User-facing project documents produced by those skills should be written in Simplified Chinese.
 - Avoid decorative status icons in project skills and agent instructions.

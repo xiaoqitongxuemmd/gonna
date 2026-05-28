@@ -1,5 +1,7 @@
 # Local Environment Variables
 
+When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep environment variable names, config keys, commands, paths, ports, and protocol names in their required technical form.
+
 Copy this guidance into `deploy/local/.env.example` or use it to create a project-specific local env file.
 
 Do not commit real secrets.

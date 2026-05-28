@@ -56,6 +56,12 @@ Prefer one of these inputs:
 
 When a Story is referenced, read it before editing code. Extract acceptance criteria, dependencies, design references, source documents, implementation notes, and validation plan.
 
+## Language Policy
+
+Produce human-facing development output in Simplified Chinese by default. This includes implementation reports, PR descriptions, validation summaries, code change summaries, known gaps, follow-up notes, and user-facing explanations.
+
+Keep code identifiers, paths, commands, commit message subjects, package names, API/RPC names, config keys, and generated code comments in their required technical form. Skill instructions and templates may remain in English.
+
 ## Internal References
 
 Use these project resources as internal references. The user should not need to invoke them directly.

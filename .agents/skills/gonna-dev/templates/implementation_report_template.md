@@ -1,5 +1,7 @@
 # Implementation Report
 
+When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep commands, paths, identifiers, and status literals in their required technical form.
+
 Story: `STORY-X-XX`
 Status: `Implemented | Partially Implemented | Blocked`
 

@@ -1,5 +1,7 @@
 # Summary
 
+When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep commands, paths, identifiers, and status literals in their required technical form.
+
 - {change}
 - {change}
 

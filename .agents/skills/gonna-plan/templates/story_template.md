@@ -18,6 +18,8 @@ created_at: "YYYY-MM-DD"
 updated_at: "YYYY-MM-DD"
 ---
 
+<!-- When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep YAML keys, IDs, status values, priority values, tags, paths, and technical identifiers in their required technical form. -->
+
 # STORY-{epic_number}-{story_number}: {title}
 
 ## Value

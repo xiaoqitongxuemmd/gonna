@@ -55,6 +55,12 @@ Prefer one of these inputs:
 
 When input is incomplete, produce an environment proposal and clearly mark assumptions.
 
+## Language Policy
+
+Produce human-facing environment output in Simplified Chinese by default. This includes local environment plans, `deploy/local/README.md`, environment runbooks, healthcheck reports, observability notes, dependency explanations, and user-facing summaries.
+
+Keep Docker image names, service names, ports, environment variable names, config keys, paths, commands, and protocol names in their required technical form. Skill instructions, templates, and low-level config files may remain in English when that is the natural technical format.
+
 ## Internal References
 
 Use these project resources as internal references:

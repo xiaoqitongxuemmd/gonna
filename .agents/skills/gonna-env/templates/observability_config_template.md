@@ -1,5 +1,7 @@
 # Observability Config Template
 
+When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep file paths, service names, ports, protocol names, and telemetry field names in their required technical form.
+
 Use this as a planning template before creating concrete files under `deploy/local/observability/`.
 
 ## OpenTelemetry Collector

@@ -73,6 +73,12 @@ This skill owns architecture decisions and architecture facts. It should answer:
 
 Do not leave downstream skills to guess architecture decisions. Produce explicit artifacts or handoff sections that `gonna-plan`, `gonna-env`, `gonna-dev`, `gonna-test`, and future `gonna-deploy` can consume.
 
+## Language Policy
+
+Produce human-facing architecture output in Simplified Chinese by default. This includes architecture analysis, maintained design documents under `docs/design/`, scaffold plans, environment contracts, observability architecture, implementation handoffs, review notes, and user-facing summaries.
+
+Keep code identifiers, paths, commands, API/RPC field names, config keys, status values, and upstream technical terms in their required technical form. Skill instructions and embedded reference documents may remain in English.
+
 ## Internal References
 
 Use these project resources as references for this skill. The user should not need to invoke them directly.

@@ -1,5 +1,7 @@
 # Test Plan
 
+When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep IDs, test layer names, commands, paths, coverage targets, and API/RPC names in their required technical form.
+
 Story: `STORY-X-XX`
 Scope: `{scope}`
 
