@@ -46,6 +46,12 @@ gonna-arch -> gonna-plan -> gonna-env -> gonna-dev -> gonna-test -> future gonna
 
 skill、agent instructions、模板和内嵌 reference 这类框架指导材料可以使用英文。代码、命令、路径、配置键、API/RPC 字段、状态枚举和必要技术术语保持原始技术形式。
 
+## 设计文档约定
+
+`docs/design/` 只放当前项目已经通过 `gonna-arch` 生成并采纳的架构事实文档。初始仓库不预置 `*_vX.Y.Z.md` 设计文档。
+
+`gonna-arch` 可产出的架构文档模板位于 `.agents/skills/gonna-arch/templates/`。当用户提供 PRD、规格说明或设计文档后，`gonna-arch` 再基于这些模板生成对应的 `docs/design/*_vX.Y.Z.md`。
+
 ## 仓库结构
 
 ```text

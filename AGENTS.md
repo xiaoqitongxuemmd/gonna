@@ -27,6 +27,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Treat `.agents/ai-context/` and `.agents/skills/zero-skills/` as references that support the architecture skill.
 - Do not ask the user to invoke `ai-context` or `zero-skills` directly for normal project work.
 - Load the specific go-zero reference files only when the architecture task needs that level of detail.
+- Treat `docs/design/` as accepted project architecture facts only; architecture document templates live under `.agents/skills/gonna-arch/templates/`.
 
 ## Language Policy
 

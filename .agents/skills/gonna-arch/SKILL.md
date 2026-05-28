@@ -127,6 +127,10 @@ Produce:
 
 Use when the output should become a maintained project artifact under `docs/design/`.
 
+`docs/design/` is reserved for accepted project architecture facts. Do not keep default framework baseline documents there. Generate files in `docs/design/` only after the user provides source material or explicitly asks to create architecture artifacts for the current project.
+
+Prefer producing a split document set from the beginning. Keep `system_architecture_vX.Y.Z.md` as the overview and index, and place detailed decisions in topic-specific documents. Create only the documents required by the current source material.
+
 Produce or update one or more versioned files:
 
 - `docs/design/system_architecture_vX.Y.Z.md`
@@ -142,7 +146,22 @@ Produce or update one or more versioned files:
 - `docs/design/resilience_architecture_vX.Y.Z.md`
 - `docs/design/migration_plan_vX.Y.Z.md`
 
-Do not create every document for every task. Create the smallest set that gives downstream work a clear source of truth.
+Use the matching templates in `.agents/skills/gonna-arch/templates/` when writing these documents:
+
+- `system_architecture_template.md`
+- `service_layer_architecture_template.md`
+- `api_design_template.md`
+- `rpc_contract_template.md`
+- `event_contract_template.md`
+- `data_layer_design_template.md`
+- `scaffold_architecture_template.md`
+- `environment_contract_template.md`
+- `observability_architecture_template.md`
+- `security_architecture_template.md`
+- `resilience_architecture_template.md`
+- `migration_plan_template.md`
+
+Do not create every document for every task. Create the smallest split set that gives downstream work a clear source of truth.
 
 ### 3. go-zero Implementation Handoff
 
@@ -180,6 +199,8 @@ Produce:
 
 The scaffold plan should prefer go-zero conventions and `goctl` generation. Avoid inventing custom framework structure unless the source document requires it.
 
+When the scaffold plan becomes a maintained project artifact, write it to `docs/design/scaffold_architecture_vX.Y.Z.md` using `.agents/skills/gonna-arch/templates/scaffold_architecture_template.md`.
+
 ### 5. Technical Stack Decision
 
 Use when starting the project, adding a major capability, or changing infrastructure.
@@ -200,6 +221,8 @@ Use when project setup, local debugging, integration testing, or a new feature n
 
 Produce or update `docs/design/environment_contract_vX.Y.Z.md`.
 
+Use `.agents/skills/gonna-arch/templates/environment_contract_template.md` for the maintained document.
+
 The contract should define:
 
 - Required and optional local dependencies
@@ -218,6 +241,8 @@ This skill decides what the environment requires. `gonna-env` materializes it in
 Use when the system needs metrics, tracing, logging, dashboards, or local observability.
 
 Produce or update `docs/design/observability_architecture_vX.Y.Z.md`.
+
+Use `.agents/skills/gonna-arch/templates/observability_architecture_template.md` for the maintained document.
 
 Define:
 
