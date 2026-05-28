@@ -37,6 +37,17 @@ Each project skill has a focused role:
 - `gonna-dev` implements Stories using go-zero conventions, goctl generation, ServiceContext wiring, and focused validation.
 - `gonna-test` verifies acceptance criteria, API/RPC behavior, integration paths, and quality gates.
 
+## Embedded References
+
+The following upstream projects are embedded as ordinary repository files so the
+framework stays self-contained and stable for AI-assisted workflows:
+
+- `.agents/ai-context/`: [zeromicro/ai-context](https://github.com/zeromicro/ai-context)
+- `.agents/skills/zero-skills/`: [zeromicro/zero-skills](https://github.com/zeromicro/zero-skills)
+
+They are reference inputs for the local `gonna-*` skills. Update them
+intentionally when the project wants to adopt newer go-zero guidance.
+
 ## Repository Layout
 
 ```text
@@ -54,13 +65,7 @@ Each project skill has a focused role:
 
 ## Quick Start
 
-Initialize or refresh submodules first:
-
-```bash
-git submodule update --init --recursive
-```
-
-Then run the framework checks:
+Run the framework checks:
 
 ```bash
 make tools-check

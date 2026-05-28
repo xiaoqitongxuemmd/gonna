@@ -1,6 +1,0 @@
-[submodule ".agents/ai-context"]
-	path = .agents/ai-context
-	url = https://github.com/zeromicro/ai-context.git
-[submodule ".agents/skills/zero-skills"]
-	path = .agents/skills/zero-skills
-	url = https://github.com/zeromicro/zero-skills.git
