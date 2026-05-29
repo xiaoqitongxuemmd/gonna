@@ -20,16 +20,17 @@
 ## Skill 链路
 
 ```text
-gonna-arch -> gonna-plan -> gonna-env -> gonna-dev -> gonna-test -> future gonna-deploy
+gonna-arch -> gonna-plan -> gonna-env -> gonna-dev -> gonna-test -> gonna-submit -> future gonna-devops -> future gonna-deploy
 ```
 
 每个项目 skill 都有明确职责：
 
 - `gonna-arch` 将 PRD、规格说明和设计文档转化为 go-zero 架构、服务边界、契约、脚手架规划和环境契约。
-- `gonna-plan` 将架构输出拆分为 Epic、Story、验收标准和 KANBAN 进展视图。
+- `gonna-plan` 将架构输出拆分并落成 AI 可执行的 Epic、Story、验收标准、依赖顺序和 KANBAN 进展视图。
 - `gonna-env` 准备本地依赖、Docker Compose profiles、健康检查和可观测性接入。
 - `gonna-dev` 基于 go-zero 约定、goctl 生成、ServiceContext 注入和聚焦验证来实现 Story。
 - `gonna-test` 验证验收标准、API/RPC 行为、集成路径和质量门禁。
+- `gonna-submit` 将已经实现并验证过的变更整理成可评审提交，包括 commit plan、commit message、MR 描述和 submission report。
 
 ## 内嵌参考资料
 

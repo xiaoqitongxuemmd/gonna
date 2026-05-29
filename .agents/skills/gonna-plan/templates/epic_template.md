@@ -6,9 +6,7 @@ status: "TODO"
 priority: "P1"
 layer: "APP_LAYER"
 owner: ""
-start_date: ""
-target_date: ""
-completed_date: ""
+execution_order: 0
 stories: []
 dependencies: []
 tags: []
@@ -38,6 +36,10 @@ Out of scope:
 ## Stories
 
 - [ ] STORY-{number}-01: {story title}
+
+## Execution Order
+
+- {dependency or sequence note}
 
 ## Acceptance Criteria
 

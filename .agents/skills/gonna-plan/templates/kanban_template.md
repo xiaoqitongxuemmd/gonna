@@ -16,35 +16,35 @@ Generated: `YYYY-MM-DD`
 
 ## TODO
 
-| Story | Priority | Points | Assignee | Target | Title |
+| Story | Priority | Complexity | Layer | Blockers | Title |
 | --- | --- | --- | --- | --- | --- |
 
 ## IN_PROGRESS
 
-| Story | Priority | Points | Assignee | Target | Title |
+| Story | Priority | Complexity | Layer | Blockers | Title |
 | --- | --- | --- | --- | --- | --- |
 
 ## IN_REVIEW
 
-| Story | Priority | Points | Assignee | Target | Title |
+| Story | Priority | Complexity | Layer | Blockers | Title |
 | --- | --- | --- | --- | --- | --- |
 
 ## TESTING
 
-| Story | Priority | Points | Assignee | Target | Title |
+| Story | Priority | Complexity | Layer | Blockers | Title |
 | --- | --- | --- | --- | --- | --- |
 
 ## BLOCKED
 
-| Story | Priority | Points | Assignee | Target | Title |
+| Story | Priority | Complexity | Layer | Blockers | Title |
 | --- | --- | --- | --- | --- | --- |
 
 ## COMPLETED
 
-| Story | Priority | Points | Assignee | Target | Title |
+| Story | Priority | Complexity | Layer | Blockers | Title |
 | --- | --- | --- | --- | --- | --- |
 
 ## CANCELLED
 
-| Story | Priority | Points | Assignee | Target | Title |
+| Story | Priority | Complexity | Layer | Blockers | Title |
 | --- | --- | --- | --- | --- | --- |

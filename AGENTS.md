@@ -11,6 +11,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Environment skill: `gonna-env` at `.agents/skills/gonna-env/SKILL.md`
 - Development skill: `gonna-dev` at `.agents/skills/gonna-dev/SKILL.md`
 - Test skill: `gonna-test` at `.agents/skills/gonna-test/SKILL.md`
+- Submission skill: `gonna-submit` at `.agents/skills/gonna-submit/SKILL.md`
 - go-zero workflow reference for arch: `.agents/ai-context/00-instructions.md`
 - go-zero task workflow reference for arch: `.agents/ai-context/workflows.md`
 - goctl command reference for arch: `.agents/ai-context/tools.md`
@@ -20,10 +21,11 @@ It is intended to integrate project-level skills for architecture, planning, dev
 ## Default Rules
 
 - Use `gonna-arch` as the main entry for source document analysis, architecture design, technical stack decisions, service decomposition, API/RPC/event/data contracts, scaffold planning, environment contracts, observability architecture, resilience/security design, migration planning, and implementation handoff.
-- Use `gonna-plan` when the user asks to split architecture output, implementation handoff, PRDs, specifications, or design documents into Epics, Stories, acceptance criteria, Sprint scope, or backlog.
+- Use `gonna-plan` when the user asks to split architecture output, implementation handoff, PRDs, specifications, or design documents into Epics, Stories, acceptance criteria, dependency order, execution scope, or AI-readable backlog.
 - Use `gonna-env` when the user asks to create, update, run, or verify local development/debug environments, dependency containers, Docker Compose profiles, environment variables, go-zero config mapping, health checks, or local observability with OpenTelemetry, Prometheus, Grafana, tracing, or logs.
 - Use `gonna-dev` when the user asks to implement Stories, generate go-zero code, modify API/RPC/model/logic/config, fix bugs, add tests, run validation, or prepare implementation reports.
 - Use `gonna-test` when the user asks to design tests, verify Story acceptance criteria, validate implementations, evaluate coverage, run or interpret test/build output, produce test reports, report defects, or decide whether a Story can be completed.
+- Use `gonna-submit` when the user asks to prepare, review, stage, commit, push, or package verified changes for merge request submission; create commit plans, commit messages, merge request descriptions, or submission reports.
 - Treat `.agents/ai-context/` and `.agents/skills/zero-skills/` as references that support the architecture skill.
 - Do not ask the user to invoke `ai-context` or `zero-skills` directly for normal project work.
 - Load the specific go-zero reference files only when the architecture task needs that level of detail.
@@ -56,9 +58,11 @@ It is intended to integrate project-level skills for architecture, planning, dev
 
 ## Planning Workflow
 
-- For Epic planning, Story decomposition, acceptance criteria, implementation phases, Sprint planning, or progress tracking, read `gonna-plan` from `.agents/skills/gonna-plan/SKILL.md`.
+- For Epic planning, Story decomposition, acceptance criteria, implementation phases, execution ordering, or progress tracking, read `gonna-plan` from `.agents/skills/gonna-plan/SKILL.md`.
 - Prefer using `gonna-arch` output as the input to `gonna-plan`.
-- Keep Epic and Story source files under `docs/scrum/prd/` and `docs/scrum/story/` when files are requested.
+- Keep Epic and Story source files under `docs/scrum/prd/` and `docs/scrum/story/`.
+- By default, `gonna-plan` should materialize planning output into Epic, Story, and KANBAN files unless the user explicitly asks for conversation-only planning.
+- Do not assume human team scheduling fields such as Sprint length, calendar dates, assignees, or capacity unless the user explicitly asks for them.
 
 ## Environment Workflow
 
@@ -79,6 +83,16 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Prefer using `gonna-plan` Story files and `gonna-dev` implementation reports as the input to `gonna-test`.
 - Use `gonna-env` when integration or observability verification requires local dependencies.
 - Let `gonna-test` decide which go-zero and `zero-skills` verification references to load.
+
+## Submission Workflow
+
+- For commit planning, staging review, commit creation, branch push, merge request descriptions, or submission reports, read `gonna-submit` from `.agents/skills/gonna-submit/SKILL.md`.
+- Prefer using `gonna-dev` implementation reports and `gonna-test` test reports as input to `gonna-submit`.
+- Keep `gonna-submit` focused on packaging verified changes; merge gate policy and CI/CD readiness belong to future `gonna-devops`.
+- Do not push unless the user explicitly asks.
+
+## Skill Authoring Rules
+
 - Project skills and agent instructions should be written in English.
 - User-facing project documents produced by those skills should be written in Simplified Chinese.
 - Avoid decorative status icons in project skills and agent instructions.

@@ -5,15 +5,15 @@ title: "{title}"
 description: "{short description}"
 status: "TODO"
 priority: "P1"
-story_points: 3
-assignee: ""
-start_date: ""
-target_date: ""
-completed_date: ""
+complexity: "M"
+execution_order: 0
 dependencies: []
+blocked_by: []
 tags: []
 source_docs: []
 design_refs: []
+dev_handoff: []
+test_handoff: []
 created_at: "YYYY-MM-DD"
 updated_at: "YYYY-MM-DD"
 ---
@@ -56,6 +56,16 @@ Out of scope:
 - [ ] `go mod tidy`
 - [ ] `go build ./...`
 - [ ] {focused test or manual verification}
+
+## Handoff
+
+For `gonna-dev`:
+
+- {implementation handoff}
+
+For `gonna-test`:
+
+- {verification handoff}
 
 ## Dependencies
 

@@ -1,25 +1,27 @@
 ---
 name: gonna-plan
-description: Use this skill when the user asks to split architecture output, PRDs, specifications, design documents, or go-zero implementation handoffs into Epics, Stories, acceptance criteria, planning phases, sprint-ready backlog, KANBAN, or progress tracking artifacts for this ai-native go-zero microservice framework project.
+description: Use this skill when the user asks to split architecture output, PRDs, specifications, design documents, or go-zero implementation handoffs into AI-executable Epics, Stories, acceptance criteria, dependency order, KANBAN, or progress tracking artifacts for this ai-native go-zero microservice framework project.
 version: 1.0.0
 license: MIT
 ---
 
 # Planning Skill
 
-This skill turns architecture and design intent into planned work. It is responsible for Epic and Story decomposition, acceptance criteria, dependencies, sprint planning, and progress tracking. It is not responsible for architecture design, code implementation, testing execution, or deployment execution.
+This skill turns architecture and design intent into AI-executable work items. It is responsible for Epic and Story decomposition, acceptance criteria, dependency order, handoff notes, readiness for `gonna-dev` and `gonna-test`, and progress tracking. It is not responsible for architecture design, code implementation, testing execution, submission, DevOps gates, or deployment execution.
 
 ## Project Role
 
-`gonna` is an ai-native engineering framework for go-zero based microservice development. It is expected to integrate skills for architecture, planning, development, testing, and deployment.
+`gonna` is an ai-native engineering framework for go-zero based microservice development. It is expected to integrate skills for architecture, planning, environment setup, development, testing, submission, DevOps gates, and deployment.
 
 Use this skill as the planning layer:
 
 - `gonna-arch`: source documents and design intent to go-zero architecture and implementation handoff
-- `gonna-plan`: architecture handoff to Epics, Stories, acceptance criteria, and sprint-ready backlog
+- `gonna-plan`: architecture handoff to Epics, Stories, acceptance criteria, dependency order, and AI-readable execution backlog
+- `gonna-env`: environment requirements to local dependency setup
 - `gonna-dev`: Stories to implementation tasks and code changes
-- future `test`: Stories to verification plans and test evidence
-- future `deploy`: release and deployment planning
+- `gonna-test`: Stories to verification plans and test evidence
+- `gonna-submit`: verified changes to commit and merge request packaging
+- future `gonna-devops`: submitted changes to merge gates and CI/CD readiness
 
 ## When to Use
 
@@ -29,13 +31,15 @@ Use this skill for:
 - Creating or updating `docs/scrum/prd/epic-*.md`
 - Creating or updating `docs/scrum/story/story-*.md`
 - Writing acceptance criteria for implementation Stories
-- Planning phases or Sprint scope
+- Planning implementation phases and dependency order
 - Producing a progress KANBAN from Epic and Story status
 - Reviewing Story readiness before development
 - Tracking Story state from TODO to COMPLETED
 - Producing a backlog from PRD, specification, technical design, or `specx`-authored documents
 
 If the source document has not yet been mapped to go-zero architecture, use `.agents/skills/gonna-arch/SKILL.md` first. If the user explicitly asks to split the source document directly, perform a lightweight architecture extraction before writing planning items.
+
+This skill is not a traditional human team scheduling tool. Do not assume Sprint length, calendar dates, assignees, team capacity, or human delivery commitments unless the user explicitly asks for them. Prefer dependency order, execution sequence, acceptance criteria, and handoff evidence that `gonna-dev`, `gonna-test`, `gonna-submit`, and future `gonna-devops` can consume.
 
 ## Inputs
 
@@ -53,7 +57,7 @@ When input is incomplete, state assumptions and open questions rather than inven
 
 ## Language Policy
 
-Produce human-facing planning output in Simplified Chinese by default. This includes planning breakdowns, Epic files, Story files, Sprint plans, KANBAN views, progress summaries, acceptance criteria, risks, and open questions.
+Produce human-facing planning output in Simplified Chinese by default. This includes planning breakdowns, Epic files, Story files, execution plans, KANBAN views, progress summaries, acceptance criteria, risks, and open questions.
 
 Keep Story IDs, Epic IDs, status enum values, priority values, tags, file paths, code identifiers, commands, and YAML metadata keys in their required technical form. Skill instructions and templates may remain in English.
 
@@ -76,7 +80,7 @@ Choose the smallest useful mode.
 
 ### 1. Planning Breakdown
 
-Use for planning in conversation before writing files.
+Use for quick conversation, early shaping, or when the user explicitly asks not to write files.
 
 Produce:
 
@@ -85,12 +89,13 @@ Produce:
 - Acceptance criteria per Story
 - Dependencies and sequencing
 - Suggested priority
-- Estimated size
+- Complexity size
 - Risks and open questions
+- Proposed file paths when files are not written
 
 ### 2. Versioned Work Items
 
-Use when the user wants files created or updated.
+Use by default when the user asks to decompose, split, plan, or generate work from architecture/source documents and does not explicitly say "only discuss", "do not write files", or equivalent.
 
 Create or update:
 
@@ -102,17 +107,21 @@ Use the templates in:
 - `.agents/skills/gonna-plan/templates/epic_template.md`
 - `.agents/skills/gonna-plan/templates/story_template.md`
 
-### 3. Sprint Plan
+Also create or update `docs/scrum/KANBAN.md` from the resulting Story files unless the user asks not to.
 
-Use when the user asks for iteration planning.
+### 3. Execution Plan
 
-Produce:
+Use when the user asks for implementation order, phased delivery, or "what should dev/test do next".
 
-- Sprint goal
+Produce or update planning sections/files with:
+
+- Execution goal
 - Selected Stories
 - Excluded Stories
 - Dependencies and blockers
-- Capacity assumptions
+- Execution order
+- Ready-for-dev conditions
+- Ready-for-test conditions
 - Definition of done
 - Validation plan
 
@@ -158,7 +167,7 @@ When generating a KANBAN:
 1. Read Story files from `docs/scrum/story/`.
 2. Group Stories by `status`.
 3. Sort by priority, then Epic number, then Story number.
-4. Include Story ID, title, priority, points, assignee, and target date when present.
+4. Include Story ID, title, priority, complexity size, layer, and blockers when present.
 5. Include a short summary with total Stories, completed Stories, blocked Stories, and completion rate.
 6. If Epic files exist, include Epic progress based on their Stories.
 
@@ -189,9 +198,7 @@ status: "TODO"
 priority: "P1"
 layer: "APP_LAYER"
 owner: ""
-start_date: ""
-target_date: ""
-completed_date: ""
+execution_order: 0
 stories: []
 dependencies: []
 tags: []
@@ -262,15 +269,15 @@ title: "{title}"
 description: "{short description}"
 status: "TODO"
 priority: "P1"
-story_points: 3
-assignee: ""
-start_date: ""
-target_date: ""
-completed_date: ""
+complexity: "M"
+execution_order: 0
 dependencies: []
+blocked_by: []
 tags: []
 source_docs: []
 design_refs: []
+dev_handoff: []
+test_handoff: []
 created_at: "YYYY-MM-DD"
 updated_at: "YYYY-MM-DD"
 ---
@@ -284,6 +291,9 @@ Every Story must include:
 - Implementation notes
 - Validation plan
 - Dependencies
+- Execution order
+- Handoff notes for `gonna-dev`
+- Handoff notes for `gonna-test`
 - Risks
 - Source document references
 
@@ -295,7 +305,7 @@ Use INVEST as a guide:
 - Negotiable where details can be refined during implementation
 - Valuable to the project, developer workflow, or system capability
 - Estimable with visible scope
-- Small enough for one to five working days when possible
+- Small enough for one focused implementation unit when possible
 - Testable with clear acceptance criteria
 
 For go-zero work, prefer Stories around concrete generated or hand-written boundaries:
@@ -365,10 +375,12 @@ A Story is ready for development when:
 - Scope is small enough to implement
 - Validation steps are clear
 - go-zero generation and manual implementation boundaries are clear
+- `dev_handoff` is specific enough for `gonna-dev`
+- `test_handoff` is specific enough for `gonna-test`
 
 ## Epic and Story Breakdown Format
 
-When answering without writing files, use this format:
+When answering without writing files, use this format. By default, prefer writing the corresponding files unless the user explicitly asks for conversation-only planning.
 
 ```markdown
 ## Planning Breakdown
@@ -381,9 +393,9 @@ When answering without writing files, use this format:
 
 ### Stories
 
-| Story | Epic | Priority | Points | Goal |
-| --- | --- | --- | --- | --- |
-| STORY-1-01 | EPIC-1 | P1 | 3 | Define user API spec |
+| Story | Epic | Priority | Complexity | Order | Goal |
+| --- | --- | --- | --- | --- | --- |
+| STORY-1-01 | EPIC-1 | P1 | M | 10 | Define user API spec |
 
 ### Dependencies
 
@@ -415,41 +427,40 @@ Generated: YYYY-MM-DD
 
 ### TODO
 
-| Story | Priority | Points | Assignee | Target | Title |
+| Story | Priority | Complexity | Layer | Blockers | Title |
 | --- | --- | --- | --- | --- | --- |
 
 ### IN_PROGRESS
 
-| Story | Priority | Points | Assignee | Target | Title |
+| Story | Priority | Complexity | Layer | Blockers | Title |
 | --- | --- | --- | --- | --- | --- |
 
 ### IN_REVIEW
 
-| Story | Priority | Points | Assignee | Target | Title |
+| Story | Priority | Complexity | Layer | Blockers | Title |
 | --- | --- | --- | --- | --- | --- |
 
 ### TESTING
 
-| Story | Priority | Points | Assignee | Target | Title |
+| Story | Priority | Complexity | Layer | Blockers | Title |
 | --- | --- | --- | --- | --- | --- |
 
 ### BLOCKED
 
-| Story | Priority | Points | Assignee | Target | Title |
+| Story | Priority | Complexity | Layer | Blockers | Title |
 | --- | --- | --- | --- | --- | --- |
 
 ### COMPLETED
 
-| Story | Priority | Points | Assignee | Target | Title |
+| Story | Priority | Complexity | Layer | Blockers | Title |
 | --- | --- | --- | --- | --- | --- |
 ```
 
-## Handoff to Future Skills
+## Handoff to Downstream Skills
 
 When Epic and Story files are ready:
 
 - Development work should use `.agents/skills/gonna-dev/SKILL.md`.
-- Test planning and evidence should use future `test` skill instructions.
-- Release and deployment planning should use future `deploy` skill instructions.
-
-Until those skills exist, include implementation, validation, and deployment notes inside each Story.
+- Test planning and evidence should use `.agents/skills/gonna-test/SKILL.md`.
+- Submission packaging should use `.agents/skills/gonna-submit/SKILL.md`.
+- Merge gates and CI/CD readiness should use future `gonna-devops` skill instructions.
