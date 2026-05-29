@@ -12,6 +12,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Development skill: `gonna-dev` at `.agents/skills/gonna-dev/SKILL.md`
 - Test skill: `gonna-test` at `.agents/skills/gonna-test/SKILL.md`
 - Submission skill: `gonna-submit` at `.agents/skills/gonna-submit/SKILL.md`
+- YOLO runner skill: `gonna-yolo` at `.agents/skills/gonna-yolo/SKILL.md`
 - go-zero workflow reference for arch: `.agents/ai-context/00-instructions.md`
 - go-zero task workflow reference for arch: `.agents/ai-context/workflows.md`
 - goctl command reference for arch: `.agents/ai-context/tools.md`
@@ -26,6 +27,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Use `gonna-dev` when the user asks to implement Stories, generate go-zero code, modify API/RPC/model/logic/config, fix bugs, add tests, run validation, or prepare implementation reports.
 - Use `gonna-test` when the user asks to design tests, verify Story acceptance criteria, validate implementations, evaluate coverage, run or interpret test/build output, produce test reports, report defects, or decide whether a Story can be completed.
 - Use `gonna-submit` when the user asks to prepare, review, stage, commit, push, or package verified changes for merge request submission; create commit plans, commit messages, merge request descriptions, or submission reports.
+- Use `gonna-yolo` only when the user explicitly asks for yolo mode, autonomous iteration, or to automatically run planned Epics/Stories through dev, test, and submit loops.
 - Treat `.agents/ai-context/` and `.agents/skills/zero-skills/` as references that support the architecture skill.
 - Do not ask the user to invoke `ai-context` or `zero-skills` directly for normal project work.
 - Load the specific go-zero reference files only when the architecture task needs that level of detail.
@@ -90,6 +92,15 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Prefer using `gonna-dev` implementation reports and `gonna-test` test reports as input to `gonna-submit`.
 - Keep `gonna-submit` focused on packaging verified changes; merge gate policy and CI/CD readiness belong to future `gonna-devops`.
 - Do not push unless the user explicitly asks.
+
+## YOLO Workflow
+
+- For authorized autonomous execution of planned Stories, read `gonna-yolo` from `.agents/skills/gonna-yolo/SKILL.md`.
+- `gonna-yolo` must use existing `docs/scrum/prd/` and `docs/scrum/story/` planning artifacts as the execution source of truth.
+- `gonna-yolo` may drive `gonna-env`, `gonna-dev`, `gonna-test`, and `gonna-submit` within the requested authorization mode.
+- Default authorization mode is `yolo-dev`; committing requires `yolo-submit`, and pushing requires `yolo-push` plus an explicit target remote and branch.
+- `gonna-yolo` must stop on missing acceptance criteria, incomplete dependencies, unresolved architecture/environment decisions, test failure, P0/P1 defects, unrelated worktree changes, secret risk, destructive Git needs, merge needs, or deploy needs.
+- Write yolo run artifacts under `docs/run/`, not under `docs/scrum/`.
 
 ## Skill Authoring Rules
 

@@ -20,7 +20,7 @@
 ## Skill 链路
 
 ```text
-gonna-arch -> gonna-plan -> gonna-env -> gonna-dev -> gonna-test -> gonna-submit -> future gonna-devops -> future gonna-deploy
+gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-submit -> future gonna-devops -> future gonna-deploy
 ```
 
 每个项目 skill 都有明确职责：
@@ -31,6 +31,7 @@ gonna-arch -> gonna-plan -> gonna-env -> gonna-dev -> gonna-test -> gonna-submit
 - `gonna-dev` 基于 go-zero 约定、goctl 生成、ServiceContext 注入和聚焦验证来实现 Story。
 - `gonna-test` 验证验收标准、API/RPC 行为、集成路径和质量门禁。
 - `gonna-submit` 将已经实现并验证过的变更整理成可评审提交，包括 commit plan、commit message、MR 描述和 submission report。
+- `gonna-yolo` 在用户明确授权的 yolo mode 下，按 `gonna-plan` 的 Story 自动驱动 `gonna-dev -> gonna-test -> gonna-submit` 迭代，并在硬停止条件出现时中止。
 
 ## 内嵌参考资料
 
@@ -65,6 +66,7 @@ skill、agent instructions、模板和内嵌 reference 这类框架指导材料�
 |-- deploy/local/      # 本地依赖与可观测性
 |-- docs/design/       # 架构事实来源
 |-- docs/scrum/        # Epic、Story 和规划视图
+|-- docs/run/          # yolo 自动执行报告
 `-- .agents/           # AI 上下文与 skill
 ```
 
