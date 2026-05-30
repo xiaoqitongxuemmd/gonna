@@ -270,6 +270,8 @@ Produce:
 - Implementation handoff for `gonna-dev`
 - Verification expectations for `gonna-test`
 
+Also use this mode when `gonna-selftest` feedback marks a case as `Needs Design Update`. Treat that feedback as a human design-intent correction, then update the relevant architecture document, contract, open question, or implementation handoff before downstream planning or development continues.
+
 ## Document Governance
 
 Use these rules only for maintained design documents.

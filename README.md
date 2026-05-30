@@ -20,7 +20,7 @@
 ## Skill 链路
 
 ```text
-gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-submit -> future gonna-devops -> future gonna-deploy
+gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-selftest/gonna-submit -> future gonna-devops -> future gonna-deploy
 ```
 
 每个项目 skill 都有明确职责：
@@ -30,6 +30,7 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-s
 - `gonna-env` 准备本地依赖、Docker Compose profiles、健康检查和可观测性接入。
 - `gonna-dev` 基于 go-zero 约定、goctl 生成、ServiceContext 注入和聚焦验证来实现 Story。
 - `gonna-test` 验证验收标准、API/RPC 行为、集成路径和质量门禁。
+- `gonna-selftest` 生成 push 前由人执行的契约自测文档，并准备数据库、Redis、Kafka 等测试数据；每个 required case 必须人工勾选 `Pass` 才允许 push。
 - `gonna-submit` 将已经实现并验证过的变更整理成可评审提交，包括 commit plan、commit message、MR 描述和 submission report。
 - `gonna-yolo` 在用户明确授权的 yolo mode 下，按 `gonna-plan` 的 Story 自动驱动 `gonna-dev -> gonna-test -> gonna-submit` 迭代，并在硬停止条件出现时中止。
 
@@ -49,6 +50,26 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-s
 - 每个 Epic 独立形成本地提交，方便回看和回滚。
 - 遇到测试失败、架构歧义、外部依赖阻塞等硬停止条件时立即中止。
 - 执行报告写入 `docs/run/`，Story 和 KANBAN 状态回写到 `docs/scrum/`。
+
+## 自测与 push 门禁
+
+`gonna-selftest` 用来避免 AI 对设计意图集体理解偏差。它会为 Story 或 Epic 生成可人工执行的契约自测文档，并尽量自动准备好所需数据。
+
+自测文档包含：
+
+- 可复制执行的 `curl`、`grpcurl`、Kafka producer、SQL、Redis 检查等命令。
+- AI 生成并准备的数据资产，例如 `seed.sql`、`cleanup.sql`、`produce_kafka_event.py`、`seed_redis.py`。
+- 每个测试用例的人工验收勾选项。
+- 每个测试用例的结果：`Pass | Fail | Needs Design Update | Not Run`。
+- 反馈区，用于记录实际 response、副作用、设计偏差和建议调整。
+
+规则：
+
+- 本地 commit 不强制完成自测。
+- push 前必须完成 required selftest case。
+- 只有所有 required case 都是 `Pass` 才允许 push。
+- `Fail` 会回到 `gonna-dev` 或 `gonna-test` 修复。
+- `Needs Design Update` 会回到 `gonna-arch` 更新设计文档。
 
 ## 内嵌参考资料
 
@@ -84,6 +105,7 @@ skill、agent instructions、模板和内嵌 reference 这类框架指导材料�
 |-- docs/design/       # 架构事实来源
 |-- docs/scrum/        # Epic、Story 和规划视图
 |-- docs/run/          # yolo 自动执行报告
+|-- docs/selftest/     # 人工契约自测文档和数据资产
 `-- .agents/           # AI 上下文与 skill
 ```
 

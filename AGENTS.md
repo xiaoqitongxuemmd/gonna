@@ -11,6 +11,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Environment skill: `gonna-env` at `.agents/skills/gonna-env/SKILL.md`
 - Development skill: `gonna-dev` at `.agents/skills/gonna-dev/SKILL.md`
 - Test skill: `gonna-test` at `.agents/skills/gonna-test/SKILL.md`
+- Selftest skill: `gonna-selftest` at `.agents/skills/gonna-selftest/SKILL.md`
 - Submission skill: `gonna-submit` at `.agents/skills/gonna-submit/SKILL.md`
 - YOLO runner skill: `gonna-yolo` at `.agents/skills/gonna-yolo/SKILL.md`
 - go-zero workflow reference for arch: `.agents/ai-context/00-instructions.md`
@@ -26,6 +27,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Use `gonna-env` when the user asks to create, update, run, or verify local development/debug environments, dependency containers, Docker Compose profiles, environment variables, go-zero config mapping, health checks, or local observability with OpenTelemetry, Prometheus, Grafana, tracing, or logs.
 - Use `gonna-dev` when the user asks to implement Stories, generate go-zero code, modify API/RPC/model/logic/config, fix bugs, add tests, run validation, or prepare implementation reports.
 - Use `gonna-test` when the user asks to design tests, verify Story acceptance criteria, validate implementations, evaluate coverage, run or interpret test/build output, produce test reports, report defects, or decide whether a Story can be completed.
+- Use `gonna-selftest` when the user asks to generate or verify human contract selftest docs, prepare local test data, create curl/grpcurl/Kafka/DB/Redis probes, or check push readiness from human acceptance results.
 - Use `gonna-submit` when the user asks to prepare, review, stage, commit, push, or package verified changes for merge request submission; create commit plans, commit messages, merge request descriptions, or submission reports.
 - Use `gonna-yolo` only when the user explicitly asks for yolo mode, autonomous iteration, or to automatically run planned Epics/Stories through dev, test, and submit loops.
 - Treat `.agents/ai-context/` and `.agents/skills/zero-skills/` as references that support the architecture skill.
@@ -86,19 +88,28 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Use `gonna-env` when integration or observability verification requires local dependencies.
 - Let `gonna-test` decide which go-zero and `zero-skills` verification references to load.
 
+## Selftest Workflow
+
+- For human-executed contract selftest documents, generated selftest data, copy-paste probes, or push-gate selftest checks, read `gonna-selftest` from `.agents/skills/gonna-selftest/SKILL.md`.
+- `gonna-selftest` owns documents under `docs/selftest/` and generated assets under `docs/selftest/assets/`.
+- The assistant should prepare selftest data whenever possible; the user should validate behavior, check each required case, and write feedback when behavior differs from intent.
+- Local commit does not require completed selftest.
+- Push requires required selftest cases to be completed and marked `Pass`; `Fail` returns to `gonna-dev` or `gonna-test`, and `Needs Design Update` returns to `gonna-arch`.
+
 ## Submission Workflow
 
 - For commit planning, staging review, commit creation, branch push, merge request descriptions, or submission reports, read `gonna-submit` from `.agents/skills/gonna-submit/SKILL.md`.
-- Prefer using `gonna-dev` implementation reports and `gonna-test` test reports as input to `gonna-submit`.
+- Prefer using `gonna-dev` implementation reports, `gonna-test` test reports, and `gonna-selftest` push-gate status as input to `gonna-submit`.
 - Keep `gonna-submit` focused on packaging verified changes; merge gate policy and CI/CD readiness belong to future `gonna-devops`.
-- Do not push unless the user explicitly asks.
+- Do not push unless the user explicitly asks and required human contract selftests are complete.
 
 ## YOLO Workflow
 
 - For authorized autonomous execution of planned Stories, read `gonna-yolo` from `.agents/skills/gonna-yolo/SKILL.md`.
 - `gonna-yolo` must use existing `docs/scrum/prd/` and `docs/scrum/story/` planning artifacts as the execution source of truth.
-- `gonna-yolo` may drive `gonna-env`, `gonna-dev`, `gonna-test`, and `gonna-submit` within the requested authorization mode.
+- `gonna-yolo` may drive `gonna-env`, `gonna-dev`, `gonna-test`, `gonna-selftest`, and `gonna-submit` within the requested authorization mode.
 - Default authorization mode is `yolo-dev`; committing requires `yolo-submit`, and pushing requires `yolo-push` plus an explicit target remote and branch.
+- `yolo-submit` may create local commits without completed selftest; `yolo-push` must stop until required human selftests are complete and marked `Pass`.
 - `gonna-yolo` must stop on missing acceptance criteria, incomplete dependencies, unresolved architecture/environment decisions, test failure, P0/P1 defects, unrelated worktree changes, secret risk, destructive Git needs, merge needs, or deploy needs.
 - Write yolo run artifacts under `docs/run/`, not under `docs/scrum/`.
 

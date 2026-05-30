@@ -7,7 +7,7 @@ license: MIT
 
 # YOLO Skill
 
-This skill is the authorized autonomous runner for `gonna`. It reads planned Epic and Story files, selects executable Stories, and drives the approved loop of `gonna-dev -> gonna-test -> gonna-submit` within strict stop conditions.
+This skill is the authorized autonomous runner for `gonna`. It reads planned Epic and Story files, selects executable Stories, and drives the approved loop of `gonna-dev -> gonna-test -> gonna-selftest -> gonna-submit` within strict stop conditions.
 
 `gonna-yolo` means fewer confirmations inside an approved scope. It does not mean lower quality, skipped validation, unsafe Git behavior, uncontrolled scope expansion, merge approval, or deployment.
 
@@ -21,6 +21,7 @@ Use this skill as the execution orchestration layer:
 - `gonna-env`: local dependency setup when a Story requires it
 - `gonna-dev`: Story implementation
 - `gonna-test`: verification and completion recommendation
+- `gonna-selftest`: human contract selftest docs, prepared data, and push gate
 - `gonna-submit`: commit and merge request packaging
 - future `gonna-devops`: merge gates and CI/CD readiness
 
@@ -64,6 +65,7 @@ Allowed:
 
 - Everything in `yolo-dev`
 - Use `gonna-submit` to create local commits
+- Generate or update selftest TODO docs when contract behavior changed
 
 Not allowed:
 
@@ -77,6 +79,7 @@ Allowed:
 
 - Everything in `yolo-submit`
 - Push to the explicitly named remote and branch
+- Check required selftest cases are completed and marked `Pass` before push
 
 Not allowed:
 
@@ -100,6 +103,7 @@ Read the minimum needed inputs:
 - Architecture references listed in Story `design_refs`
 - Source documents listed in Story `source_docs`
 - Existing implementation and test reports when present
+- Selftest docs under `docs/selftest/` when push is requested
 
 If no Story files exist, stop and ask the user to run `gonna-plan` first.
 
@@ -140,12 +144,13 @@ For each selected Story:
 5. Run focused validation.
 6. Mark the Story `TESTING`.
 7. Use `gonna-test` to verify acceptance criteria and quality gates.
-8. If verification passes, mark the Story `IN_REVIEW`.
-9. If authorization is `yolo-submit` or `yolo-push`, use `gonna-submit` to create a clean commit.
-10. If authorization is `yolo-push`, push only to the explicit target remote and branch.
-11. Mark the Story `COMPLETED` only when acceptance criteria are verified and required submission work is complete.
-12. Update `docs/scrum/KANBAN.md`.
-13. Write a Story iteration report and update the run report.
+8. Use `gonna-selftest` to generate or update human contract selftest docs and prepare data when the Story changes API, RPC, event, database-visible behavior, Redis/cache-visible behavior, scheduled jobs, webhooks, or user-visible behavior.
+9. If verification passes, mark the Story `IN_REVIEW`.
+10. If authorization is `yolo-submit` or `yolo-push`, use `gonna-submit` to create a clean commit. Completed selftest is not required for local commit.
+11. If authorization is `yolo-push`, push only when required selftest cases are completed and marked `Pass`, and only to the explicit target remote and branch.
+12. Mark the Story `COMPLETED` only when acceptance criteria are verified and required submission/selftest work for the authorization mode is complete.
+13. Update `docs/scrum/KANBAN.md`.
+14. Write a Story iteration report and update the run report.
 
 ## Hard Stop Conditions
 
@@ -157,6 +162,8 @@ Stop immediately and produce a blocker report when any of these occur:
 - Required environment dependency is not defined by architecture or environment contract.
 - `gonna-dev` cannot complete implementation.
 - `gonna-test` returns `Fail`.
+- Required selftest case is `Fail`, `Needs Design Update`, or `Not Run` when push is requested.
+- Required selftest document is missing when push is requested.
 - P0 or P1 defect exists.
 - `go test ./...` or `go build ./...` fails and cannot be fixed within the Story scope.
 - Worktree contains unrelated changes that would be staged or overwritten.
