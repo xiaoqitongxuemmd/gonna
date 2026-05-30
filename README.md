@@ -33,6 +33,23 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-s
 - `gonna-submit` 将已经实现并验证过的变更整理成可评审提交，包括 commit plan、commit message、MR 描述和 submission report。
 - `gonna-yolo` 在用户明确授权的 yolo mode 下，按 `gonna-plan` 的 Story 自动驱动 `gonna-dev -> gonna-test -> gonna-submit` 迭代，并在硬停止条件出现时中止。
 
+## gonna-yolo 使用示例
+
+`gonna-yolo` 适合在已经有 `gonna-arch` 和 `gonna-plan` 产物后，授权 AI 按 Epic/Story 自动推进。示例：
+
+```text
+看下 epic-5 开发的 block 是不是已经解决，如果解决以 submit 模式继续推进到 epic-7，逐 Epic 本地提交，不 push；遇到测试失败、架构歧义、外部依赖阻塞时停止
+```
+
+这条指令表达了几个关键约束：
+
+- 先检查 `EPIC-5` 的 blocker 是否解除，未解除则停止并说明原因。
+- 使用 `yolo-submit` 授权模式，可以本地 commit，但不能 push。
+- 从 `EPIC-5` 继续推进到 `EPIC-7`，按 `gonna-plan` 的 Story 依赖和 `execution_order` 执行。
+- 每个 Epic 独立形成本地提交，方便回看和回滚。
+- 遇到测试失败、架构歧义、外部依赖阻塞等硬停止条件时立即中止。
+- 执行报告写入 `docs/run/`，Story 和 KANBAN 状态回写到 `docs/scrum/`。
+
 ## 内嵌参考资料
 
 以下上游项目已经作为普通仓库文件内嵌到本项目中，使 AI 辅助工作流保持自包含和稳定：
