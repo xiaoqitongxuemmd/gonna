@@ -21,7 +21,14 @@ updated_at: "YYYY-MM-DD"
 
 ## Overview
 
-{Describe the Epic goal, context, and value.}
+{Describe the end-to-end capability, accepted outcome, context, and value. Prefer a capability closure over a technical-layer bucket.}
+
+## Capability Boundary
+
+- Capability or delivery goal: {what can be accepted after this Epic}
+- Primary contracts: {API/RPC/event/user workflow}
+- Main data or state changes: {models, persistence, cache, status changes}
+- Selftest surface: {HTTP/RPC/Kafka/DB/Redis contracts that should be human-verified}
 
 ## Scope
 
@@ -37,6 +44,8 @@ Out of scope:
 
 - [ ] STORY-{number}-01: {story title}
 
+<!-- A normal capability Epic should usually contain about 4 to 8 Stories. If this Epic has fewer than 4 Stories, explain why it is intentionally small instead of splitting by technical layer. -->
+
 ## Execution Order
 
 - {dependency or sequence note}
@@ -44,6 +53,7 @@ Out of scope:
 ## Acceptance Criteria
 
 - [ ] All listed Stories are completed or explicitly cancelled.
+- [ ] The capability can be verified as one coherent accepted state.
 - [ ] Required documentation is updated.
 - [ ] Validation evidence is recorded in the relevant Stories.
 

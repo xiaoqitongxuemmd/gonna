@@ -44,6 +44,8 @@ Out of scope:
 
 ## Implementation Notes
 
+- Story boundary:
+  - `{API/RPC/event contract | data model | ServiceContext/config | logic | middleware | validation | selftest | docs}`
 - go-zero specs:
   - `{api or proto path}`
 - Generated code boundary:

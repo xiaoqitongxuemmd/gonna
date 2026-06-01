@@ -43,6 +43,48 @@ If the source document has not yet been mapped to go-zero architecture, use `.ag
 
 This skill is not a traditional human team scheduling tool. Do not assume Sprint length, calendar dates, assignees, team capacity, or human delivery commitments unless the user explicitly asks for them. Prefer dependency order, execution sequence, acceptance criteria, and handoff evidence that `gonna-dev`, `gonna-test`, `gonna-submit`, and future `gonna-devops` can consume.
 
+## Epic Granularity Strategy
+
+Plan Epics around an end-to-end capability, user-visible outcome, service capability, platform capability, or selftest-verifiable delivery goal. Do not default to making one Epic per technical layer or go-zero artifact type.
+
+Good Epic boundaries:
+
+- A complete domain capability that can be understood and accepted as one delivery goal.
+- A service capability with API/RPC/event/data/logic/test/selftest work under it.
+- A platform capability such as local observability, environment orchestration, or submission gates.
+- An intent-alignment repair stream created from human selftest feedback.
+
+Poor Epic boundaries unless the user explicitly asks:
+
+- One Epic only for API specs.
+- One Epic only for database models.
+- One Epic only for business logic.
+- One Epic only for tests.
+- One Epic only for generated code.
+
+Use Stories for the engineering boundaries inside an Epic. A normal capability Epic should usually contain about 4 to 8 Stories. Merge thin Epics when several of them each contain only 1 to 3 Stories and together represent one coherent capability. Keep thin Epics only when they are clearly justified, such as:
+
+- Intent-alignment repair Epic
+- Technical spike or investigation
+- Small environment/tooling task
+- Isolated bug fix
+- Explicit user-requested narrow scope
+
+When splitting a go-zero feature, prefer this shape:
+
+```text
+EPIC-N: {capability} 能力闭环
+  STORY-N-01: 定义或更新 API/RPC/event 契约
+  STORY-N-02: 建立数据模型和持久化边界
+  STORY-N-03: 接入 ServiceContext、配置和依赖
+  STORY-N-04: 实现核心 logic
+  STORY-N-05: 实现查询、状态流转、幂等、审计或异常路径
+  STORY-N-06: 补齐自动化验证
+  STORY-N-07: 生成或更新人工 selftest 契约清单
+```
+
+The exact Story list must follow the actual design. Do not add meaningless filler Stories just to reach a count. The goal is coherent delivery shape, not artificial volume.
+
 ## Selftest Feedback Planning
 
 When `gonna-selftest` feedback contains any required case marked `不符合预期`, treat it as an intent-alignment planning input, not as ordinary QA noise.
@@ -270,6 +312,14 @@ Recommended `layer` values:
 - `DEPLOYMENT`
 - `TESTING`
 
+Epic decomposition rules:
+
+- Epic titles should describe the capability or delivery goal, not only a technical artifact.
+- Epic scope should cover enough Stories to produce a coherent accepted state.
+- Epic acceptance criteria should describe the completed capability and its evidence.
+- If an Epic has fewer than 4 Stories, explicitly record why it is intentionally small or consider merging it with a related Epic.
+- If multiple adjacent Epics are split only by API/model/logic/test layers, merge them into one capability Epic and keep those layers as Stories.
+
 ## Story Rules
 
 Story IDs use:
@@ -355,6 +405,8 @@ For go-zero work, prefer Stories around concrete generated or hand-written bound
 - Documentation and usage examples
 
 Avoid Stories that mix too many layers unless the user asks for a thin vertical slice.
+
+Do not promote every go-zero boundary into an Epic. API specs, RPC proto files, models, ServiceContext wiring, logic, tests, and selftest artifacts are usually Story-level boundaries inside a capability Epic.
 
 ## Numbering Workflow
 

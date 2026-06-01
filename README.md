@@ -26,7 +26,7 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-s
 每个项目 skill 都有明确职责：
 
 - `gonna-arch` 将 PRD、规格说明和设计文档转化为 go-zero 架构、服务边界、契约、脚手架规划和环境契约。
-- `gonna-plan` 将架构输出拆分并落成 AI 可执行的 Epic、Story、验收标准、依赖顺序和 KANBAN 进展视图。
+- `gonna-plan` 将架构输出拆分并落成 AI 可执行的 Epic、Story、验收标准、依赖顺序和 KANBAN 进展视图；Epic 优先表示可验收的能力闭环，API、model、logic、test、selftest 等 go-zero 工程边界通常下沉为 Story。
 - `gonna-env` 准备本地依赖、Docker Compose profiles、健康检查和可观测性接入。
 - `gonna-dev` 基于 go-zero 约定、goctl 生成、ServiceContext 注入和聚焦验证来实现 Story。
 - `gonna-test` 验证验收标准、API/RPC 行为、集成路径和质量门禁。
