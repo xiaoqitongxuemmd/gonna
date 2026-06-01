@@ -20,6 +20,7 @@ Use this skill as the submission layer:
 - `gonna-dev`: Story to implementation, focused tests, validation, and implementation report
 - `gonna-test`: implementation to test plan, verification evidence, defect report, and completion recommendation
 - `gonna-selftest`: human contract acceptance and push-gate evidence
+- `gonna-repair`: selftest feedback to intent-alignment fix Epics, yolo-submit repairs, and updated selftest documents
 - `gonna-submit`: verified local changes to commit plan, commit, push, merge request description, and submission report
 - future `gonna-devops`: submitted merge request to gate evaluation, CI/CD readiness, release gate, and deployment readiness
 
@@ -91,6 +92,7 @@ Rules:
 - When yolo or submit generates selftest documents before the user has executed them, leave those files uncommitted or commit them only in a dedicated selftest draft commit when explicitly requested.
 - After the user marks all required selftest cases `符合预期`, commit selftest documents and assets as a dedicated selftest evidence commit.
 - If the user marks any case `不符合预期`, do not commit the selftest result as final evidence. Preserve the feedback, route it back to `gonna-arch`/`gonna-plan`/`gonna-dev` as needed, and keep subsequent implementation commits separate from selftest artifacts.
+- When the user asks to iterate from `不符合预期` selftest feedback, use `gonna-repair` as the coordinating skill instead of handling arch, plan, yolo, and selftest updates ad hoc.
 - If selftest feedback causes code/design changes, stage implementation/design/planning files separately from selftest files.
 - Push is blocked until accepted selftest artifacts have been committed separately or the user explicitly states that no selftest artifact commit is required for the push.
 

@@ -12,6 +12,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Development skill: `gonna-dev` at `.agents/skills/gonna-dev/SKILL.md`
 - Test skill: `gonna-test` at `.agents/skills/gonna-test/SKILL.md`
 - Selftest skill: `gonna-selftest` at `.agents/skills/gonna-selftest/SKILL.md`
+- Repair iteration skill: `gonna-repair` at `.agents/skills/gonna-repair/SKILL.md`
 - Submission skill: `gonna-submit` at `.agents/skills/gonna-submit/SKILL.md`
 - YOLO runner skill: `gonna-yolo` at `.agents/skills/gonna-yolo/SKILL.md`
 - go-zero workflow reference for arch: `.agents/ai-context/00-instructions.md`
@@ -28,6 +29,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Use `gonna-dev` when the user asks to implement Stories, generate go-zero code, modify API/RPC/model/logic/config, fix bugs, add tests, run validation, or prepare implementation reports.
 - Use `gonna-test` when the user asks to design tests, verify Story acceptance criteria, validate implementations, evaluate coverage, run or interpret test/build output, produce test reports, report defects, or decide whether a Story can be completed.
 - Use `gonna-selftest` when the user asks to generate or verify human contract selftest docs from local unpushed changes, prepare local test data, create HTTP/RPC/Kafka/DB/Redis input-output probes, or check push readiness from human acceptance results.
+- Use `gonna-repair` when the user has completed human selftest, recorded `不符合预期` feedback, and wants to iterate repairs through arch intent updates, plan fix Epic/Stories, yolo-submit repair, and selftest document updates.
 - Use `gonna-submit` when the user asks to prepare, review, stage, commit, push, or package verified changes for merge request submission; create commit plans, commit messages, merge request descriptions, or submission reports.
 - Use `gonna-yolo` only when the user explicitly asks for yolo mode, autonomous iteration, or to automatically run planned Epics/Stories through dev, test, and submit loops.
 - Treat `.agents/ai-context/` and `.agents/skills/zero-skills/` as references that support the architecture skill.
@@ -96,7 +98,15 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - The assistant should prepare selftest data whenever possible; the user should validate HTTP/RPC/Kafka and other contract behavior, check `符合预期` or `不符合预期` for each required case, and write feedback when behavior differs from intent.
 - Local commit does not require completed selftest.
 - Do not commit generated `docs/selftest/**` artifacts together with implementation, generated go-zero code, automated tests, or planning fixes. Commit accepted selftest artifacts separately after the user finishes human selftest.
-- Push requires all required selftest cases to be marked `符合预期`; any `不符合预期` feedback blocks push and is routed to `gonna-arch`, `gonna-dev`, or `gonna-test` based on the feedback.
+- Push requires all required selftest cases to be marked `符合预期`; any `不符合预期` feedback blocks push and is routed to `gonna-repair` for coordinated arch, plan, yolo-submit, and selftest updates.
+
+## Repair Workflow
+
+- For selftest-feedback repair iteration, read `gonna-repair` from `.agents/skills/gonna-repair/SKILL.md`.
+- `gonna-repair` starts only after the user has run human selftest and recorded one or more `不符合预期` cases.
+- `gonna-repair` must coordinate `gonna-arch` for design-intent updates when needed, `gonna-plan` for intent-alignment fix Epic/Stories, `gonna-yolo` in `yolo-submit` mode for repair implementation and automated verification, and `gonna-selftest` for updated selftest documents.
+- `gonna-repair` must not push. It stops after updating selftest and asks the user to run human selftest again.
+- Repeated selftest repair attempts for the same feature should reuse the same intent-alignment fix Epic and append new Stories.
 
 ## Submission Workflow
 
@@ -113,7 +123,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - `gonna-yolo` may drive `gonna-env`, `gonna-dev`, `gonna-test`, `gonna-selftest`, and `gonna-submit` within the requested authorization mode.
 - Default authorization mode is `yolo-dev`; committing requires `yolo-submit`, and pushing requires `yolo-push` plus an explicit target remote and branch.
 - `yolo-submit` may create local commits without completed selftest; `yolo-push` must stop until required human selftests are marked `符合预期`.
-- If human selftest reports `不符合预期`, `gonna-yolo` should stop normal progression, route design-intent issues through `gonna-arch`, ask `gonna-plan` to create or update an intent-alignment fix Epic, and keep repeated fix Stories under that Epic.
+- If human selftest reports `不符合预期`, `gonna-yolo` should stop normal progression and hand off to `gonna-repair`.
 - `gonna-yolo` must stop on missing acceptance criteria, incomplete dependencies, unresolved architecture/environment decisions, test failure, P0/P1 defects, unrelated worktree changes, secret risk, destructive Git needs, merge needs, or deploy needs.
 - Write yolo run artifacts under `docs/run/`, not under `docs/scrum/`.
 

@@ -20,7 +20,7 @@
 ## Skill 链路
 
 ```text
-gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-selftest/gonna-submit -> future gonna-devops -> future gonna-deploy
+gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-submit -> gonna-selftest -> gonna-repair -> future gonna-devops -> future gonna-deploy
 ```
 
 每个项目 skill 都有明确职责：
@@ -31,6 +31,7 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-s
 - `gonna-dev` 基于 go-zero 约定、goctl 生成、ServiceContext 注入和聚焦验证来实现 Story。
 - `gonna-test` 验证验收标准、API/RPC 行为、集成路径和质量门禁。
 - `gonna-selftest` 根据本地未 push 的改动生成 HTTP、Kafka 等微服务输入输出契约自测清单，并准备数据库、Redis、Kafka 等测试数据；每个 required case 必须人工勾选 `符合预期` 才允许 push。
+- `gonna-repair` 在人工自测出现 `不符合预期` 后，读取自测反馈，协调 `gonna-arch` 更新设计意图，协调 `gonna-plan` 创建或追加意图对齐修复 Epic/Story，再用 `gonna-yolo` 的 `yolo-submit` 模式修复并更新 selftest。
 - `gonna-submit` 将已经实现并验证过的变更整理成可评审提交，包括 commit plan、commit message、MR 描述和 submission report。
 - `gonna-yolo` 在用户明确授权的 yolo mode 下，按 `gonna-plan` 的 Story 自动驱动 `gonna-dev -> gonna-test -> gonna-submit` 迭代，并在硬停止条件出现时中止。
 
@@ -70,7 +71,7 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-s
 - `docs/selftest/**` 不能和开发代码、go-zero 生成代码、自动化测试或规划修复混在同一个提交里。
 - push 前必须完成 required selftest case。
 - 只有所有 required case 都勾选 `符合预期` 才允许 push。
-- 任何 `不符合预期` 都会阻止 push，并根据反馈回到 `gonna-arch`、`gonna-dev` 或 `gonna-test`。
+- 任何 `不符合预期` 都会阻止 push，并交给 `gonna-repair` 编排设计更新、修复规划、yolo-submit 修复和 selftest 更新。
 
 推荐闭环：
 
@@ -87,8 +88,9 @@ yolo 开发完成 -> 自动化测试 -> 提交实现改动 -> 生成 selftest ->
 如果人工自测不通过：
 
 ```text
-不符合预期反馈 -> gonna-arch 更新设计意图 -> gonna-plan 创建或更新意图对齐修复 Epic
--> yolo 修复 Story -> submit amend 到本地未 push 的 Epic 实现提交 -> 更新 selftest -> 再次人工自测
+不符合预期反馈 -> gonna-repair -> gonna-arch 更新设计意图 -> gonna-plan 创建或更新意图对齐修复 Epic
+-> gonna-yolo 以 yolo-submit 修复 Story -> submit amend 到本地未 push 的 Epic 实现提交
+-> gonna-selftest 更新自测文档 -> 再次人工自测
 ```
 
 同一个意图偏差反复修改时，新的修复 Story 应继续追加到同一个意图对齐修复 Epic 中。`amend` 只适用于本地未 push 的 Epic 实现提交；已经 push 的提交不默认改写历史。

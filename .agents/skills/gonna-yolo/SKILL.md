@@ -22,6 +22,7 @@ Use this skill as the execution orchestration layer:
 - `gonna-dev`: Story implementation
 - `gonna-test`: verification and completion recommendation
 - `gonna-selftest`: human contract selftest docs, prepared data, and push gate
+- `gonna-repair`: selftest-feedback repair iteration through arch, plan, yolo-submit, and selftest update
 - `gonna-submit`: commit and merge request packaging
 - future `gonna-devops`: merge gates and CI/CD readiness
 
@@ -148,7 +149,7 @@ For each selected Story:
 9. If verification passes, mark the Story `IN_REVIEW`.
 10. If authorization is `yolo-submit` or `yolo-push`, use `gonna-submit` to create or amend a clean implementation commit. Completed selftest is not required for local commit.
 11. Do not commit generated selftest artifacts with the implementation commit. Leave selftest files uncommitted until the user completes human selftest, unless the user explicitly asks for a dedicated selftest draft commit.
-12. If the user marks any selftest case `不符合预期`, stop normal progression and route feedback to `gonna-arch` and `gonna-plan` as needed. `gonna-plan` must create or update an intent-alignment fix Epic and add fix Stories under it.
+12. If the user marks any selftest case `不符合预期`, stop normal progression and hand off to `gonna-repair`. `gonna-repair` must route feedback to `gonna-arch` and `gonna-plan` as needed, create or update an intent-alignment fix Epic, add fix Stories, run yolo-submit repair, and update selftest.
 13. When rerunning yolo for a selftest-feedback fix Epic, implement and verify the new Stories, then use `gonna-submit` to amend the local unpushed Epic implementation commit when it is safe to do so. Do not amend pushed commits unless explicitly authorized.
 14. After selftest is updated and the user confirms all required cases `符合预期`, use `gonna-submit` to create a dedicated selftest evidence commit.
 15. If authorization is `yolo-push`, push only after accepted selftest artifacts are separately committed and only to the explicit target remote and branch.
@@ -173,7 +174,7 @@ accepted selftest -> dedicated selftest commit -> push gate may pass
 If human selftest fails:
 
 ```text
-不符合预期 -> arch updates design if needed -> plan updates/creates intent-alignment Epic -> yolo fixes Stories -> submit amends local Epic commit -> selftest updates -> repeat
+不符合预期 -> gonna-repair -> arch updates design if needed -> plan updates/creates intent-alignment Epic -> yolo-submit fixes Stories -> submit amends local Epic commit -> selftest updates -> repeat
 ```
 
 Rules:
