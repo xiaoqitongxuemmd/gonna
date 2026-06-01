@@ -9,15 +9,15 @@ Generated: `YYYY-MM-DD`
 - Story or Epic: `{STORY-X-XX | EPIC-X}`
 - Result: `Allowed | Blocked`
 - Required cases: `{count}`
-- Passed cases: `{count}`
-- Failed cases: `{count}`
-- Needs design update: `{count}`
+- 符合预期: `{count}`
+- 不符合预期: `{count}`
+- 未勾选: `{count}`
 
 ## Case Results
 
-| Case | Required | Result | Feedback |
-| --- | --- | --- | --- |
-| CASE-001 | yes | Pass | none |
+| Case | Contract | Required | Human Result | Feedback |
+| --- | --- | --- | --- | --- |
+| HTTP-001 | `POST /api/example` | yes | 符合预期 | none |
 
 ## Data Assets
 
@@ -32,7 +32,7 @@ Generated: `YYYY-MM-DD`
 
 ## Handoff
 
-- To `gonna-arch`: {design feedback or none}
+- To `gonna-arch`: {design-intent feedback or none}
 - To `gonna-dev`: {implementation feedback or none}
-- To `gonna-test`: {test feedback or none}
+- To `gonna-test`: {contract test update or none}
 - To `gonna-submit`: {push gate status}

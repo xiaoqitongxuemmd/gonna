@@ -1,6 +1,6 @@
-# Selftest Plan
+# Contract Selftest Checklist
 
-When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep Story IDs, commands, paths, status values, env vars, JSON fields, SQL, and topic names in their required technical form.
+When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep Story IDs, branch names, commands, paths, status values, env vars, HTTP methods, JSON fields, SQL, Kafka topic names, and raw responses in their required technical form.
 
 Story or Epic: `{STORY-X-XX | EPIC-X}`
 Generated: `YYYY-MM-DD`
@@ -10,20 +10,20 @@ Generated: `YYYY-MM-DD`
 - Source Story/Epic: `{path}`
 - Related design docs: `{paths}`
 - Push gate: `Required | Optional`
+- Local change range: `{branch/upstream or commit range}`
 
-## Required Cases
+## 本地未 push 改动的契约清单
 
-| Case | Contract | Required | Data Status | Result |
-| --- | --- | --- | --- | --- |
-| CASE-001 | REST API | yes | Prepared | Not Run |
+| ID | Type | Contract | Required | Data Status | Human Result |
+| --- | --- | --- | --- | --- | --- |
+| HTTP-001 | HTTP | `POST /api/example` | yes | Prepared | 未勾选 |
+| KAFKA-001 | Kafka | `topic.name` | yes | Prepared | 未勾选 |
 
-## Generated Assets
+## 数据准备
 
 | Asset | Purpose |
 | --- | --- |
 | `{path}` | seed data |
-
-## Data Preparation Summary
 
 - Status: `Prepared | Preparation Failed | Manual Command Provided`
 - Commands executed by assistant:
@@ -33,6 +33,6 @@ Generated: `YYYY-MM-DD`
 
 ## Push Gate Rule
 
-- Required cases must be marked `Pass` before push.
-- `Fail` blocks push and returns to `gonna-dev` or `gonna-test`.
-- `Needs Design Update` blocks push and returns to `gonna-arch`.
+- Required cases must be checked as `符合预期` before push.
+- `不符合预期` blocks push and the feedback determines whether to return to `gonna-arch`, `gonna-dev`, or `gonna-test`.
+- Local commit does not require this checklist to be completed.

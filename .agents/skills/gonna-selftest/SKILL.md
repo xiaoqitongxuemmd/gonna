@@ -1,15 +1,15 @@
 ---
 name: gonna-selftest
-description: Use this skill when the user asks to create, update, prepare, or verify human-executed contract selftest documents before push; generate curl, grpcurl, Kafka producer scripts, seed SQL, Redis data, cleanup assets, per-case pass checklists, and design feedback loops for this ai-native go-zero microservice framework project.
+description: Use this skill when the user asks to create, update, prepare, or verify human-executed contract selftest documents before push; inspect local unpushed changes and produce HTTP, RPC, Kafka, database, Redis, job, or webhook input/output checklists with executable curl/grpcurl/shell probes, prepared data assets, expected/unexpected checkboxes, and design feedback loops for this ai-native go-zero microservice framework project.
 version: 1.0.0
 license: MIT
 ---
 
 # Selftest Skill
 
-This skill creates the human contract acceptance layer for `gonna`. It generates selftest documents and prepares local test data so the user can manually verify request/response behavior, messages, data side effects, and design intent before push.
+This skill creates the human contract acceptance layer for `gonna`. It inspects local unpushed changes, extracts changed externally visible contracts, generates a human-readable input/output checklist, and prepares local test data so the user can manually verify request/response behavior, messages, data side effects, and design intent before push.
 
-It does not replace `gonna-test`, unit tests, CI, or DevOps gates. It focuses on human-visible contract behavior and design-intent feedback.
+It does not replace `gonna-test`, unit tests, build checks, CI, or DevOps gates. It must not produce a generic "run all tests" script or focus on whether the project builds. It focuses on human-visible contract behavior and design-intent feedback.
 
 ## Project Role
 
@@ -19,22 +19,24 @@ Use this skill between `gonna-test` and push:
 - `gonna-test`: verifies automated quality gates
 - `gonna-selftest`: prepares human contract selftest data and documents
 - `gonna-submit`: allows local commit without selftest, but blocks push until required selftests pass
-- `gonna-arch`: consumes `Needs Design Update` feedback to update design documents
+- `gonna-arch`: consumes design-intent feedback from `不符合预期` cases to update design documents
 
 ## When to Use
 
 Use this skill for:
 
 - Creating human-executable contract selftest docs for a Story or Epic
+- Creating selftest docs from local unpushed changes before push
+- Listing changed HTTP APIs with endpoint, request, response, and copy-paste `curl`
 - Generating copy-paste `curl` commands for REST APIs
 - Generating `grpcurl` commands or small clients for RPC contracts
-- Generating Kafka producer scripts or payloads for event flows
+- Listing changed Kafka producers/consumers with topic, message fields, expected behavior, and a shell probe to send or observe messages
 - Generating seed SQL, Redis seed/check scripts, cleanup SQL, or sample files
 - Preparing local test data before the user runs contract checks
-- Recording per-case human pass/fail/design-feedback results
+- Recording per-case human `符合预期` or `不符合预期` design-feedback results
 - Checking whether selftest completion is sufficient for push
 
-Do not use this skill for ordinary unit test design or coverage evaluation; use `gonna-test` for that.
+Do not use this skill for ordinary unit test design, coverage evaluation, build verification, or CI-style validation; use `gonna-test` for that.
 
 ## Language Policy
 
@@ -44,7 +46,7 @@ Produce human-facing selftest output in Simplified Chinese by default. Keep comm
 
 The assistant prepares test data whenever possible. Do not make the user manually design data setup.
 
-For each selftest case:
+For each changed contract:
 
 - Generate deterministic seed assets under `docs/selftest/assets/{story-id}/`.
 - Generate cleanup assets when data mutation is involved.
@@ -53,6 +55,20 @@ For each selftest case:
 - If automatic preparation cannot run, provide one copy-paste command and record the blocker reason.
 
 Data must be safe, repeatable, isolated, and clearly named. Do not use real secrets or production data.
+
+Do not require the user to prepare data. The user validates behavior; the assistant prepares or provides one-command preparation assets.
+
+## Local Change Detection
+
+When preparing push-gate selftest, inspect local unpushed changes first:
+
+- Determine the current branch and upstream or push target.
+- Use Git evidence such as `git status --short`, `git diff --stat`, and relevant diffs.
+- Identify changed `.api`, `.proto`, handler/logic, Kafka producer/consumer, SQL/model, Redis/cache, job, and webhook files.
+- Produce selftest items only for changed externally visible contracts and their required side effects.
+- If no contract-visible behavior changed, state that no required selftest cases are needed for push.
+
+Do not include generic build, `go test`, lint, coverage, or generated-code-only checks in the selftest document.
 
 ## Selftest Artifacts
 
@@ -65,7 +81,7 @@ Recommended paths:
 - `docs/selftest/assets/{story-id}/seed.sql`
 - `docs/selftest/assets/{story-id}/cleanup.sql`
 - `docs/selftest/assets/{story-id}/seed_redis.py`
-- `docs/selftest/assets/{story-id}/produce_kafka_event.py`
+- `docs/selftest/assets/{story-id}/kafka_probe.sh`
 - `docs/selftest/assets/{story-id}/check_redis.py`
 
 Use these templates:
@@ -79,17 +95,19 @@ Use these templates:
 
 Each required case must include:
 
-- Purpose and design intent
-- Contract under test: API, RPC, event, DB side effect, Redis side effect, scheduled job, or webhook
+- Contract summary: HTTP endpoint, RPC method, Kafka topic, DB/Redis side effect, scheduled job, or webhook
+- Input shape: request body, RPC message, Kafka message fields, or trigger parameters
+- Expected output shape: response body, consumed message result, DB/Redis visible state, log/observable result, or callback behavior
 - Data preparation status
 - Generated data assets
-- Copy-paste execution command
-- Expected request or event payload
-- Expected response or observable result
+- Copy-paste execution command such as `curl`, `grpcurl`, or a per-contract shell probe
 - Side-effect checks
-- Human acceptance checklist
-- Result field: `Pass | Fail | Needs Design Update | Not Run`
-- Feedback fields for actual response, actual side effects, design deviation, and suggested adjustment
+- Human result options only:
+  - `[ ] 符合预期`
+  - `[ ] 不符合预期`
+- Feedback area under `不符合预期`
+
+Avoid multi-step checklist noise. Each case should be easy for the user to execute, observe, check pass/fail, and write feedback.
 
 ## Push Gate Semantics
 
@@ -106,13 +124,13 @@ Selftest is required before push when a change affects:
 - Webhooks or external callbacks
 - User-visible business behavior
 
-Push is allowed only when all required cases are marked `Pass`.
+Push is allowed only when every required case is checked `符合预期` and no required case is checked `不符合预期` or left unchecked.
 
-If any required case is `Fail`, block push and hand back to `gonna-dev` or `gonna-test`.
+If any required case is marked `不符合预期`, block push. Use the feedback text to decide whether to hand back to `gonna-arch`, `gonna-dev`, or `gonna-test`.
 
-If any required case is `Needs Design Update`, block push and hand back to `gonna-arch` to update design documents before planning, development, testing, and selftest are repeated.
+If the feedback describes a design-intent mismatch or contract wording issue, hand back to `gonna-arch` to update design documents before planning, development, testing, and selftest are repeated.
 
-Optional cases may be `Not Run` only when the reason is recorded.
+Optional cases may remain unchecked only when they are clearly marked optional and the reason is recorded.
 
 ## Completion Check
 
@@ -121,9 +139,9 @@ Before reporting selftest as complete, verify:
 - Required selftest document exists.
 - Required cases are listed.
 - Data preparation status is `Prepared` or an explicitly accepted fallback is recorded.
-- Every required case has human acceptance checkboxes completed.
-- Every required case result is `Pass`.
-- Feedback sections are empty or non-blocking.
+- Every required case has exactly one human result selected.
+- Every required case is marked `符合预期`.
+- No required case is marked `不符合预期`.
 - Cleanup instructions exist when data mutation occurred.
 
 ## Handoff

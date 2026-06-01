@@ -79,7 +79,7 @@ Allowed:
 
 - Everything in `yolo-submit`
 - Push to the explicitly named remote and branch
-- Check required selftest cases are completed and marked `Pass` before push
+- Check required selftest cases are marked `符合预期` before push
 
 Not allowed:
 
@@ -147,7 +147,7 @@ For each selected Story:
 8. Use `gonna-selftest` to generate or update human contract selftest docs and prepare data when the Story changes API, RPC, event, database-visible behavior, Redis/cache-visible behavior, scheduled jobs, webhooks, or user-visible behavior.
 9. If verification passes, mark the Story `IN_REVIEW`.
 10. If authorization is `yolo-submit` or `yolo-push`, use `gonna-submit` to create a clean commit. Completed selftest is not required for local commit.
-11. If authorization is `yolo-push`, push only when required selftest cases are completed and marked `Pass`, and only to the explicit target remote and branch.
+11. If authorization is `yolo-push`, push only when required selftest cases are marked `符合预期`, and only to the explicit target remote and branch.
 12. Mark the Story `COMPLETED` only when acceptance criteria are verified and required submission/selftest work for the authorization mode is complete.
 13. Update `docs/scrum/KANBAN.md`.
 14. Write a Story iteration report and update the run report.
@@ -162,7 +162,7 @@ Stop immediately and produce a blocker report when any of these occur:
 - Required environment dependency is not defined by architecture or environment contract.
 - `gonna-dev` cannot complete implementation.
 - `gonna-test` returns `Fail`.
-- Required selftest case is `Fail`, `Needs Design Update`, or `Not Run` when push is requested.
+- Required selftest case is marked `不符合预期` or left unchecked when push is requested.
 - Required selftest document is missing when push is requested.
 - P0 or P1 defect exists.
 - `go test ./...` or `go build ./...` fails and cannot be fixed within the Story scope.

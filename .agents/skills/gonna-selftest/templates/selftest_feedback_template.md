@@ -3,22 +3,22 @@
 When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep Story IDs, case IDs, status values, paths, commands, and raw output in their required technical form.
 
 Story: `{STORY-X-XX}`
-Case: `{CASE-XXX}`
-Result: `Fail | Needs Design Update`
+Case: `{HTTP-XXX | RPC-XXX | KAFKA-XXX | DB-XXX | REDIS-XXX | JOB-XXX | WEBHOOK-XXX}`
+Human Result: `不符合预期`
 
-## Observed Behavior
+## 实际行为
 
 ```text
 {actual behavior}
 ```
 
-## Expected Intent
+## 预期意图
 
 ```text
 {user intended behavior}
 ```
 
-## Evidence
+## 证据
 
 - Command: `{command}`
 - Output:
@@ -27,7 +27,7 @@ Result: `Fail | Needs Design Update`
 {raw output}
 ```
 
-## Recommended Handoff
+## 建议回流
 
 - `gonna-arch`: {design document update needed}
 - `gonna-dev`: {implementation change needed}

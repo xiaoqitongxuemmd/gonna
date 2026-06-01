@@ -1,10 +1,9 @@
-# Selftest Case
+# Contract Selftest Case
 
-When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep commands, paths, env vars, JSON fields, SQL, Kafka topics, status values, and raw responses in their required technical form.
+When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep commands, paths, env vars, HTTP methods, JSON fields, SQL, Kafka topics, status values, and raw responses in their required technical form.
 
-Case ID: `CASE-XXX`
+Case ID: `HTTP-XXX | RPC-XXX | KAFKA-XXX | DB-XXX | REDIS-XXX | JOB-XXX | WEBHOOK-XXX`
 Required: `yes | no`
-Result: `Pass | Fail | Needs Design Update | Not Run`
 
 ## 目标
 
@@ -12,8 +11,57 @@ Result: `Pass | Fail | Needs Design Update | Not Run`
 
 ## 契约对象
 
-- Type: `REST API | RPC | Kafka | DB | Redis | Job | Webhook`
-- Contract: `{endpoint, proto method, topic, table, key, job name}`
+- Type: `HTTP | RPC | Kafka | DB | Redis | Job | Webhook`
+- Contract: `{HTTP method and endpoint, proto method, topic, table, key, job name}`
+
+## 输入
+
+HTTP 示例：
+
+- Method: `POST`
+- URL: `http://localhost:{port}/{path}`
+- Headers:
+
+```text
+Content-Type: application/json
+Authorization: Bearer {token}
+```
+
+- Request:
+
+```json
+{}
+```
+
+Kafka 示例：
+
+- Topic: `{topic}`
+- Key: `{key}`
+- Message fields:
+
+| Field | Type | Required | Example | Meaning |
+| --- | --- | --- | --- | --- |
+| `{field}` | string | yes | `{value}` | {meaning} |
+
+- Message:
+
+```json
+{}
+```
+
+## 输出
+
+HTTP Response:
+
+```json
+{}
+```
+
+Kafka Expected Effect:
+
+```text
+{consumer behavior, DB change, Redis change, log, or downstream event}
+```
 
 ## 数据准备
 
@@ -27,39 +75,40 @@ Result: `Pass | Fail | Needs Design Update | Not Run`
 
 ## 执行命令
 
-```bash
-{copy-paste command}
-```
-
-## 预期 Request 或 Event
-
-```json
-{}
-```
-
-## 预期 Response 或结果
-
-```json
-{}
-```
-
-## 副作用检查
+HTTP 示例：
 
 ```bash
-{SQL, redis-cli, Kafka consumer, or log check command}
+curl -i -X POST 'http://localhost:{port}/{path}' \
+  -H 'Content-Type: application/json' \
+  -d '{}'
+```
+
+Kafka 示例：
+
+```bash
+sh docs/selftest/assets/{story-id}/kafka_probe.sh
+```
+
+## 观察命令
+
+```bash
+{SQL, redis-cli, Kafka consumer, log check, or curl readback command}
 ```
 
 ## 人工验收
 
-- [ ] 我已确认数据准备状态可用于本 case
-- [ ] 我已执行请求、RPC、消息或任务触发命令
-- [ ] Response 或可观察结果符合预期
-- [ ] 数据库、Redis、Kafka、日志或其他副作用符合预期
-- [ ] 行为与我的设计意图一致
+- [ ] 符合预期
+- [ ] 不符合预期
 
-## 反馈
+### 不符合预期反馈
 
-实际 Response 或结果：
+实际 request/event：
+
+```text
+{paste actual request/event if different}
+```
+
+实际 response/result：
 
 ```text
 {paste actual response/result}
