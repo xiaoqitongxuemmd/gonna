@@ -67,9 +67,31 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-s
 规则：
 
 - 本地 commit 不强制完成自测。
+- `docs/selftest/**` 不能和开发代码、go-zero 生成代码、自动化测试或规划修复混在同一个提交里。
 - push 前必须完成 required selftest case。
 - 只有所有 required case 都勾选 `符合预期` 才允许 push。
 - 任何 `不符合预期` 都会阻止 push，并根据反馈回到 `gonna-arch`、`gonna-dev` 或 `gonna-test`。
+
+推荐闭环：
+
+```text
+yolo 开发完成 -> 自动化测试 -> 提交实现改动 -> 生成 selftest -> 人工自测
+```
+
+如果人工自测通过：
+
+```text
+提交 selftest 证据 -> push
+```
+
+如果人工自测不通过：
+
+```text
+不符合预期反馈 -> gonna-arch 更新设计意图 -> gonna-plan 创建或更新意图对齐修复 Epic
+-> yolo 修复 Story -> submit amend 到本地未 push 的 Epic 实现提交 -> 更新 selftest -> 再次人工自测
+```
+
+同一个意图偏差反复修改时，新的修复 Story 应继续追加到同一个意图对齐修复 Epic 中。`amend` 只适用于本地未 push 的 Epic 实现提交；已经 push 的提交不默认改写历史。
 
 ## 内嵌参考资料
 

@@ -39,6 +39,8 @@ Use this skill for:
 - Producing submission reports for future `gonna-devops` gate checks
 - Packaging `gonna-dev` implementation evidence and `gonna-test` verification evidence into reviewable form
 - Checking `gonna-selftest` human acceptance before push
+- Keeping generated selftest artifacts out of development/test commits until the user has completed human selftest acceptance
+- Amending local unpushed Epic commits when selftest feedback creates additional alignment-fix Stories for the same Epic
 
 Do not use this skill to decide whether a merge request is allowed to merge. That belongs to future `gonna-devops`.
 
@@ -78,6 +80,38 @@ Use this workflow:
 10. For push, check required `gonna-selftest` cases are completed and marked `符合预期`.
 11. Push only when the user explicitly asks to push and selftest push gate passes.
 12. Produce a submission report and MR/PR description when requested.
+
+## Selftest Artifact Submission Rules
+
+Selftest artifacts are human acceptance materials. Treat them as a separate submission unit from implementation and automated test changes.
+
+Rules:
+
+- Do not include `docs/selftest/**` changes in the same commit as development, generated go-zero code, automated tests, or planning fixes unless the user explicitly asks.
+- When yolo or submit generates selftest documents before the user has executed them, leave those files uncommitted or commit them only in a dedicated selftest draft commit when explicitly requested.
+- After the user marks all required selftest cases `符合预期`, commit selftest documents and assets as a dedicated selftest evidence commit.
+- If the user marks any case `不符合预期`, do not commit the selftest result as final evidence. Preserve the feedback, route it back to `gonna-arch`/`gonna-plan`/`gonna-dev` as needed, and keep subsequent implementation commits separate from selftest artifacts.
+- If selftest feedback causes code/design changes, stage implementation/design/planning files separately from selftest files.
+- Push is blocked until accepted selftest artifacts have been committed separately or the user explicitly states that no selftest artifact commit is required for the push.
+
+Recommended commit split:
+
+```text
+feat(epic-N): implement {epic goal}
+fix(epic-N): align {behavior} with selftest feedback
+docs(selftest): record accepted {epic/story} contract selftest
+```
+
+## Alignment Fix Amend Rules
+
+When selftest exposes an intent mismatch after a local Epic commit has already been created:
+
+- Ask `gonna-plan` to create or update an intent-alignment fix Epic when the issue changes design intent, contract wording, or acceptance criteria.
+- Add repeated fix attempts as new Stories under the same alignment fix Epic instead of creating scattered unrelated work items.
+- For local unpushed commits that belong to the same Epic scope, prefer `git commit --amend` or an explicit fixup/squash plan so the final local Epic commit represents the accepted implementation state.
+- Do not amend commits that have already been pushed unless the user explicitly asks for history rewrite and confirms the target branch.
+- Do not amend selftest evidence into an implementation commit. Accepted selftest artifacts remain a separate commit.
+- When amending, restage only the files that belong to the Epic implementation/design/planning fix. Leave `docs/selftest/**` unstaged unless creating the dedicated selftest evidence commit.
 
 ## Git Safety Rules
 

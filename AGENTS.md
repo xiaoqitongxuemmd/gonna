@@ -95,6 +95,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - For HTTP changes, generate one independent selftest case and one standalone copy-paste `curl` for every changed endpoint or required endpoint scenario; do not replace per-API review with one shell script that calls many APIs.
 - The assistant should prepare selftest data whenever possible; the user should validate HTTP/RPC/Kafka and other contract behavior, check `符合预期` or `不符合预期` for each required case, and write feedback when behavior differs from intent.
 - Local commit does not require completed selftest.
+- Do not commit generated `docs/selftest/**` artifacts together with implementation, generated go-zero code, automated tests, or planning fixes. Commit accepted selftest artifacts separately after the user finishes human selftest.
 - Push requires all required selftest cases to be marked `符合预期`; any `不符合预期` feedback blocks push and is routed to `gonna-arch`, `gonna-dev`, or `gonna-test` based on the feedback.
 
 ## Submission Workflow
@@ -102,6 +103,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - For commit planning, staging review, commit creation, branch push, merge request descriptions, or submission reports, read `gonna-submit` from `.agents/skills/gonna-submit/SKILL.md`.
 - Prefer using `gonna-dev` implementation reports, `gonna-test` test reports, and `gonna-selftest` push-gate status as input to `gonna-submit`.
 - Keep `gonna-submit` focused on packaging verified changes; merge gate policy and CI/CD readiness belong to future `gonna-devops`.
+- Keep implementation commits and selftest evidence commits separate. If selftest feedback causes repeated repair work before push, plan the work under an intent-alignment fix Epic and amend the local unpushed Epic implementation commit when safe.
 - Do not push unless the user explicitly asks and required human contract selftests are marked `符合预期`.
 
 ## YOLO Workflow
@@ -111,6 +113,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - `gonna-yolo` may drive `gonna-env`, `gonna-dev`, `gonna-test`, `gonna-selftest`, and `gonna-submit` within the requested authorization mode.
 - Default authorization mode is `yolo-dev`; committing requires `yolo-submit`, and pushing requires `yolo-push` plus an explicit target remote and branch.
 - `yolo-submit` may create local commits without completed selftest; `yolo-push` must stop until required human selftests are marked `符合预期`.
+- If human selftest reports `不符合预期`, `gonna-yolo` should stop normal progression, route design-intent issues through `gonna-arch`, ask `gonna-plan` to create or update an intent-alignment fix Epic, and keep repeated fix Stories under that Epic.
 - `gonna-yolo` must stop on missing acceptance criteria, incomplete dependencies, unresolved architecture/environment decisions, test failure, P0/P1 defects, unrelated worktree changes, secret risk, destructive Git needs, merge needs, or deploy needs.
 - Write yolo run artifacts under `docs/run/`, not under `docs/scrum/`.
 

@@ -20,7 +20,7 @@ Use this skill between `gonna-test` and push:
 - `gonna-dev`: implements the Story
 - `gonna-test`: verifies automated quality gates
 - `gonna-selftest`: prepares human contract selftest data and documents
-- `gonna-submit`: allows local commit without selftest, but blocks push until required selftests pass
+- `gonna-submit`: keeps selftest artifacts separate from implementation commits, allows local implementation commits without completed selftest, and blocks push until required selftests pass
 - `gonna-arch`: consumes design-intent feedback from `不符合预期` cases to update design documents
 
 ## When to Use
@@ -170,6 +170,18 @@ If any required case is marked `不符合预期`, block push. Use the feedback t
 If the feedback describes a design-intent mismatch or contract wording issue, hand back to `gonna-arch` to update design documents before planning, development, testing, and selftest are repeated.
 
 Optional cases may remain unchecked only when they are clearly marked optional and the reason is recorded.
+
+## Submission Separation
+
+Selftest documents and generated assets are not implementation changes.
+
+Rules:
+
+- Generate or update selftest artifacts after implementation and automated test verification, but do not include them in the implementation commit.
+- Leave selftest artifacts uncommitted while the user is still executing them or while any required case is marked `不符合预期`.
+- When all required cases are marked `符合预期`, commit selftest documents and assets as a dedicated selftest evidence commit.
+- If feedback triggers another yolo repair pass, update selftest artifacts after the repair, but keep them separate from the repair implementation commit.
+- Selftest feedback files may be referenced by `gonna-plan` when creating intent-alignment fix Epics and Stories.
 
 ## Completion Check
 

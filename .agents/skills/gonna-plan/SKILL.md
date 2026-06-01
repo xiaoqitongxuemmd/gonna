@@ -36,10 +36,43 @@ Use this skill for:
 - Reviewing Story readiness before development
 - Tracking Story state from TODO to COMPLETED
 - Producing a backlog from PRD, specification, technical design, or `specx`-authored documents
+- Creating or updating an intent-alignment fix Epic when human selftest feedback shows the implementation or design does not match the user's intent
+- Adding repeated selftest-feedback fix attempts as additional Stories under the same intent-alignment Epic
 
 If the source document has not yet been mapped to go-zero architecture, use `.agents/skills/gonna-arch/SKILL.md` first. If the user explicitly asks to split the source document directly, perform a lightweight architecture extraction before writing planning items.
 
 This skill is not a traditional human team scheduling tool. Do not assume Sprint length, calendar dates, assignees, team capacity, or human delivery commitments unless the user explicitly asks for them. Prefer dependency order, execution sequence, acceptance criteria, and handoff evidence that `gonna-dev`, `gonna-test`, `gonna-submit`, and future `gonna-devops` can consume.
+
+## Selftest Feedback Planning
+
+When `gonna-selftest` feedback contains any required case marked `不符合预期`, treat it as an intent-alignment planning input, not as ordinary QA noise.
+
+Use this workflow:
+
+1. Classify the feedback:
+   - Design intent mismatch: architecture or contract needs clarification.
+   - Implementation mismatch: code differs from accepted design.
+   - Test gap: automated tests did not cover the intended behavior.
+   - Selftest document issue: the selftest case itself is unclear or wrong.
+2. If design intent, contract wording, or acceptance criteria must change, route to `gonna-arch` first and use its updated design as planning input.
+3. Create one intent-alignment fix Epic for the affected feature or original Epic when no suitable fix Epic exists.
+4. If a suitable intent-alignment fix Epic already exists, add new Stories under that Epic instead of creating another fix Epic.
+5. Each repeated selftest failure or correction pass should become a new Story under the same fix Epic, with references to the selftest feedback and affected contracts.
+6. Keep the fix Epic focused on reaching the user's confirmed intent. Do not mix unrelated feature expansion into it.
+
+Recommended naming:
+
+```text
+EPIC-{number}: {feature} 意图对齐修复
+STORY-{number}-01: 修复 {contract/behavior} 与自测反馈的偏差
+```
+
+Recommended metadata:
+
+- Add tags such as `selftest-feedback`, `intent-alignment`, and the affected original Epic ID.
+- Add `source_docs` references to the selftest document and feedback file.
+- Add `design_refs` references to updated design documents when `gonna-arch` changed them.
+- Set dependencies on the original Epic or Story that introduced the behavior.
 
 ## Inputs
 
