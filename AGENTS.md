@@ -92,6 +92,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 
 - For human-executed contract selftest documents from local unpushed changes, generated selftest data, copy-paste probes, or push-gate selftest checks, read `gonna-selftest` from `.agents/skills/gonna-selftest/SKILL.md`.
 - `gonna-selftest` owns documents under `docs/selftest/` and generated assets under `docs/selftest/assets/`.
+- For HTTP changes, generate one independent selftest case and one standalone copy-paste `curl` for every changed endpoint or required endpoint scenario; do not replace per-API review with one shell script that calls many APIs.
 - The assistant should prepare selftest data whenever possible; the user should validate HTTP/RPC/Kafka and other contract behavior, check `符合预期` or `不符合预期` for each required case, and write feedback when behavior differs from intent.
 - Local commit does not require completed selftest.
 - Push requires all required selftest cases to be marked `符合预期`; any `不符合预期` feedback blocks push and is routed to `gonna-arch`, `gonna-dev`, or `gonna-test` based on the feedback.

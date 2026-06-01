@@ -16,10 +16,22 @@ Required: `yes | no`
 
 ## 输入
 
-HTTP 示例：
+HTTP 必填：
 
 - Method: `POST`
 - URL: `http://localhost:{port}/{path}`
+- Path params:
+
+| Name | Value | Meaning |
+| --- | --- | --- |
+| `{name}` | `{value}` | {meaning} |
+
+- Query params:
+
+| Name | Value | Meaning |
+| --- | --- | --- |
+| `{name}` | `{value}` | {meaning} |
+
 - Headers:
 
 ```text
@@ -51,7 +63,16 @@ Kafka 示例：
 
 ## 输出
 
-HTTP Response:
+HTTP 必填：
+
+- Expected status: `200`
+- Expected response fields:
+
+| Field | Type | Required | Expected | Meaning |
+| --- | --- | --- | --- | --- |
+| `{field}` | string | yes | `{value}` | {meaning} |
+
+- Expected response:
 
 ```json
 {}
@@ -75,7 +96,7 @@ Kafka Expected Effect:
 
 ## 执行命令
 
-HTTP 示例：
+HTTP 必填，每个 HTTP case 必须是一个独立可复制的 `curl`，不要用批量脚本、函数或循环替代：
 
 ```bash
 curl -i -X POST 'http://localhost:{port}/{path}' \
@@ -83,7 +104,7 @@ curl -i -X POST 'http://localhost:{port}/{path}' \
   -d '{}'
 ```
 
-Kafka 示例：
+Kafka 必填，每个 Kafka case 使用一个只覆盖当前 topic/message 的探针：
 
 ```bash
 sh docs/selftest/assets/{story-id}/kafka_probe.sh

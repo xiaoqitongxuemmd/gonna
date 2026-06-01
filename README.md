@@ -57,11 +57,12 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-s
 
 自测文档包含：
 
-- HTTP 契约：接口、request、response，以及可复制执行的 `curl`。
+- HTTP 契约：每个发生变更的接口都要单独列出 request、response，以及一个可复制执行的独立 `curl`；如果一个接口有多个关键验收场景，每个场景都要单独给 `curl`。
 - Kafka 契约：topic、消息结构字段，以及用于收发观察效果的 shell probe。
 - AI 生成并准备的数据资产，例如 `seed.sql`、`cleanup.sql`、`kafka_probe.sh`、`seed_redis.py`。
 - 每个契约用例只有两个人工结果：`符合预期` 或 `不符合预期`。
 - `不符合预期` 下方提供反馈区，用于记录实际 response、副作用、设计偏差和建议调整。
+- 自测文档不能被一个批量执行 HTTP API 的 shell 脚本替代；脚本只能用于数据准备、清理、观察或单个 Kafka/RPC 探针。
 
 规则：
 

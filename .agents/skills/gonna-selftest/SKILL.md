@@ -11,6 +11,8 @@ This skill creates the human contract acceptance layer for `gonna`. It inspects 
 
 It does not replace `gonna-test`, unit tests, build checks, CI, or DevOps gates. It must not produce a generic "run all tests" script or focus on whether the project builds. It focuses on human-visible contract behavior and design-intent feedback.
 
+The output must be a human review document first, not an automation runner. Scripts are allowed only as supporting assets for data preparation, cleanup, observation, or one specific Kafka/RPC probe. Do not replace the selftest document with a shell script that calls many HTTP APIs and asserts results automatically.
+
 ## Project Role
 
 Use this skill between `gonna-test` and push:
@@ -69,6 +71,43 @@ When preparing push-gate selftest, inspect local unpushed changes first:
 - If no contract-visible behavior changed, state that no required selftest cases are needed for push.
 
 Do not include generic build, `go test`, lint, coverage, or generated-code-only checks in the selftest document.
+
+## HTTP Contract Rules
+
+For HTTP contracts, be strict:
+
+- Generate at least one independent selftest case for every changed HTTP endpoint.
+- Generate at least one executable `curl` command inside each HTTP case.
+- Do not merge multiple HTTP endpoints into a single shell script, helper function, or "happy path" runner.
+- Do not hide requests behind shell functions such as `post()` or a loop when the user needs to inspect each API.
+- If one endpoint has multiple required acceptance scenarios, generate one case and one `curl` per scenario.
+- A data-preparation command may call APIs only when it is explicitly labeled as setup and is not counted as the human acceptance command.
+- The human acceptance command for an HTTP case must be directly copy-pasteable as a standalone `curl`.
+
+Each HTTP case must show:
+
+- Method and URL
+- Path, query, and header parameters
+- Request JSON or body
+- Expected HTTP status
+- Expected response JSON or response field table
+- Optional DB/Redis/Kafka/log observation command when the endpoint has side effects
+- Human result options: `符合预期` and `不符合预期`
+
+## Script Boundaries
+
+Allowed generated scripts:
+
+- Data setup scripts such as `prepare_data.sh`, `seed.sql`, or `seed_redis.py`
+- Cleanup scripts such as `cleanup.sql` or `cleanup_data.sh`
+- One-contract Kafka probes such as `kafka_probe.sh`
+- Observation helpers such as `check_redis.py`
+
+Forbidden generated scripts:
+
+- A single shell script that runs all HTTP APIs for the user
+- A script that validates HTTP responses and prints a global success result instead of giving per-API human checkboxes
+- A script that combines data preparation, API execution, assertions, and final pass/fail into one opaque workflow
 
 ## Selftest Artifacts
 
