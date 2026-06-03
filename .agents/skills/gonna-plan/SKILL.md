@@ -116,6 +116,21 @@ Recommended metadata:
 - Add `design_refs` references to updated design documents when `gonna-arch` changed them.
 - Set dependencies on the original Epic or Story that introduced the behavior.
 
+## Compatibility Planning Gate
+
+Do not plan compatibility work by default.
+
+When decomposing Epics and Stories, do not add Stories, acceptance criteria, fields, endpoints, migrations, fallback paths, versioning, adapters, dual-read/write, or legacy support just to preserve compatibility unless the user explicitly approved that compatibility design.
+
+If compatibility seems necessary:
+
+- Record it as an open question or blocker.
+- Ask `gonna-arch` to define the compatibility design only after user approval.
+- Do not include compatibility acceptance criteria in Stories until approved.
+- Keep Stories focused on the current accepted contract.
+
+Approved compatibility work should be explicit in Story metadata, tags, source docs, acceptance criteria, and `dev_handoff`.
+
 ## Inputs
 
 Prefer one of these inputs:

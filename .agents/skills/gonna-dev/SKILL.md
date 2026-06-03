@@ -105,6 +105,26 @@ Before implementing a Story, check:
 
 If readiness is weak but the user explicitly asks to proceed, state assumptions and continue with the smallest safe implementation.
 
+## Compatibility Approval Gate
+
+Do not implement compatibility behavior by default.
+
+Before adding any backward-compatible, forward-compatible, legacy-compatible, reserved, alias, fallback, deprecated, versioned, migration-only, optional-for-future, or adapter behavior, verify that the user explicitly approved it in the Story, design docs, or current conversation.
+
+This applies to:
+
+- `.api` routes, request fields, response fields, headers, status codes, and error codes
+- `.proto` services, methods, messages, fields, tags, and errors
+- Kafka/event topics, keys, message fields, and schema evolution
+- Database columns, tables, indexes, defaults, nullable fields, views, and migration helpers
+- Redis/cache keys and fallback value shapes
+- Config keys, feature flags, and rollout switches
+- Code branches that preserve old behavior or accept old and new shapes
+
+If compatibility appears necessary but is not approved, stop before editing the contract or schema. Present the exact compatibility addition, why it may be needed, affected files, and the risk of not doing it, then wait for user approval.
+
+Prefer implementing only the current accepted Story and architecture contract.
+
 ## go-zero Implementation Workflow
 
 Use this workflow for feature work:

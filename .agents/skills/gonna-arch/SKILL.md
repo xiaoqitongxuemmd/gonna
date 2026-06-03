@@ -73,6 +73,36 @@ This skill owns architecture decisions and architecture facts. It should answer:
 
 Do not leave downstream skills to guess architecture decisions. Produce explicit artifacts or handoff sections that `gonna-plan`, `gonna-env`, `gonna-dev`, `gonna-test`, and future `gonna-deploy` can consume.
 
+## Compatibility Approval Gate
+
+Do not design compatibility by default.
+
+Compatibility design includes backward compatibility, forward compatibility, legacy support, dual-write or dual-read, shadow fields, alias fields, fallback behavior, deprecated fields, reserved fields, versioned endpoints, adapters, migration-only fields, optional future fields, and speculative extensibility.
+
+This gate applies to:
+
+- REST API routes, request fields, response fields, headers, status codes, and error codes
+- RPC services, methods, proto messages, fields, tags, and error details
+- Kafka/event topics, keys, message fields, and schema evolution
+- Database tables, columns, indexes, constraints, default values, migration paths, and compatibility views
+- Redis/cache keys, value shapes, TTLs, and fallback keys
+- Config keys, environment variables, feature flags, and rollout switches
+- Selftest contracts and test data that imply compatibility behavior
+
+Rules:
+
+- Prefer the minimal contract required by the user's current accepted intent.
+- Do not add fields or interfaces only because they may be useful later.
+- Do not include compatibility strategy in architecture artifacts unless the user explicitly approved it in the current workflow.
+- If a source document appears to require compatibility, surface it as an approval question instead of treating the document as automatic approval.
+- When compatibility may be necessary, stop and ask for approval with:
+  - compatibility goal
+  - affected contracts and storage
+  - exact fields, endpoints, messages, tables, or config keys to add
+  - operational cost and risk
+  - risk of not doing compatibility
+- Record the approval decision in the relevant design document before handing work to `gonna-plan`.
+
 ## Language Policy
 
 Produce human-facing architecture output in Simplified Chinese by default. This includes architecture analysis, maintained design documents under `docs/design/`, scaffold plans, environment contracts, observability architecture, implementation handoffs, review notes, and user-facing summaries.
@@ -264,7 +294,7 @@ Produce:
 
 - Current architecture impact
 - New or changed architecture artifacts
-- Migration or compatibility plan
+- Migration plan, and compatibility plan only when explicitly approved by the user
 - Environment contract updates
 - Planning handoff for `gonna-plan`
 - Implementation handoff for `gonna-dev`
@@ -307,7 +337,7 @@ Avoid temporary names such as:
 Use `vMAJOR.MINOR.PATCH`.
 
 - MAJOR: incompatible architecture change, new major service boundary, data model redesign, API contract rewrite
-- MINOR: backward-compatible feature, new endpoint group, new config, new integration, meaningful section addition
+- MINOR: approved backward-compatible feature, new endpoint group, new config, new integration, meaningful section addition
 - PATCH: typo, clarification, small correction, formatting, reference fix
 
 ### Archives

@@ -26,6 +26,14 @@
 }
 ```
 
+## 兼容性审批
+
+- 是否包含兼容性设计：yes/no
+- 用户是否已明确批准：yes/no
+- 批准依据：{对话、需求或设计引用}
+
+未获得用户明确批准时，topic、key、消息字段、payload 结构、schema version、旧事件别名、fallback 消费和预留字段只能覆盖当前已确认意图，不得为了未来兼容默认添加。
+
 ## 投递与消费语义
 
 - 投递语义：at-least-once | at-most-once | exactly-once

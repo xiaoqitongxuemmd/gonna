@@ -56,6 +56,14 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Run post-generation checks: `go mod tidy`, import verification, and `go build ./...`.
 - Generate or update README/API/RPC docs when adding services or endpoints.
 
+## Compatibility Approval Gate
+
+- Do not add compatibility design by default.
+- Do not add backward-compatible, forward-compatible, legacy-compatible, future-proof, reserved, optional-for-future, migration-only, shadow, alias, fallback, deprecated, versioned, or adapter fields/interfaces/tables/configs unless the user explicitly approves that compatibility design.
+- This applies to API routes, request/response fields, RPC methods/messages, Kafka/event schemas, database tables/columns/indexes, Redis keys, config keys, migrations, selftest cases, and generated docs.
+- If compatibility may be needed, first present the compatibility need, affected contracts, alternatives, risk of not doing it, and concrete fields/interfaces to be added. Wait for explicit user approval before including them in architecture, planning, implementation, tests, or selftest artifacts.
+- Prefer the minimal current-intent contract over speculative extensibility.
+
 ## Architecture Workflow
 
 - For architecture design, PRD analysis, design document analysis, spec document analysis, technical stack selection, service decomposition, API/RPC/event design, data model design, scaffold planning, local environment requirements, observability architecture, resilience/security design, migration planning, or implementation planning, read `gonna-arch` from `.agents/skills/gonna-arch/SKILL.md`.

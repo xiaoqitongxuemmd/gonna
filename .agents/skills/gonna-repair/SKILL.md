@@ -94,6 +94,16 @@ Use this workflow:
 11. Stop and ask the user to run human selftest again. Do not push.
 12. Write or update a repair iteration report under `docs/run/`.
 
+## Compatibility Repair Gate
+
+Do not turn selftest feedback into compatibility design by default.
+
+If a repair could be solved either by changing the current contract or by adding compatibility behavior, prefer clarifying the current accepted intent first. Only create compatibility repair Stories after the user explicitly approves the compatibility design.
+
+Do not add fallback fields, old and new payload support, versioned endpoints, adapters, dual-read/write, migration-only columns, or legacy selftest cases while repairing unless approved.
+
+If compatibility is proposed by `gonna-arch`, record the user's approval reference in the repair report and in the planned Story.
+
 ## Fix Epic Rules
 
 Intent-alignment fix Epics are long-lived for one feedback stream.

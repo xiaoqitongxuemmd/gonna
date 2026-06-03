@@ -29,6 +29,14 @@ message {Request} {
 }
 ```
 
+## 兼容性审批
+
+- 是否包含兼容性设计：yes/no
+- 用户是否已明确批准：yes/no
+- 批准依据：{对话、需求或设计引用}
+
+未获得用户明确批准时，RPC 方法、message 字段、field tag、reserved 字段、旧消息别名、版本化服务和 fallback 行为只能覆盖当前已确认意图，不得为了未来兼容默认添加。
+
 ## 服务发现与配置
 
 - 服务发现：etcd/direct

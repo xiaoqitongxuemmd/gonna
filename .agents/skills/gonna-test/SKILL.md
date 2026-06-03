@@ -193,6 +193,21 @@ Design tests for:
 
 Do not invent requirements. If expected behavior is unclear, record an open question.
 
+## Compatibility Test Gate
+
+Do not add compatibility test cases by default.
+
+Only design or require backward-compatible, forward-compatible, legacy, deprecated, versioned, alias, fallback, migration, or old-shape/new-shape tests when the user explicitly approved the compatibility behavior in the design, Story, or current conversation.
+
+If changed contracts could need compatibility coverage but approval is missing, report an open question instead of adding compatibility expectations. The report should name:
+
+- affected API/RPC/event/database/cache/config contract
+- compatibility behavior being considered
+- risk of not testing it
+- required user approval before tests or gates include it
+
+Keep default verification focused on the current accepted contract.
+
 ## Test Idempotency
 
 Tests should be repeatable and safe.

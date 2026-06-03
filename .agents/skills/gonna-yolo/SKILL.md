@@ -134,6 +134,14 @@ A Story is eligible when:
 
 If readiness fails, do not invent missing requirements. Produce a blocker report.
 
+## Compatibility Stop Rule
+
+YOLO must not introduce compatibility design on its own.
+
+If a selected Story, implementation path, selftest feedback, or repair appears to require backward compatibility, forward compatibility, legacy support, versioned interfaces, fallback fields, dual-read/write, migration-only fields, or adapters, stop and require explicit user approval unless that compatibility is already approved in the Story or design docs.
+
+Do not continue autonomously by adding compatibility API/RPC fields, database columns, Kafka message fields, Redis keys, config keys, tests, or selftest cases.
+
 ## Execution Loop
 
 For each selected Story:

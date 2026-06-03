@@ -72,6 +72,16 @@ When preparing push-gate selftest, inspect local unpushed changes first:
 
 Do not include generic build, `go test`, lint, coverage, or generated-code-only checks in the selftest document.
 
+## Compatibility Selftest Gate
+
+Do not generate compatibility selftest cases by default.
+
+Selftest cases must verify the current accepted contract. Do not add old-version, new-version, deprecated, alias, fallback, reserved-field, optional-future-field, migration, dual-read/write, or legacy payload cases unless the user explicitly approved that compatibility behavior.
+
+If local changes suggest compatibility might matter but approval is missing, record an open question in the selftest document instead of generating compatibility cases or compatibility data.
+
+Do not add compatibility fields to example HTTP requests, RPC payloads, Kafka messages, SQL seed data, Redis seed data, or expected responses unless approved.
+
 ## HTTP Contract Rules
 
 For HTTP contracts, be strict:
