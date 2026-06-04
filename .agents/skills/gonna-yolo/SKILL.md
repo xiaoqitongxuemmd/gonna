@@ -66,6 +66,7 @@ Allowed:
 
 - Everything in `yolo-dev`
 - Use `gonna-submit` to create local commits
+- Use `gonna-submit` branch rules: work on `feature/*` and require rebase onto latest `develop` before MR preparation
 - Generate or update selftest TODO docs when contract behavior changed
 
 Not allowed:
@@ -80,13 +81,14 @@ Allowed:
 
 - Everything in `yolo-submit`
 - Push to the explicitly named remote and branch
+- Rebase the `feature/*` branch onto latest `develop` before push
 - Check required selftest cases are marked `符合预期` before push
 
 Not allowed:
 
 - Merge
 - Deploy
-- Force push unless the user explicitly asks and confirms
+- Force push unless the user explicitly asks and confirms; if rebase rewrites a pushed feature branch, use `--force-with-lease`
 
 ## Language Policy
 
@@ -147,23 +149,24 @@ Do not continue autonomously by adding compatibility API/RPC fields, database co
 For each selected Story:
 
 1. Create or update a yolo run plan.
-2. Mark the Story `IN_PROGRESS`.
-3. Use `gonna-env` only if the Story requires local dependencies or observability setup.
-4. Use `gonna-dev` to implement the Story.
-5. Run focused validation.
-6. Mark the Story `TESTING`.
-7. Use `gonna-test` to verify acceptance criteria and quality gates.
-8. Use `gonna-selftest` to generate or update human contract selftest docs and prepare data when the Story changes API, RPC, event, database-visible behavior, Redis/cache-visible behavior, scheduled jobs, webhooks, or user-visible behavior.
-9. If verification passes, mark the Story `IN_REVIEW`.
-10. If authorization is `yolo-submit` or `yolo-push`, use `gonna-submit` to create or amend a clean implementation commit. Completed selftest is not required for local commit.
-11. Do not commit generated selftest artifacts with the implementation commit. Leave selftest files uncommitted until the user completes human selftest, unless the user explicitly asks for a dedicated selftest draft commit.
-12. If the user marks any selftest case `不符合预期`, stop normal progression and hand off to `gonna-repair`. `gonna-repair` must route feedback to `gonna-arch` and `gonna-plan` as needed, create or update an intent-alignment fix Epic, add fix Stories, run yolo-submit repair, and update selftest.
-13. When rerunning yolo for a selftest-feedback fix Epic, implement and verify the new Stories, then use `gonna-submit` to amend the local unpushed Epic implementation commit when it is safe to do so. Do not amend pushed commits unless explicitly authorized.
-14. After selftest is updated and the user confirms all required cases `符合预期`, use `gonna-submit` to create a dedicated selftest evidence commit.
-15. If authorization is `yolo-push`, push only after accepted selftest artifacts are separately committed and only to the explicit target remote and branch.
-16. Mark the Story `COMPLETED` only when acceptance criteria are verified and required submission/selftest work for the authorization mode is complete.
-17. Update `docs/scrum/KANBAN.md`.
-18. Write a Story iteration report and update the run report.
+2. Confirm normal implementation is on a `feature/*` branch. If the current branch is `develop` or `master`, stop unless the user explicitly authorized that exception.
+3. Mark the Story `IN_PROGRESS`.
+4. Use `gonna-env` only if the Story requires local dependencies or observability setup.
+5. Use `gonna-dev` to implement the Story.
+6. Run focused validation.
+7. Mark the Story `TESTING`.
+8. Use `gonna-test` to verify acceptance criteria and quality gates.
+9. Use `gonna-selftest` to generate or update human contract selftest docs and prepare data when the Story changes API, RPC, event, database-visible behavior, Redis/cache-visible behavior, scheduled jobs, webhooks, or user-visible behavior.
+10. If verification passes, mark the Story `IN_REVIEW`.
+11. If authorization is `yolo-submit` or `yolo-push`, use `gonna-submit` to create or amend a clean implementation commit. Completed selftest is not required for local commit.
+12. Do not commit generated selftest artifacts with the implementation commit. Leave selftest files uncommitted until the user completes human selftest, unless the user explicitly asks for a dedicated selftest draft commit.
+13. If the user marks any selftest case `不符合预期`, stop normal progression and hand off to `gonna-repair`. `gonna-repair` must route feedback to `gonna-arch` and `gonna-plan` as needed, create or update an intent-alignment fix Epic, add fix Stories, run yolo-submit repair, and update selftest.
+14. When rerunning yolo for a selftest-feedback fix Epic, implement and verify the new Stories, then use `gonna-submit` to amend the local unpushed Epic implementation commit when it is safe to do so. Do not amend pushed commits unless explicitly authorized.
+15. After selftest is updated and the user confirms all required cases `符合预期`, use `gonna-submit` to create a dedicated selftest evidence commit.
+16. If authorization is `yolo-push`, rebase the feature branch onto latest `develop`, then push only after accepted selftest artifacts are separately committed and only to the explicit target remote and branch.
+17. Mark the Story `COMPLETED` only when acceptance criteria are verified and required submission/selftest work for the authorization mode is complete.
+18. Update `docs/scrum/KANBAN.md`.
+19. Write a Story iteration report and update the run report.
 
 ## Selftest Feedback Loop
 
@@ -207,6 +210,8 @@ Stop immediately and produce a blocker report when any of these occur:
 - Required selftest document is missing when push is requested.
 - Generated selftest artifacts would be staged together with implementation or automated test changes.
 - Amending would require rewriting a pushed commit without explicit user authorization.
+- Normal implementation is on `develop` or `master` without an explicit user-authorized exception.
+- Rebase onto latest `develop` fails or creates unresolved conflicts.
 - P0 or P1 defect exists.
 - `go test ./...` or `go build ./...` fails and cannot be fixed within the Story scope.
 - Worktree contains unrelated changes that would be staged or overwritten.

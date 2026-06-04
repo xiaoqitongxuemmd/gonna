@@ -65,22 +65,48 @@ Prefer one or more of these inputs:
 
 When reports are missing but the user explicitly asks to submit, proceed with the available Git evidence and clearly record missing evidence as risk.
 
+## Branch Management Rules
+
+Use this branch model:
+
+- `master`: protected production/release branch. Do not implement, commit, push, or merge directly on `master` during normal submission work.
+- `develop`: integration branch for completed feature work. Normal merge request target is `develop`.
+- `feature/*`: normal implementation branch for Story, Epic, bug fix, scaffold, documentation, and framework changes.
+
+Branch naming:
+
+- Prefer `feature/epic-<id>-<summary>` for Epic-scoped work.
+- Prefer `feature/story-<id>-<summary>` for Story-scoped work.
+- Use `feature/<short-scope>` for direct requests without an Epic or Story.
+- Keep branch names lowercase, ASCII, hyphen-separated, and traceable to the submission scope when possible.
+
+Creation and synchronization:
+
+- New feature branches must be created from the latest `develop`.
+- Rebase is mandatory before push or merge request preparation.
+- Feature branches must be rebased onto the latest `develop` using `git rebase develop` or an equivalent `git pull --rebase` flow.
+- Do not merge `develop` into a feature branch. Do not create merge commits for normal feature synchronization.
+- If rebase conflicts occur, stop after preserving the conflict evidence and ask the user how to resolve business-level conflicts. Do not guess conflict resolution for externally visible contracts.
+- If a branch was already pushed and rebase rewrites remote history, push only when the user explicitly asks to push and confirms the target branch. Use `--force-with-lease`, never unconditional force push.
+
 ## Submission Workflow
 
 Use this workflow:
 
 1. Inspect current branch, remotes, and worktree status.
-2. Review `git diff --stat` and relevant diffs before staging.
-3. Identify the submission scope: Story, direct request, bug fix, scaffold change, documentation change, or framework change.
-4. Separate unrelated changes. Do not stage unrelated files unless the user explicitly includes them.
-5. Check that generated go-zero files are consistent with `.api` or `.proto` changes when applicable.
-6. Check that validation evidence exists from `gonna-dev` or `gonna-test`, or record the gap.
-7. Create a commit plan before committing when the scope is non-trivial.
-8. Stage only files in scope.
-9. Commit only when the user asks to commit.
-10. For push, check required `gonna-selftest` cases are completed and marked `符合预期`.
-11. Push only when the user explicitly asks to push and selftest push gate passes.
-12. Produce a submission report and MR/PR description when requested.
+2. Confirm the work is on a `feature/*` branch for normal feature submission. If it is on `develop` or `master`, stop before committing unless the user explicitly authorizes the exception.
+3. Review `git diff --stat` and relevant diffs before staging.
+4. Identify the submission scope: Story, direct request, bug fix, scaffold change, documentation change, or framework change.
+5. Separate unrelated changes. Do not stage unrelated files unless the user explicitly includes them.
+6. Check that generated go-zero files are consistent with `.api` or `.proto` changes when applicable.
+7. Check that validation evidence exists from `gonna-dev` or `gonna-test`, or record the gap.
+8. Create a commit plan before committing when the scope is non-trivial.
+9. Stage only files in scope.
+10. Commit only when the user asks to commit.
+11. Before push or MR preparation, rebase the feature branch onto the latest `develop`.
+12. For push, check required `gonna-selftest` cases are completed and marked `符合预期`.
+13. Push only when the user explicitly asks to push and selftest push gate passes.
+14. Produce a submission report and MR/PR description when requested.
 
 ## Selftest Artifact Submission Rules
 
@@ -117,20 +143,22 @@ When selftest exposes an intent mismatch after a local Epic commit has already b
 
 ## Git Safety Rules
 
-- Do not rewrite history unless the user explicitly requests it.
+- Do not rewrite shared history unless the user explicitly requests it. Mandatory feature-branch rebase is allowed before push or MR preparation, but pushing a rebased branch that was already published still requires explicit user push authorization and `--force-with-lease`.
 - Do not run destructive commands such as `git reset --hard` or `git checkout --` to discard changes.
 - Do not commit secrets, real credentials, local-only env files, or machine-specific files.
 - Do not stage unrelated changes.
 - Do not hide validation failures.
 - Do not push unless the user explicitly asks and required selftest cases are marked `符合预期`.
 - Do not merge branches or approve merge requests.
+- Do not commit directly on `master` or push directly to `master` during normal submission work.
+- Do not merge `develop` into `feature/*`; rebase `feature/*` onto `develop`.
 - If the worktree contains user changes outside the requested scope, leave them untouched and report them.
 
 ## Submission Readiness
 
 A submission is ready to commit when:
 
-- The branch is known.
+- The branch is known and is a `feature/*` branch unless the user explicitly authorized an exception.
 - The intended scope is clear.
 - Changed files match the intended scope.
 - No obvious secret or local-only file is included.
@@ -146,6 +174,7 @@ A submission is ready to push when:
 - Target remote and branch are clear.
 - User explicitly asked to push.
 - Push target does not conflict with the intended workflow.
+- The current branch is a `feature/*` branch and has been rebased onto the latest `develop`.
 - Required human contract selftest documents exist when local unpushed changes affect API, RPC, Kafka/event, database-visible behavior, Redis/cache-visible behavior, scheduled jobs, webhooks, or user-visible business behavior.
 - Every required selftest case is marked `符合预期`.
 - No required selftest case is marked `不符合预期` or left unchecked.

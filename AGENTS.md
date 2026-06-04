@@ -56,6 +56,20 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Run post-generation checks: `go mod tidy`, import verification, and `go build ./...`.
 - Generate or update README/API/RPC docs when adding services or endpoints.
 
+## Branch Management
+
+- Use three branch roles by default: `feature/*`, `develop`, and `master`.
+- `master` is the protected production/release branch. Do not implement directly on `master`, do not push directly to `master`, and do not merge into `master` from skills unless the user explicitly asks for release integration and the relevant merge gate is handled outside normal `gonna-submit`.
+- `develop` is the integration branch for completed feature work. New feature work must start from the latest `develop`.
+- `feature/*` branches are the only normal implementation branches. Use them for Story, Epic, bug fix, scaffold, documentation, and framework changes.
+- Prefer traceable feature branch names such as `feature/epic-<id>-<summary>`, `feature/story-<id>-<summary>`, or `feature/<short-scope>`. Keep branch names lowercase, ASCII, and hyphen-separated.
+- Before creating a feature branch, fetch the remote state when network access is available, update local `develop`, and create the feature branch from `develop`.
+- Rebase is mandatory for branch synchronization. Feature branches must be rebased onto the latest `develop` before push or merge request preparation.
+- Do not merge `develop` into a feature branch. Use `git rebase develop` or `git pull --rebase` instead.
+- Do not use merge commits for normal feature integration. Merge readiness should be represented by a feature branch rebased on `develop` and a merge request from `feature/*` to `develop`.
+- If a feature branch was already pushed and rebase rewrites its history, push the rebased branch only when the user explicitly asks to push and confirms the target branch. Use a safe force update such as `--force-with-lease`; never use an unconditional force push.
+- Keep selftest evidence commits separate after implementation commits on the same feature branch.
+
 ## Compatibility Approval Gate
 
 - Do not add compatibility design by default.
@@ -121,6 +135,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - For commit planning, staging review, commit creation, branch push, merge request descriptions, or submission reports, read `gonna-submit` from `.agents/skills/gonna-submit/SKILL.md`.
 - Prefer using `gonna-dev` implementation reports, `gonna-test` test reports, and `gonna-selftest` push-gate status as input to `gonna-submit`.
 - Keep `gonna-submit` focused on packaging verified changes; merge gate policy and CI/CD readiness belong to future `gonna-devops`.
+- Submission must follow the branch model: feature work on `feature/*`, merge request target `develop`, and mandatory rebase onto latest `develop` before push or MR preparation.
 - Keep implementation commits and selftest evidence commits separate. If selftest feedback causes repeated repair work before push, plan the work under an intent-alignment fix Epic and amend the local unpushed Epic implementation commit when safe.
 - Do not push unless the user explicitly asks and required human contract selftests are marked `符合预期`.
 
