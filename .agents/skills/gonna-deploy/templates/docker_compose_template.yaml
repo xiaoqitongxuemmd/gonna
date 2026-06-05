@@ -1,4 +1,24 @@
 services:
+  # Add project microservices here when generated services exist.
+  #
+  # Example:
+  # user-api:
+  #   build:
+  #     context: ../..
+  #     dockerfile: services/user/api/Dockerfile
+  #   profiles: ["minimal", "integration", "observability"]
+  #   env_file:
+  #     - ./.env
+  #   volumes:
+  #     - ../../services/user/api/etc:/app/etc:ro
+  #   ports:
+  #     - "${USER_API_PORT:-8888}:8888"
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
+  #     redis:
+  #       condition: service_healthy
+
   postgres:
     image: postgres:16
     profiles: ["minimal", "integration", "observability"]

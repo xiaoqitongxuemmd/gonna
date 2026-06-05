@@ -1,6 +1,6 @@
-# 本地环境
+# 本地部署
 
-本目录为 `gonna` 提供本地依赖和可观测性支持。
+本目录为 `gonna` 提供基于 Docker Compose 的本地部署能力，用于统一组织依赖容器、开发中的 go-zero 微服务容器和可观测性组件。
 
 Profiles:
 
@@ -11,10 +11,10 @@ Profiles:
 ## 命令
 
 ```bash
-make env-config PROFILE=minimal
-make env-up PROFILE=minimal
-make env-ps PROFILE=minimal
-make env-down PROFILE=minimal
+make deploy-config PROFILE=minimal
+make deploy-up PROFILE=minimal
+make deploy-ps PROFILE=minimal
+make deploy-down PROFILE=minimal
 ```
 
-使用 `.env.example` 作为本地配置参考。不要提交真实密钥。
+使用 `.env.example` 作为本地部署配置参考。不要提交真实密钥。

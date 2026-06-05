@@ -11,17 +11,16 @@ This skill turns architecture and design intent into AI-executable work items. I
 
 ## Project Role
 
-`gonna` is an ai-native engineering framework for go-zero based microservice development. It is expected to integrate skills for architecture, planning, environment setup, development, testing, submission, DevOps gates, and deployment.
+`gonna` is an ai-native engineering framework for go-zero based microservice development. It integrates skills for architecture, planning, local Docker Compose deployment, development, testing, selftest, repair, and submission. It does not provide generic DevOps gates or online deployment workflows.
 
 Use this skill as the planning layer:
 
 - `gonna-arch`: source documents and design intent to go-zero architecture and implementation handoff
 - `gonna-plan`: architecture handoff to Epics, Stories, acceptance criteria, dependency order, and AI-readable execution backlog
-- `gonna-env`: environment requirements to local dependency setup
+- `gonna-deploy`: deployment requirements to local Docker Compose deployment assets
 - `gonna-dev`: Stories to implementation tasks and code changes
 - `gonna-test`: Stories to verification plans and test evidence
 - `gonna-submit`: verified changes to commit and merge request packaging
-- future `gonna-devops`: submitted changes to merge gates and CI/CD readiness
 
 ## When to Use
 
@@ -41,7 +40,7 @@ Use this skill for:
 
 If the source document has not yet been mapped to go-zero architecture, use `.agents/skills/gonna-arch/SKILL.md` first. If the user explicitly asks to split the source document directly, perform a lightweight architecture extraction before writing planning items.
 
-This skill is not a traditional human team scheduling tool. Do not assume Sprint length, calendar dates, assignees, team capacity, or human delivery commitments unless the user explicitly asks for them. Prefer dependency order, execution sequence, acceptance criteria, and handoff evidence that `gonna-dev`, `gonna-test`, `gonna-submit`, and future `gonna-devops` can consume.
+This skill is not a traditional human team scheduling tool. Do not assume Sprint length, calendar dates, assignees, team capacity, or human delivery commitments unless the user explicitly asks for them. Prefer dependency order, execution sequence, acceptance criteria, and handoff evidence that `gonna-dev`, `gonna-test`, and `gonna-submit` can consume.
 
 ## Epic Granularity Strategy
 
@@ -563,4 +562,4 @@ When Epic and Story files are ready:
 - Development work should use `.agents/skills/gonna-dev/SKILL.md`.
 - Test planning and evidence should use `.agents/skills/gonna-test/SKILL.md`.
 - Submission packaging should use `.agents/skills/gonna-submit/SKILL.md`.
-- Merge gates and CI/CD readiness should use future `gonna-devops` skill instructions.
+- Merge gates, CI/CD readiness, release workflows, and online deployment should use project-specific team instructions outside the generic `gonna` framework.

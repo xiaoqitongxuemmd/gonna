@@ -36,7 +36,7 @@ When instantiated for a user-facing project artifact, write headings and prose i
 
 - {note}
 
-## DevOps Gate Inputs
+## Project-Specific Gate Inputs
 
 - Requires CI: yes/no
 - Requires integration tests: yes/no

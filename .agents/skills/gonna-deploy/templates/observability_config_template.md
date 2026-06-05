@@ -2,7 +2,7 @@
 
 When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep file paths, service names, ports, protocol names, and telemetry field names in their required technical form.
 
-Use this as a planning template before creating concrete files under `deploy/local/observability/`.
+Use this as a planning template before creating concrete files under `deploy/local/observability/` for locally deployed dependency containers and go-zero microservice containers.
 
 ## OpenTelemetry Collector
 

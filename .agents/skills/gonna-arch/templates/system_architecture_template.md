@@ -54,7 +54,7 @@
 ## 下游交接
 
 - `gonna-plan`: {Epic/Story 拆分输入}
-- `gonna-env`: {环境和可观测性输入}
+- `gonna-deploy`: {部署、环境和可观测性输入}
 - `gonna-dev`: {实现输入}
 - `gonna-test`: {验证输入}
 

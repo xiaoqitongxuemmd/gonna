@@ -1,8 +1,8 @@
-# Local Environment Variables
+# Local Deployment Variables
 
 When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep environment variable names, config keys, commands, paths, ports, and protocol names in their required technical form.
 
-Copy this guidance into `deploy/local/.env.example` or use it to create a project-specific local env file.
+Copy this guidance into `deploy/local/.env.example` or use it to create a project-specific local deployment env file.
 
 Do not commit real secrets.
 
@@ -24,6 +24,9 @@ PROMETHEUS_PORT=9090
 GRAFANA_PORT=3000
 GRAFANA_USER=admin
 GRAFANA_PASSWORD=admin
+
+# Example microservice port placeholders.
+USER_API_PORT=8888
 ```
 
 ## go-zero Config Mapping
@@ -35,3 +38,4 @@ GRAFANA_PASSWORD=admin
 | `KAFKA_PORT` | `etc/{service}.yaml` Kafka brokers | Use `localhost:${KAFKA_PORT}` locally |
 | `OTEL_GRPC_PORT` | tracing exporter endpoint | Use when service exports spans over OTLP gRPC |
 | `OTEL_HTTP_PORT` | tracing exporter endpoint | Use when service exports spans over OTLP HTTP |
+| `{SERVICE}_PORT` | `etc/{service}.yaml` listen address | Use for locally deployed go-zero API/RPC services |

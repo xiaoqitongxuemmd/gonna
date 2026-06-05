@@ -3,7 +3,7 @@ PROFILE ?= minimal
 COMPOSE_FILE ?= deploy/local/docker-compose.yaml
 export PATH := $(HOME)/go/bin:/opt/homebrew/bin:$(PATH)
 
-.PHONY: tools-check tools-install generate tidy fmt build test docker-check env-config env-up env-down env-ps env-logs
+.PHONY: tools-check tools-install generate tidy fmt build test docker-check deploy-config deploy-up deploy-down deploy-ps deploy-logs
 
 tools-check:
 	@go version
@@ -30,20 +30,20 @@ test:
 	go test ./...
 
 docker-check:
-	@command -v docker >/dev/null 2>&1 || (echo "docker is required for local environment commands" && exit 1)
+	@command -v docker >/dev/null 2>&1 || (echo "docker is required for local deployment commands" && exit 1)
 	@docker compose version >/dev/null
 
-env-config: docker-check
+deploy-config: docker-check
 	docker compose -f $(COMPOSE_FILE) --profile $(PROFILE) config
 
-env-up: docker-check
+deploy-up: docker-check
 	docker compose -f $(COMPOSE_FILE) --profile $(PROFILE) up -d
 
-env-down: docker-check
+deploy-down: docker-check
 	docker compose -f $(COMPOSE_FILE) --profile $(PROFILE) down
 
-env-ps: docker-check
+deploy-ps: docker-check
 	docker compose -f $(COMPOSE_FILE) --profile $(PROFILE) ps
 
-env-logs: docker-check
+deploy-logs: docker-check
 	docker compose -f $(COMPOSE_FILE) --profile $(PROFILE) logs -f

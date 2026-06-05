@@ -1,15 +1,15 @@
 ---
 name: gonna-submit
-description: Use this skill when the user asks to prepare, review, stage, commit, push, or package verified changes for merge request submission in this ai-native go-zero microservice framework project; create commit plans, commit messages, merge request descriptions, submission reports, or handoff evidence between gonna-test and gonna-devops.
+description: Use this skill when the user asks to prepare, review, stage, commit, push, or package verified changes for merge request submission in this ai-native go-zero microservice framework project; create commit plans, commit messages, merge request descriptions, submission reports, or review handoff evidence.
 version: 1.0.0
 license: MIT
 ---
 
 # Submit Skill
 
-This skill packages verified local changes into reviewable submission units. It sits between `gonna-test` and future `gonna-devops`: `gonna-test` provides verification evidence, `gonna-submit` creates clean commits and merge request material, and `gonna-devops` evaluates merge gates and CI/CD readiness.
+This skill packages verified local changes into reviewable submission units. `gonna-test` provides verification evidence, and `gonna-submit` creates clean commits, push evidence, merge request material, and submission reports.
 
-It is not responsible for writing feature code, designing tests, defining CI/CD gates, approving merges, or deploying releases.
+It is not responsible for writing feature code, designing tests, defining CI/CD gates, approving merges, online deployment, or release operations. Those rules must be specialized per project and team when needed.
 
 ## Project Role
 
@@ -22,7 +22,6 @@ Use this skill as the submission layer:
 - `gonna-selftest`: human contract acceptance and push-gate evidence
 - `gonna-repair`: selftest feedback to intent-alignment fix Epics, yolo-submit repairs, and updated selftest documents
 - `gonna-submit`: verified local changes to commit plan, commit, push, merge request description, and submission report
-- future `gonna-devops`: submitted merge request to gate evaluation, CI/CD readiness, release gate, and deployment readiness
 
 ## When to Use
 
@@ -37,13 +36,13 @@ Use this skill for:
 - Running `git commit` when the user asks to commit
 - Pushing a branch when the user explicitly asks to push
 - Creating merge request or pull request descriptions
-- Producing submission reports for future `gonna-devops` gate checks
+- Producing submission reports for project-specific review, CI/CD, or release gates when the team defines them
 - Packaging `gonna-dev` implementation evidence and `gonna-test` verification evidence into reviewable form
 - Checking `gonna-selftest` human acceptance before push
 - Keeping generated selftest artifacts out of development/test commits until the user has completed human selftest acceptance
 - Amending local unpushed Epic commits when selftest feedback creates additional alignment-fix Stories for the same Epic
 
-Do not use this skill to decide whether a merge request is allowed to merge. That belongs to future `gonna-devops`.
+Do not use this skill to decide whether a merge request is allowed to merge. Merge approval, CI/CD readiness, release gates, and production operations belong to project-specific team workflows outside the generic `gonna` framework.
 
 ## Language Policy
 
@@ -232,13 +231,13 @@ Use:
 
 ### 4. Submission Report
 
-Use after commit or push, or when handing off to future `gonna-devops`.
+Use after commit or push, or when handing off to a project-specific review or release workflow.
 
 Use:
 
 - `.agents/skills/gonna-submit/templates/submission_report_template.md`
 
-## Handoff to DevOps
+## Handoff to Project-Specific Review
 
 When submission is complete, provide:
 

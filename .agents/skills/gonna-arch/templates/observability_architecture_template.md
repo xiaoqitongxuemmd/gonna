@@ -38,6 +38,6 @@
 - 请求吞吐
 - RPC 延迟
 
-## 本地环境交接
+## 本地部署交接
 
-- `gonna-env`: {需要落地的 observability profile}
+- `gonna-deploy`: {需要落地的 observability profile}

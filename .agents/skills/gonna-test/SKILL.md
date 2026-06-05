@@ -21,7 +21,7 @@ Use this skill as the independent verification layer:
 - `gonna-plan`: architecture handoff to Epics, Stories, acceptance criteria, and KANBAN
 - `gonna-dev`: Story to implementation, focused tests, validation, and implementation report
 - `gonna-test`: implementation to test plan, verification evidence, defect report, and completion recommendation
-- future `gonna-deploy`: release and deployment execution
+- `gonna-deploy`: local Docker Compose deployment assets
 
 ## When to Use
 
@@ -256,4 +256,4 @@ When testing is complete:
 
 - Update or recommend Story status based on evidence.
 - If failed, hand defects back to `gonna-dev`.
-- If passed and deployment is needed, hand release needs to future `gonna-deploy`.
+- If passed and deployment is needed, hand deployment needs to `gonna-deploy`.

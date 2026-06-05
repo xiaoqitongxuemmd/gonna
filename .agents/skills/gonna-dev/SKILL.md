@@ -21,7 +21,7 @@ Use this skill as the implementation layer:
 - `gonna-plan`: architecture handoff to Epics, Stories, acceptance criteria, and KANBAN
 - `gonna-dev`: Story to go-zero code, tests, validation, and implementation report
 - `gonna-test`: verification plans and independent test evidence
-- future `deploy`: release and deployment execution
+- `gonna-deploy`: local Docker Compose deployment assets
 
 ## When to Use
 
@@ -248,5 +248,5 @@ Keep the PR description grounded in actual changes and validation output.
 When implementation is complete:
 
 - Hand off validation needs to `.agents/skills/gonna-test/SKILL.md`.
-- Hand off release needs to future `deploy` skill.
-- Until those skills exist, include validation and deployment notes in the implementation report.
+- Hand off local Docker Compose deployment needs to `gonna-deploy`.
+- Include validation and local deployment notes in the implementation report when they affect the Story.

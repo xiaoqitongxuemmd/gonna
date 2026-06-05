@@ -40,7 +40,7 @@ Status: `Prepared | Committed | Pushed | Blocked`
 | Test report | present/missing | {notes} |
 | Build/test commands | pass/fail/not run | {notes} |
 
-## Handoff to DevOps
+## Handoff to Project-Specific Review
 
 - MR/PR description: {path or inline}
 - Gate risks: {risks}

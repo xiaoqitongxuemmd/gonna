@@ -1,6 +1,6 @@
 ---
 name: gonna-arch
-description: Use this skill as the primary architecture authority when the user asks to analyze a PRD, specification, technical design, architecture document, or any source document; define technical stack; design system architecture; decompose services; design API/RPC/event/data contracts; plan go-zero scaffold; define local environment and observability contracts; design security, resilience, migration, or evolution strategy; or turn documented intent into implementation-ready go-zero architecture.
+description: Use this skill as the primary architecture authority when the user asks to analyze a PRD, specification, technical design, architecture document, or any source document; define technical stack; design system architecture; decompose services; design API/RPC/event/data contracts; plan go-zero scaffold; define deployment/environment and observability contracts; design security, resilience, migration, or evolution strategy; or turn documented intent into implementation-ready go-zero architecture.
 version: 1.0.0
 license: MIT
 ---
@@ -19,7 +19,7 @@ Use this skill for:
 - Creating system, service, API, or data-layer architecture documents
 - Decomposing requirements into go-zero services, APIs, RPCs, models, and tasks
 - Defining the technical stack and scaffold architecture
-- Defining local environment, runtime dependency, and observability contracts
+- Defining deployment/environment, runtime dependency, and observability contracts
 - Designing API, RPC, event, data, security, resilience, and migration architecture
 - Planning the go-zero project scaffold and code generation flow
 - Making technical decisions and recording architecture rationale
@@ -71,7 +71,7 @@ This skill owns architecture decisions and architecture facts. It should answer:
 - How should metrics, traces, and logs be produced and observed?
 - How should the architecture evolve when a feature changes the stack or scaffold?
 
-Do not leave downstream skills to guess architecture decisions. Produce explicit artifacts or handoff sections that `gonna-plan`, `gonna-env`, `gonna-dev`, `gonna-test`, and future `gonna-deploy` can consume.
+Do not leave downstream skills to guess architecture decisions. Produce explicit artifacts or handoff sections that `gonna-plan`, `gonna-deploy`, `gonna-dev`, and `gonna-test` can consume.
 
 ## Compatibility Approval Gate
 
@@ -264,7 +264,7 @@ The contract should define:
 - Feature-to-dependency mapping
 - Evolution rules for adding or removing dependencies
 
-This skill decides what the environment requires. `gonna-env` materializes it into Docker Compose, env files, health checks, and local run instructions.
+This skill decides what deployment/environment requires. `gonna-deploy` materializes it into Docker Compose, dependency containers, microservice containers, env files, health checks, and local run instructions.
 
 ### 7. Observability Architecture
 
@@ -284,7 +284,7 @@ Define:
 - Log backend choice such as Loki when needed
 - Required correlation fields such as trace ID and span ID
 - go-zero service instrumentation expectations
-- Local observability profile requirements for `gonna-env`
+- Local observability profile requirements for `gonna-deploy`
 
 ### 8. Architecture Evolution
 
@@ -516,7 +516,7 @@ When the user asks for project setup, local debugging dependencies, observabilit
 
 ### Evolution Rules
 
-- When a feature adds a runtime dependency, update this contract before `gonna-env` materializes it.
+- When a feature adds a runtime dependency or service container need, update this contract before `gonna-deploy` materializes it.
 - When a feature changes observability requirements, update this contract and the observability architecture.
 ```
 
@@ -525,10 +525,10 @@ When the user asks for project setup, local debugging dependencies, observabilit
 Use this mapping when producing handoffs:
 
 - `gonna-plan` consumes Epics, Stories, acceptance criteria, dependencies, and implementation phases.
-- `gonna-env` consumes environment contracts and observability architecture.
+- `gonna-deploy` consumes deployment/environment contracts and observability architecture.
 - `gonna-dev` consumes API/RPC/data/scaffold designs, generation plans, and manual implementation boundaries.
 - `gonna-test` consumes acceptance criteria, API/RPC contracts, resilience expectations, observability expectations, and validation requirements.
-- Future `gonna-deploy` consumes deployment architecture, environment contract, security constraints, and release verification requirements.
+- Online deployment architecture, release workflows, CI/CD, and production operations are project-specific and outside the generic `gonna` framework.
 
 ## Scaffold Planning Format
 

@@ -20,13 +20,12 @@ Use this skill as the execution orchestration layer:
 - `gonna-arch`: source documents to architecture and implementation handoff
 - `gonna-plan`: architecture handoff to AI-executable Epic and Story files
 - `gonna-yolo`: planned Stories to autonomous dev/test/submit iterations
-- `gonna-env`: local dependency setup when a Story requires it
+- `gonna-deploy`: local Docker Compose deployment and dependency/service container setup when a Story requires it
 - `gonna-dev`: Story implementation
 - `gonna-test`: verification and completion recommendation
 - `gonna-selftest`: human contract selftest docs, prepared data, and push gate
 - `gonna-repair`: selftest-feedback repair iteration through arch, plan, yolo-submit, and selftest update
 - `gonna-submit`: commit and merge request packaging
-- future `gonna-devops`: merge gates and CI/CD readiness
 
 ## When to Use
 
@@ -153,7 +152,7 @@ For each selected Story:
 
 1. Create or update a yolo run plan.
 2. Mark the Story `IN_PROGRESS` using `gonna-plan` status rules.
-3. Use `gonna-env` only if the Story requires local dependencies or observability setup.
+3. Use `gonna-deploy` only if the Story requires local deployment, dependency containers, microservice containers, or observability setup.
 4. Use `gonna-dev` to implement the Story and produce its own implementation report or inline equivalent.
 5. Run focused validation.
 6. Use `gonna-test` to verify acceptance criteria and quality gates and produce its own test report, defect report, or completion recommendation.

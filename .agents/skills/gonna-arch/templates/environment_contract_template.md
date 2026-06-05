@@ -1,4 +1,4 @@
-# 环境契约 vX.Y.Z
+# 部署与环境契约 vX.Y.Z
 
 版本：vX.Y.Z
 创建时间：YYYY-MM-DD
@@ -7,7 +7,7 @@
 
 ## 概览
 
-{说明本地开发、调试和集成测试所需环境。}
+{说明本地 Docker Compose 部署、开发调试、集成测试所需环境；线上部署需由具体项目按团队规范另行特化。}
 
 ## 运行时栈
 
@@ -17,11 +17,17 @@
 | go-zero | {version} | yes | {说明} |
 | goctl | {version} | yes | {说明} |
 
-## 本地依赖
+## 本地部署依赖
 
 | 依赖 | 镜像或版本 | Profile | 端口 | 用途 |
 | --- | --- | --- | --- | --- |
 | PostgreSQL | `postgres:{version}` | minimal | `5432` | {用途} |
+
+## 本地微服务容器
+
+| 服务 | 类型 | 构建或镜像 | Profile | 端口 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| `{service}` | API/RPC | `{build or image}` | minimal | `{port}` | {说明} |
 
 ## Profiles
 
@@ -41,4 +47,4 @@
 
 ## 演进规则
 
-- 当 feature 增加运行时依赖时，先更新本契约，再由 `gonna-env` 落地。
+- 当 feature 增加运行时依赖或微服务容器部署需求时，先更新本契约，再由 `gonna-deploy` 落地。

@@ -1,8 +1,8 @@
-# Local Environment Healthcheck Report
+# Local Deployment Healthcheck Report
 
 When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep commands, paths, service names, status literals, ports, and config keys in their required technical form.
 
-Environment Profile: `minimal | integration | observability`
+Deployment Profile: `minimal | integration | observability`
 Generated: `YYYY-MM-DD`
 
 ## Summary
@@ -14,6 +14,12 @@ Result: `Pass | Partial | Fail`
 | Service | Expected | Actual | Result |
 | --- | --- | --- | --- |
 | postgres | running/healthy | {actual} | {result} |
+
+## Microservice Checks
+
+| Service | Command | Result | Notes |
+| --- | --- | --- | --- |
+| `{service}` | `{curl/grpcurl/docker compose logs command}` | {result} | {notes} |
 
 ## Connectivity Checks
 
