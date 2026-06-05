@@ -233,6 +233,8 @@ Use the template:
 
 - `.agents/skills/gonna-dev/templates/implementation_report_template.md`
 
+When invoked by `gonna-yolo`, still produce the implementation report as a `gonna-dev` artifact. `gonna-yolo` may reference this report path or result, but must not write a combined yolo document that replaces it.
+
 ## PR Description
 
 When the user asks for a PR or review-ready summary, use:

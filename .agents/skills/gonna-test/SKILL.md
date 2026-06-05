@@ -248,6 +248,8 @@ Use these templates:
 
 When answering without writing files, provide the same sections inline.
 
+When invoked by `gonna-yolo`, still produce the test plan, test report, defect report, or completion recommendation as a `gonna-test` artifact. `gonna-yolo` may reference this report path or result, but must not write a combined yolo document that replaces it.
+
 ## Handoff
 
 When testing is complete:

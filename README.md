@@ -33,7 +33,23 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-s
 - `gonna-selftest` 根据本地未 push 的改动生成 HTTP、Kafka 等微服务输入输出契约自测清单，并准备数据库、Redis、Kafka 等测试数据；每个 required case 必须人工勾选 `符合预期` 才允许 push。
 - `gonna-repair` 在人工自测出现 `不符合预期` 后，读取自测反馈，协调 `gonna-arch` 更新设计意图，协调 `gonna-plan` 创建或追加意图对齐修复 Epic/Story，再用 `gonna-yolo` 的 `yolo-submit` 模式修复并更新 selftest。
 - `gonna-submit` 将已经实现并验证过的变更整理成可评审提交，包括 commit plan、commit message、MR 描述和 submission report。
-- `gonna-yolo` 在用户明确授权的 yolo mode 下，按 `gonna-plan` 的 Story 自动驱动 `gonna-dev -> gonna-test -> gonna-submit` 迭代，并在硬停止条件出现时中止。
+- `gonna-yolo` 在用户明确授权的 yolo mode 下，按 `gonna-plan` 的 Story 自动驱动 `gonna-dev -> gonna-test -> gonna-submit` 迭代，并在硬停止条件出现时中止；它只记录编排状态和阻塞点，不替代 `gonna-dev` 的实现报告或 `gonna-test` 的测试报告。
+
+## 使用前建议
+
+在正式使用 `gonna-*` skill 前，建议团队先明确自己的工程协作规范，并写入项目 README、团队手册或仓库级说明中。尤其要先建立分支管理规范，避免 AI 在提交、rebase、push、多 remote 同步或 MR 准备时根据通用模板猜测团队流程。
+
+建议至少明确：
+
+- 主干分支、集成分支、功能分支或镜像分支分别叫什么。
+- 每个本地分支应该跟踪哪个 remote branch。
+- 新功能、修复、文档和框架调整分别从哪个分支创建。
+- push 前是否必须 rebase，以及 rebase 到哪个上游分支。
+- 是否允许 force push；如允许，是否只能使用 `--force-with-lease`。
+- MR/PR 的 source branch 和 target branch 规则。
+- 多 remote 场景下，同一改动是否需要同步到多个远端，以及同步顺序。
+
+`gonna-submit` 只负责读取当前 Git 事实、遵循团队已经明确的分支规范、检查提交和 push 风险；它不应该在 skill 内部替团队发明固定的分支模型。若团队尚未建立分支管理规范，提交和 push 前应先停下来确认。
 
 ## gonna-yolo 使用示例
 
@@ -50,7 +66,7 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-s
 - 从 `EPIC-5` 继续推进到 `EPIC-7`，按 `gonna-plan` 的 Story 依赖和 `execution_order` 执行。
 - 每个 Epic 独立形成本地提交，方便回看和回滚。
 - 遇到测试失败、架构歧义、外部依赖阻塞等硬停止条件时立即中止。
-- 执行报告写入 `docs/run/`，Story 和 KANBAN 状态回写到 `docs/scrum/`。
+- 如遇阻塞，阻塞报告写入 `docs/run/`，Story 和 KANBAN 状态回写到 `docs/scrum/`。
 
 ## 自测与 push 门禁
 
@@ -134,7 +150,7 @@ skill、agent instructions、模板和内嵌 reference 这类框架指导材料�
 |-- deploy/local/      # 本地依赖与可观测性
 |-- docs/design/       # 架构事实来源
 |-- docs/scrum/        # Epic、Story 和规划视图
-|-- docs/run/          # yolo 自动执行报告
+|-- docs/run/          # yolo 阻塞报告和编排异常记录
 |-- docs/selftest/     # 人工契约自测文档和数据资产
 `-- .agents/           # AI 上下文与 skill
 ```

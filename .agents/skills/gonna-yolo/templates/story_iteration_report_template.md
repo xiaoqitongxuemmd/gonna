@@ -1,38 +1,11 @@
-# Story Iteration Report
+# Deprecated Story Iteration Report
 
-When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep Story IDs, status values, branch names, commit SHAs, commands, paths, and skill names in their required technical form.
+Do not use this template for normal yolo execution.
 
-Story: `STORY-X-XX`
-Generated: `YYYY-MM-DD`
+`gonna-yolo` must not write Story iteration reports that summarize or replace `gonna-dev` implementation reports, `gonna-test` test reports, `gonna-submit` submission reports, or `gonna-selftest` documents.
 
-## Status Flow
+For normal execution, report concise status in the conversation and let each downstream skill produce its own artifact.
 
-| Stage | Status | Evidence |
-| --- | --- | --- |
-| Selected | TODO | {evidence} |
-| Development | IN_PROGRESS | {evidence} |
-| Test | TESTING | {evidence} |
-| Review | IN_REVIEW | {evidence} |
-| Done | COMPLETED | {evidence} |
+For blockers or abnormal stops, use:
 
-## Dev Result
-
-- Skill: `gonna-dev`
-- Summary: {summary}
-- Files changed: {files}
-
-## Test Result
-
-- Skill: `gonna-test`
-- Recommendation: `Pass | Conditional Pass | Fail`
-- Evidence: {evidence}
-
-## Submit Result
-
-- Skill: `gonna-submit`
-- Commit: `{sha or none}`
-- Push: `{remote/branch or none}`
-
-## Notes
-
-- {note}
+- `.agents/skills/gonna-yolo/templates/blocker_report_template.md`

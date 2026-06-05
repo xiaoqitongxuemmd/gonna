@@ -1,41 +1,16 @@
-# YOLO Run Report
+# Deprecated YOLO Run Report
 
-When instantiated for a user-facing project artifact, write headings and prose in Simplified Chinese. Keep Story IDs, Epic IDs, status values, branch names, remotes, commit SHAs, commands, paths, and authorization mode names in their required technical form.
+Do not use this template for normal yolo execution.
 
-Generated: `YYYY-MM-DD`
+`docs/run/` is reserved for yolo blockers and abnormal stops. A yolo run report must not become an all-in-one document that covers implementation details, test evidence, submission details, and selftest evidence.
 
-## Summary
+Use downstream artifacts instead:
 
-- Mode: `yolo-dev | yolo-submit | yolo-push`
-- Scope: `{scope}`
-- Result: `Completed | Partial | Blocked`
-- Branch: `{branch}`
-- Push target: `{remote/branch or none}`
+- `gonna-dev` owns implementation reports.
+- `gonna-test` owns test plans, test reports, defect reports, and completion recommendations.
+- `gonna-submit` owns commit plans, submission reports, and MR/PR descriptions.
+- `gonna-selftest` owns selftest documents and assets.
 
-## Story Results
+For blockers or abnormal stops, use:
 
-| Story | Start Status | End Status | Commit | Result |
-| --- | --- | --- | --- | --- |
-| `STORY-X-XX` | TODO | COMPLETED | `{sha or none}` | {result} |
-
-## Validation Evidence
-
-| Story | Check | Result | Evidence |
-| --- | --- | --- | --- |
-| `STORY-X-XX` | `go test ./...` | pass/fail/not run | {evidence} |
-
-## Files Updated
-
-| Path | Reason |
-| --- | --- |
-| `{path}` | {reason} |
-
-## Blockers
-
-- {blocker or none}
-
-## Handoff
-
-- For `gonna-submit`: {submission notes}
-- For future `gonna-devops`: {gate notes}
-- Next action: {next action}
+- `.agents/skills/gonna-yolo/templates/blocker_report_template.md`

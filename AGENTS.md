@@ -56,19 +56,16 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Run post-generation checks: `go mod tidy`, import verification, and `go build ./...`.
 - Generate or update README/API/RPC docs when adding services or endpoints.
 
-## Branch Management
+## Skill Governance
 
-- Use three branch roles by default: `feature/*`, `develop`, and `master`.
-- `master` is the protected production/release branch. Do not implement directly on `master`, do not push directly to `master`, and do not merge into `master` from skills unless the user explicitly asks for release integration and the relevant merge gate is handled outside normal `gonna-submit`.
-- `develop` is the integration branch for completed feature work. New feature work must start from the latest `develop`.
-- `feature/*` branches are the only normal implementation branches. Use them for Story, Epic, bug fix, scaffold, documentation, and framework changes.
-- Prefer traceable feature branch names such as `feature/epic-<id>-<summary>`, `feature/story-<id>-<summary>`, or `feature/<short-scope>`. Keep branch names lowercase, ASCII, and hyphen-separated.
-- Before creating a feature branch, fetch the remote state when network access is available, update local `develop`, and create the feature branch from `develop`.
-- Rebase is mandatory for branch synchronization. Feature branches must be rebased onto the latest `develop` before push or merge request preparation.
-- Do not merge `develop` into a feature branch. Use `git rebase develop` or `git pull --rebase` instead.
-- Do not use merge commits for normal feature integration. Merge readiness should be represented by a feature branch rebased on `develop` and a merge request from `feature/*` to `develop`.
-- If a feature branch was already pushed and rebase rewrites its history, push the rebased branch only when the user explicitly asks to push and confirms the target branch. Use a safe force update such as `--force-with-lease`; never use an unconditional force push.
-- Keep selftest evidence commits separate after implementation commits on the same feature branch.
+- Resolve instruction conflicts in this order: explicit user instruction in the current turn, repository facts observed with tools, this `AGENTS.md`, the active project skill, referenced supporting skills, and templates.
+- Repository facts include `git status`, `git branch -vv`, `git remote -v`, existing files, generated contracts, and current unpushed changes. Do not override these facts with a generic skill template.
+- Skills must not invent branch management policy. Branch naming, upstream mapping, rebase target, push target, and MR/PR target must come from the team's documented workflow, the user's explicit instruction, or observed Git tracking configuration.
+- When team policy is missing or conflicts with observed Git state, stop before commit, push, merge, rebase, or history rewrite and ask for clarification.
+- Keep a single owner for each rule area: `gonna-plan` owns Story status values and flow; `gonna-selftest` owns human contract selftest gates; `gonna-submit` owns staging, commit, push, and Git safety checks; `gonna-yolo` orchestrates these skills and must not duplicate their detailed rules.
+- When a coordinating skill such as `gonna-yolo` calls another skill, the called skill's owned gate is authoritative for that gate.
+- `gonna-yolo` must not replace downstream artifacts. Implementation reports belong to `gonna-dev`; test plans, test reports, and defect reports belong to `gonna-test`; submission reports belong to `gonna-submit`; selftest documents belong to `gonna-selftest`.
+- `docs/run/` is for yolo orchestration blockers and abnormal stop reports. Do not use one yolo run document to summarize or replace all development and testing work.
 
 ## Compatibility Approval Gate
 
@@ -135,7 +132,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - For commit planning, staging review, commit creation, branch push, merge request descriptions, or submission reports, read `gonna-submit` from `.agents/skills/gonna-submit/SKILL.md`.
 - Prefer using `gonna-dev` implementation reports, `gonna-test` test reports, and `gonna-selftest` push-gate status as input to `gonna-submit`.
 - Keep `gonna-submit` focused on packaging verified changes; merge gate policy and CI/CD readiness belong to future `gonna-devops`.
-- Submission must follow the branch model: feature work on `feature/*`, merge request target `develop`, and mandatory rebase onto latest `develop` before push or MR preparation.
+- Submission must follow the team's documented branch management policy and the observed Git upstream mapping. If those are missing or inconsistent, stop before push, rebase, or MR preparation and ask for clarification.
 - Keep implementation commits and selftest evidence commits separate. If selftest feedback causes repeated repair work before push, plan the work under an intent-alignment fix Epic and amend the local unpushed Epic implementation commit when safe.
 - Do not push unless the user explicitly asks and required human contract selftests are marked `符合预期`.
 
@@ -148,7 +145,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - `yolo-submit` may create local commits without completed selftest; `yolo-push` must stop until required human selftests are marked `符合预期`.
 - If human selftest reports `不符合预期`, `gonna-yolo` should stop normal progression and hand off to `gonna-repair`.
 - `gonna-yolo` must stop on missing acceptance criteria, incomplete dependencies, unresolved architecture/environment decisions, test failure, P0/P1 defects, unrelated worktree changes, secret risk, destructive Git needs, merge needs, or deploy needs.
-- Write yolo run artifacts under `docs/run/`, not under `docs/scrum/`.
+- Write only yolo blocker and abnormal-stop artifacts under `docs/run/`, not development or test reports.
 
 ## Skill Authoring Rules
 
