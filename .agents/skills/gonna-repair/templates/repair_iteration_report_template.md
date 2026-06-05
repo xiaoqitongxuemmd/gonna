@@ -8,7 +8,7 @@ Push: `Not pushed`
 
 ## Scope
 
-- Selftest document: `{docs/selftest/...}`
+- Selftest document: `{docs/scrum/selftest/...}`
 - Original Epic/Story: `{EPIC-X | STORY-X-XX | unknown}`
 - Repair Epic: `{EPIC-X}`
 - Branch: `{branch}`

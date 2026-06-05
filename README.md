@@ -66,7 +66,7 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-s
 - 从 `EPIC-5` 继续推进到 `EPIC-7`，按 `gonna-plan` 的 Story 依赖和 `execution_order` 执行。
 - 每个 Epic 独立形成本地提交，方便回看和回滚。
 - 遇到测试失败、架构歧义、外部依赖阻塞等硬停止条件时立即中止。
-- 如遇阻塞，阻塞报告写入 `docs/run/`，Story 和 KANBAN 状态回写到 `docs/scrum/`。
+- 如遇阻塞，阻塞报告写入 `docs/scrum/blocker/`，Story 和 KANBAN 状态回写到 `docs/scrum/`。
 
 ## 自测与 push 门禁
 
@@ -84,7 +84,7 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-env/gonna-dev/gonna-test/gonna-s
 规则：
 
 - 本地 commit 不强制完成自测。
-- `docs/selftest/**` 不能和开发代码、go-zero 生成代码、自动化测试或规划修复混在同一个提交里。
+- `docs/scrum/selftest/**` 不能和开发代码、go-zero 生成代码、自动化测试或规划修复混在同一个提交里。
 - push 前必须完成 required selftest case。
 - 只有所有 required case 都勾选 `符合预期` 才允许 push。
 - 任何 `不符合预期` 都会阻止 push，并交给 `gonna-repair` 编排设计更新、修复规划、yolo-submit 修复和 selftest 更新。
@@ -110,6 +110,8 @@ yolo 开发完成 -> 自动化测试 -> 提交实现改动 -> 生成 selftest ->
 ```
 
 同一个意图偏差反复修改时，新的修复 Story 应继续追加到同一个意图对齐修复 Epic 中。`amend` 只适用于本地未 push 的 Epic 实现提交；已经 push 的提交不默认改写历史。
+
+`gonna-repair` 的修复迭代报告写入 `docs/scrum/repair-reports/`。`gonna-yolo` 的阻塞报告写入 `docs/scrum/blocker/`。`docs/scrum/selftest/` 只保留人工契约自测文档和数据资产。
 
 ## 内嵌参考资料
 
@@ -150,8 +152,7 @@ skill、agent instructions、模板和内嵌 reference 这类框架指导材料�
 |-- deploy/local/      # 本地依赖与可观测性
 |-- docs/design/       # 架构事实来源
 |-- docs/scrum/        # Epic、Story 和规划视图
-|-- docs/run/          # yolo 阻塞报告和编排异常记录
-|-- docs/selftest/     # 人工契约自测文档和数据资产
+|-- docs/scrum/selftest/     # 人工契约自测文档和数据资产
 `-- .agents/           # AI 上下文与 skill
 ```
 

@@ -107,7 +107,7 @@ curl -i -X POST 'http://localhost:{port}/{path}' \
 Kafka 必填，每个 Kafka case 使用一个只覆盖当前 topic/message 的探针：
 
 ```bash
-sh docs/selftest/assets/{story-id}/kafka_probe.sh
+sh docs/scrum/selftest/assets/{story-id}/kafka_probe.sh
 ```
 
 ## 观察命令

@@ -50,7 +50,7 @@ The assistant prepares test data whenever possible. Do not make the user manuall
 
 For each changed contract:
 
-- Generate deterministic seed assets under `docs/selftest/assets/{story-id}/`.
+- Generate deterministic seed assets under `docs/scrum/selftest/assets/{story-id}/`.
 - Generate cleanup assets when data mutation is involved.
 - Execute preparation commands when the local environment is available and the user has allowed command execution.
 - Mark data preparation status in the selftest document.
@@ -121,17 +121,17 @@ Forbidden generated scripts:
 
 ## Selftest Artifacts
 
-Write documents under `docs/selftest/`.
+Write documents under `docs/scrum/selftest/`.
 
 Recommended paths:
 
-- `docs/selftest/{story-id}-selftest.md`
-- `docs/selftest/{epic-id}-selftest.md`
-- `docs/selftest/assets/{story-id}/seed.sql`
-- `docs/selftest/assets/{story-id}/cleanup.sql`
-- `docs/selftest/assets/{story-id}/seed_redis.py`
-- `docs/selftest/assets/{story-id}/kafka_probe.sh`
-- `docs/selftest/assets/{story-id}/check_redis.py`
+- `docs/scrum/selftest/{story-id}-selftest.md`
+- `docs/scrum/selftest/{epic-id}-selftest.md`
+- `docs/scrum/selftest/assets/{story-id}/seed.sql`
+- `docs/scrum/selftest/assets/{story-id}/cleanup.sql`
+- `docs/scrum/selftest/assets/{story-id}/seed_redis.py`
+- `docs/scrum/selftest/assets/{story-id}/kafka_probe.sh`
+- `docs/scrum/selftest/assets/{story-id}/check_redis.py`
 
 Use these templates:
 

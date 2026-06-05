@@ -104,7 +104,7 @@ Selftest artifacts are human acceptance materials. Treat them as a separate subm
 
 Rules:
 
-- Do not include `docs/selftest/**` changes in the same commit as development, generated go-zero code, automated tests, or planning fixes unless the user explicitly asks.
+- Do not include `docs/scrum/selftest/**` changes in the same commit as development, generated go-zero code, automated tests, or planning fixes unless the user explicitly asks.
 - When yolo or submit generates selftest documents before the user has executed them, leave those files uncommitted or commit them only in a dedicated selftest draft commit when explicitly requested.
 - After the user marks all required selftest cases `符合预期`, commit selftest documents and assets as a dedicated selftest evidence commit.
 - If the user marks any case `不符合预期`, do not commit the selftest result as final evidence. Preserve the feedback, route it back to `gonna-arch`/`gonna-plan`/`gonna-dev` as needed, and keep subsequent implementation commits separate from selftest artifacts.
@@ -129,7 +129,7 @@ When selftest exposes an intent mismatch after a local Epic commit has already b
 - For local unpushed commits that belong to the same Epic scope, prefer `git commit --amend` or an explicit fixup/squash plan so the final local Epic commit represents the accepted implementation state.
 - Do not amend commits that have already been pushed unless the user explicitly asks for history rewrite and confirms the target branch.
 - Do not amend selftest evidence into an implementation commit. Accepted selftest artifacts remain a separate commit.
-- When amending, restage only the files that belong to the Epic implementation/design/planning fix. Leave `docs/selftest/**` unstaged unless creating the dedicated selftest evidence commit.
+- When amending, restage only the files that belong to the Epic implementation/design/planning fix. Leave `docs/scrum/selftest/**` unstaged unless creating the dedicated selftest evidence commit.
 
 ## Git Safety Rules
 

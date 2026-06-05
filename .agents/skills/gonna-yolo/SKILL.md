@@ -11,7 +11,7 @@ This skill is the authorized autonomous runner for `gonna`. It reads planned Epi
 
 `gonna-yolo` means fewer confirmations inside an approved scope. It does not mean lower quality, skipped validation, unsafe Git behavior, uncontrolled scope expansion, merge approval, or deployment.
 
-`gonna-yolo` is an orchestrator, not a replacement author for downstream reports. It must not produce one broad `docs/run/` document that substitutes for `gonna-dev` implementation reports, `gonna-test` test reports, `gonna-submit` submission reports, or `gonna-selftest` selftest documents.
+`gonna-yolo` is an orchestrator, not a replacement author for downstream reports. It must not produce one broad yolo document that substitutes for `gonna-dev` implementation reports, `gonna-test` test reports, `gonna-submit` submission reports, or `gonna-selftest` selftest documents.
 
 ## Project Role
 
@@ -109,7 +109,7 @@ Read the minimum needed inputs:
 - Architecture references listed in Story `design_refs`
 - Source documents listed in Story `source_docs`
 - Existing implementation and test reports when present
-- Selftest docs under `docs/selftest/` when push is requested
+- Selftest docs under `docs/scrum/selftest/` when push is requested
 
 If no Story files exist, stop and ask the user to run `gonna-plan` first.
 
@@ -167,7 +167,7 @@ For each selected Story:
 14. If authorization is `yolo-push`, use `gonna-submit` to apply Git safety checks and push only after accepted selftest artifacts are separately committed and only to the explicit target remote and branch.
 15. Mark the Story `COMPLETED` only when `gonna-plan` status rules, `gonna-test` verification, and required submission/selftest work for the authorization mode are satisfied.
 16. Update `docs/scrum/KANBAN.md`.
-17. If a hard stop occurs, write a blocker report under `docs/run/`. If no blocker occurs, do not create a yolo run report that summarizes development and testing content.
+17. If a hard stop occurs, write a blocker report under `docs/scrum/blocker/`. If no blocker occurs, do not create a yolo run report that summarizes development and testing content.
 
 ## Selftest Feedback Loop
 
@@ -236,9 +236,9 @@ Use Story status values from `gonna-plan`:
 
 Use the status flow and completion rules defined by `gonna-plan`. Do not duplicate or override them here.
 
-## Run Artifacts
+## Blocker Artifacts
 
-Write yolo artifacts under `docs/run/` only for blockers and abnormal stops. Do not use `docs/run/` for normal development summaries, test summaries, implementation reports, or all-in-one yolo run reports.
+Write yolo artifacts under `docs/scrum/blocker/` only for blockers and abnormal stops. Do not write normal development summaries, test summaries, implementation reports, or all-in-one yolo run reports.
 
 Use only when blocked:
 
@@ -246,7 +246,7 @@ Use only when blocked:
 
 Recommended paths:
 
-- `docs/run/blocker-{story-id}.md`
+- `docs/scrum/blocker/blocker-{story-id}.md`
 
 Forbidden yolo artifacts:
 

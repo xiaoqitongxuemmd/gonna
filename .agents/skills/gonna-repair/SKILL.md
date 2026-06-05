@@ -1,13 +1,13 @@
 ---
 name: gonna-repair
-description: Use this skill when the user has completed human selftest, recorded `不符合预期` feedback in docs/selftest, and wants to iterate repairs; read selftest feedback, coordinate gonna-arch for design intent updates, coordinate gonna-plan to create or update an intent-alignment fix Epic and Stories, run gonna-yolo in submit mode for repair implementation and automated verification, then run gonna-selftest to update human selftest documents without pushing.
+description: Use this skill when the user has completed human selftest, recorded `不符合预期` feedback in docs/scrum/selftest, and wants to iterate repairs; read selftest feedback, coordinate gonna-arch for design intent updates, coordinate gonna-plan to create or update an intent-alignment fix Epic and Stories, run gonna-yolo in submit mode for repair implementation and automated verification, then run gonna-selftest to update human selftest documents without pushing.
 version: 1.0.0
 license: MIT
 ---
 
 # Repair Skill
 
-This skill orchestrates selftest-driven repair iteration for `gonna`. It is used after the user runs human selftest and records issues in `docs/selftest/**`.
+This skill orchestrates selftest-driven repair iteration for `gonna`. It is used after the user runs human selftest and records issues in `docs/scrum/selftest/**`.
 
 It does not replace `gonna-arch`, `gonna-plan`, `gonna-yolo`, `gonna-submit`, or `gonna-selftest`. It coordinates them into one repeatable loop:
 
@@ -32,7 +32,7 @@ Use this skill as the selftest feedback iteration layer:
 Use this skill when:
 
 - The user says they finished selftest and recorded problems.
-- A `docs/selftest/**` document contains required cases marked `不符合预期`.
+- A `docs/scrum/selftest/**` document contains required cases marked `不符合预期`.
 - The user asks to iterate from selftest feedback.
 - The user wants a repair Epic or Story created from selftest feedback.
 - The user wants to run yolo repairs after selftest feedback.
@@ -52,14 +52,14 @@ Keep skill names, branch names, commit SHAs, commands, paths, status values, API
 
 Read only what is needed:
 
-- Selftest documents and feedback under `docs/selftest/`
-- Generated selftest assets under `docs/selftest/assets/` when needed to understand the failing case
+- Selftest documents and feedback under `docs/scrum/selftest/`
+- Generated selftest assets under `docs/scrum/selftest/assets/` when needed to understand the failing case
 - Related Epic and Story files under `docs/scrum/prd/` and `docs/scrum/story/`
 - Related design documents under `docs/design/`
 - Current git state, local commits, and uncommitted changes
-- Existing repair run reports under `docs/run/` when continuing an iteration
+- Existing repair iteration reports under `docs/scrum/repair-reports/` when continuing an iteration
 
-If the user does not identify a selftest document, inspect `docs/selftest/` for documents with `不符合预期` or unchecked required cases. If none exist, report that no repair iteration is needed.
+If the user does not identify a selftest document, inspect `docs/scrum/selftest/` for documents with `不符合预期` or unchecked required cases. If none exist, report that no repair iteration is needed.
 
 ## Repair Workflow
 
@@ -89,10 +89,10 @@ Use this workflow:
 9. Use `gonna-submit` rules:
    - Prefer amending the local unpushed Epic implementation commit when safe.
    - Do not amend pushed commits without explicit user authorization.
-   - Do not commit `docs/selftest/**` with implementation or planning changes.
+   - Do not commit `docs/scrum/selftest/**` with implementation or planning changes.
 10. Use `gonna-selftest` to update the selftest document and data assets after repair.
 11. Stop and ask the user to run human selftest again. Do not push.
-12. Write or update a repair iteration report under `docs/run/`.
+12. Write or update a repair iteration report under `docs/scrum/repair-reports/`.
 
 ## Compatibility Repair Gate
 
@@ -130,7 +130,7 @@ This skill may cause local commits through `gonna-yolo` and `gonna-submit`, but 
 
 - Repair implementation/design/planning changes are one submission unit.
 - Selftest document and asset updates are a separate submission unit.
-- Before the user confirms selftest is `符合预期`, leave updated `docs/selftest/**` uncommitted unless the user explicitly asks for a draft selftest commit.
+- Before the user confirms selftest is `符合预期`, leave updated `docs/scrum/selftest/**` uncommitted unless the user explicitly asks for a draft selftest commit.
 - After the user confirms selftest is `符合预期`, use `gonna-submit` to create a dedicated selftest evidence commit.
 - Never push from this skill.
 
@@ -150,7 +150,7 @@ Stop and report a blocker when:
 
 ## Artifacts
 
-Write repair run artifacts under `docs/run/`, not under `docs/selftest/`.
+Write repair iteration artifacts under `docs/scrum/repair-reports/`, not under `docs/scrum/blocker/` or `docs/scrum/selftest/`.
 
 Use:
 
@@ -158,7 +158,7 @@ Use:
 
 Recommended paths:
 
-- `docs/run/repair-iteration-{YYYYMMDD}-{short-name}.md`
+- `docs/scrum/repair-reports/repair-iteration-{YYYYMMDD}-{short-name}.md`
 
 ## Handoff
 

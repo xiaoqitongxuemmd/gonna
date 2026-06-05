@@ -65,7 +65,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - Keep a single owner for each rule area: `gonna-plan` owns Story status values and flow; `gonna-selftest` owns human contract selftest gates; `gonna-submit` owns staging, commit, push, and Git safety checks; `gonna-yolo` orchestrates these skills and must not duplicate their detailed rules.
 - When a coordinating skill such as `gonna-yolo` calls another skill, the called skill's owned gate is authoritative for that gate.
 - `gonna-yolo` must not replace downstream artifacts. Implementation reports belong to `gonna-dev`; test plans, test reports, and defect reports belong to `gonna-test`; submission reports belong to `gonna-submit`; selftest documents belong to `gonna-selftest`.
-- `docs/run/` is for yolo orchestration blockers and abnormal stop reports. Do not use one yolo run document to summarize or replace all development and testing work.
+- `docs/scrum/blocker/` is for yolo orchestration blockers and abnormal stop reports. Do not use one yolo document to summarize or replace all development and testing work.
 
 ## Compatibility Approval Gate
 
@@ -112,11 +112,11 @@ It is intended to integrate project-level skills for architecture, planning, dev
 ## Selftest Workflow
 
 - For human-executed contract selftest documents from local unpushed changes, generated selftest data, copy-paste probes, or push-gate selftest checks, read `gonna-selftest` from `.agents/skills/gonna-selftest/SKILL.md`.
-- `gonna-selftest` owns documents under `docs/selftest/` and generated assets under `docs/selftest/assets/`.
+- `gonna-selftest` owns documents under `docs/scrum/selftest/` and generated assets under `docs/scrum/selftest/assets/`.
 - For HTTP changes, generate one independent selftest case and one standalone copy-paste `curl` for every changed endpoint or required endpoint scenario; do not replace per-API review with one shell script that calls many APIs.
 - The assistant should prepare selftest data whenever possible; the user should validate HTTP/RPC/Kafka and other contract behavior, check `符合预期` or `不符合预期` for each required case, and write feedback when behavior differs from intent.
 - Local commit does not require completed selftest.
-- Do not commit generated `docs/selftest/**` artifacts together with implementation, generated go-zero code, automated tests, or planning fixes. Commit accepted selftest artifacts separately after the user finishes human selftest.
+- Do not commit generated `docs/scrum/selftest/**` artifacts together with implementation, generated go-zero code, automated tests, or planning fixes. Commit accepted selftest artifacts separately after the user finishes human selftest.
 - Push requires all required selftest cases to be marked `符合预期`; any `不符合预期` feedback blocks push and is routed to `gonna-repair` for coordinated arch, plan, yolo-submit, and selftest updates.
 
 ## Repair Workflow
@@ -126,6 +126,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - `gonna-repair` must coordinate `gonna-arch` for design-intent updates when needed, `gonna-plan` for intent-alignment fix Epic/Stories, `gonna-yolo` in `yolo-submit` mode for repair implementation and automated verification, and `gonna-selftest` for updated selftest documents.
 - `gonna-repair` must not push. It stops after updating selftest and asks the user to run human selftest again.
 - Repeated selftest repair attempts for the same feature should reuse the same intent-alignment fix Epic and append new Stories.
+- Write repair iteration artifacts under `docs/scrum/repair-reports/`, not under `docs/scrum/blocker/` or `docs/scrum/selftest/`.
 
 ## Submission Workflow
 
@@ -145,7 +146,7 @@ It is intended to integrate project-level skills for architecture, planning, dev
 - `yolo-submit` may create local commits without completed selftest; `yolo-push` must stop until required human selftests are marked `符合预期`.
 - If human selftest reports `不符合预期`, `gonna-yolo` should stop normal progression and hand off to `gonna-repair`.
 - `gonna-yolo` must stop on missing acceptance criteria, incomplete dependencies, unresolved architecture/environment decisions, test failure, P0/P1 defects, unrelated worktree changes, secret risk, destructive Git needs, merge needs, or deploy needs.
-- Write only yolo blocker and abnormal-stop artifacts under `docs/run/`, not development or test reports.
+- Write only yolo blocker and abnormal-stop artifacts under `docs/scrum/blocker/`, not development or test reports.
 
 ## Skill Authoring Rules
 
