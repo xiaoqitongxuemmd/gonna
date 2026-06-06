@@ -7,7 +7,9 @@ license: MIT
 
 # Architecture Skill
 
-This skill is the architecture source-of-truth producer for `gonna`. It turns source documents into go-zero architecture, technical stack decisions, scaffold plans, environment contracts, observability contracts, and implementation-ready handoffs. Source documents can include PRDs, specifications, technical designs, architecture notes, API drafts, data model drafts, or documents produced by tools such as `specx`. It uses `ai-context` and `zero-skills` as internal references so the user can work through this single skill.
+This skill is the architecture source-of-truth producer and maintainer for `gonna`. It turns source documents into go-zero architecture, technical stack decisions, scaffold plans, environment contracts, observability contracts, and implementation-ready handoffs. Source documents can include PRDs, specifications, technical designs, architecture notes, API drafts, data model drafts, or documents produced by tools such as `specx`. It uses `ai-context` and `zero-skills` as internal references so the user can work through this single skill.
+
+The maintained, versioned design documents under `docs/design/` are the project-wide architecture source of truth. Temporary notes, reference documents, exploratory drafts, screenshots, chat summaries, and unversioned files are inputs only; they do not become accepted architecture facts until their decisions are promoted into the appropriate versioned design document.
 
 ## When to Use
 
@@ -39,6 +41,7 @@ When the user provides or points to a source document, first identify what kind 
 - Data model draft
 - Mixed or incomplete notes
 - `specx`-authored document
+- Temporary or reference material
 
 Then extract:
 
@@ -54,6 +57,58 @@ Then extract:
 - Ambiguities, contradictions, and missing decisions
 
 If the document is already a technical or architecture design, preserve its intent and avoid redesigning from scratch unless the design conflicts with go-zero conventions or contains implementation risks. Translate it into go-zero project structure, specs, generated code boundaries, and manual implementation tasks.
+
+## Design Source of Truth Governance
+
+Use these rules whenever architecture work reads, writes, updates, or hands off design decisions.
+
+### Document Classification
+
+Classify every design-related file before treating it as a fact source.
+
+Authoritative design documents:
+
+- Live under `docs/design/`.
+- Match an approved versioned design filename such as `system_architecture_vX.Y.Z.md`, `api_design_vX.Y.Z.md`, or another naming pattern listed in Document Governance.
+- Include version metadata and status in the document header.
+- Are not under `docs/design/archive/`.
+
+Archived design documents:
+
+- Live under `docs/design/archive/`.
+- Are historical evidence only.
+- Must not override the latest maintained document.
+
+Non-authoritative inputs:
+
+- Unversioned files, ad hoc notes, temporary documents, screenshots, chat exports, copied references, and exploratory drafts.
+- Files under reference or draft folders, if the project creates them.
+- Files in `docs/design/` that do not match the maintained versioned naming and metadata rules.
+
+Location alone is not enough. A temporary file placed in `docs/design/` is still non-authoritative until its decisions are promoted into a maintained versioned design document.
+
+### Source of Truth Rules
+
+- Treat the latest maintained versioned design documents as the only accepted architecture facts for downstream planning, development, testing, deployment, and selftest.
+- Before producing a new architecture answer, inspect existing maintained design documents relevant to the request.
+- If a temporary or reference document contains a technical change that is absent from the maintained design documents, mark it as a pending design sync item instead of silently treating it as accepted fact.
+- If a temporary or reference document conflicts with a maintained design document, the maintained design document wins until the user explicitly approves updating it.
+- Do not hand work to `gonna-plan`, `gonna-dev`, `gonna-test`, `gonna-deploy`, or `gonna-selftest` based only on temporary/reference material. First update or create the relevant maintained versioned design document, or explicitly state that the output is exploratory and not ready for downstream execution.
+- Every downstream architecture handoff must cite the maintained design document path, version, and relevant section when one exists.
+- When no maintained design document exists yet, create the smallest required versioned design document before declaring architecture facts ready for downstream work.
+
+### Design Sync Workflow
+
+When a source document, temporary note, implementation finding, test finding, or selftest feedback changes architecture intent:
+
+1. Identify the affected maintained design document type.
+2. Compare the proposed detail against the latest versioned document.
+3. Decide whether the change is MAJOR, MINOR, or PATCH using the versioning rules below.
+4. Update the maintained design document, including version history and cross-document links.
+5. Archive the previous version when the change is MAJOR or MINOR.
+6. Only then produce planning, implementation, deployment, test, or selftest handoff material.
+
+For quick notes or throwaway analysis, do not force this workflow. Instead, label the output as exploratory and ask whether it should be promoted into a versioned design document.
 
 ## Architecture Responsibilities
 
@@ -158,6 +213,8 @@ Produce:
 Use when the output should become a maintained project artifact under `docs/design/`.
 
 `docs/design/` is reserved for accepted project architecture facts. Do not keep default framework baseline documents there. Generate files in `docs/design/` only after the user provides source material or explicitly asks to create architecture artifacts for the current project.
+
+When a decision is accepted, record it in the relevant versioned design document before downstream handoff. Temporary or reference files can inform the decision, but they must not remain the only place where the accepted decision exists.
 
 Prefer producing a split document set from the beginning. Keep `system_architecture_vX.Y.Z.md` as the overview and index, and place detailed decisions in topic-specific documents. Create only the documents required by the current source material.
 
@@ -306,6 +363,8 @@ Also use this mode when `gonna-selftest` feedback marks a case as `Needs Design 
 
 Use these rules only for maintained design documents.
 
+Maintained design documents are the project-wide architecture source of truth. Downstream skills should not need to scan temporary notes to know the accepted architecture.
+
 ### Naming
 
 Use semantic versioned names:
@@ -384,6 +443,13 @@ Created: YYYY-MM-DD
 Updated: YYYY-MM-DD
 Status: Draft | Approved | Implementing | Deprecated
 
+## Document Governance
+
+- Source of truth: yes
+- Source documents: {PRD/spec/reference paths}
+- Non-authoritative references: {temporary/reference paths or none}
+- Downstream consumers: `gonna-plan`, `gonna-deploy`, `gonna-dev`, `gonna-test`, `gonna-selftest`
+
 ## Version History
 
 | Version | Date | Changes | Author |
@@ -414,6 +480,9 @@ Adjust sections to match the document type. Keep version numbers in the filename
 Before finalizing an architecture artifact, verify:
 
 - The requested scope is clear
+- The artifact is either a maintained versioned design document or clearly labeled exploratory
+- Temporary/reference inputs are not treated as accepted facts unless promoted into a maintained design document
+- Accepted design changes are recorded in the relevant `docs/design/*_vX.Y.Z.md` document before downstream handoff
 - Assumptions are explicit
 - Service boundaries are named
 - API and RPC responsibilities do not overlap
@@ -423,6 +492,7 @@ Before finalizing an architecture artifact, verify:
 - Security and permissions are considered
 - Version numbers are consistent
 - Relative links are used for cross-document references
+- Downstream handoff cites maintained design document path, version, and section where applicable
 - The implementation handoff is specific enough for go-zero work
 
 ## go-zero Handoff Format

@@ -5,6 +5,13 @@
 更新时间：YYYY-MM-DD
 状态：Draft | Approved | Implementing | Deprecated
 
+## 文档治理
+
+- 唯一信源：yes
+- 来源文档：{PRD/规格/正式设计文档路径}
+- 非正式参考：{临时/参考材料路径或 none}
+- 下游消费者：`gonna-plan`、`gonna-deploy`、`gonna-dev`、`gonna-test`
+
 ## 概览
 
 {说明本地 Docker Compose 部署、开发调试、集成测试所需环境；线上部署需由具体项目按团队规范另行特化。}

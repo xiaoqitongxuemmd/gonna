@@ -5,6 +5,13 @@
 更新时间：YYYY-MM-DD
 状态：Draft | Approved | Implementing | Deprecated
 
+## 文档治理
+
+- 唯一信源：yes
+- 来源文档：{PRD/规格/正式设计文档路径}
+- 非正式参考：{临时/参考材料路径或 none}
+- 下游消费者：`gonna-plan`、`gonna-dev`、`gonna-test`、`gonna-selftest`
+
 ## 概览
 
 {说明 REST API 范围、目标用户和网关边界。}

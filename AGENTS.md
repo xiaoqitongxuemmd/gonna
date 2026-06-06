@@ -35,7 +35,9 @@ It integrates project-level skills for architecture, planning, local Docker Comp
 - Treat `.agents/ai-context/` and `.agents/skills/zero-skills/` as references that support the architecture skill.
 - Do not ask the user to invoke `ai-context` or `zero-skills` directly for normal project work.
 - Load the specific go-zero reference files only when the architecture task needs that level of detail.
-- Treat `docs/design/` as accepted project architecture facts only; architecture document templates live under `.agents/skills/gonna-arch/templates/`.
+- Treat maintained, versioned `docs/design/*_vX.Y.Z.md` documents as the project-wide architecture source of truth. Architecture document templates live under `.agents/skills/gonna-arch/templates/`.
+- Do not treat temporary notes, unversioned files, exploratory drafts, screenshots, chat exports, or copied references as accepted architecture facts just because they are placed under `docs/design/`.
+- If a temporary/reference document contains a design detail that should become project truth, update or create the relevant maintained versioned design document before handing work to `gonna-plan`, `gonna-deploy`, `gonna-dev`, `gonna-test`, `gonna-selftest`, or `gonna-yolo`.
 
 ## Language Policy
 
@@ -66,6 +68,7 @@ It integrates project-level skills for architecture, planning, local Docker Comp
 - When a coordinating skill such as `gonna-yolo` calls another skill, the called skill's owned gate is authoritative for that gate.
 - `gonna-yolo` must not replace downstream artifacts. Implementation reports belong to `gonna-dev`; test plans, test reports, and defect reports belong to `gonna-test`; submission reports belong to `gonna-submit`; selftest documents belong to `gonna-selftest`.
 - `docs/scrum/blocker/` is for yolo orchestration blockers and abnormal stop reports. Do not use one yolo document to summarize or replace all development and testing work.
+- Architecture changes discovered during planning, development, testing, selftest, or repair must be synchronized back into the relevant maintained `docs/design/*_vX.Y.Z.md` document. Do not leave accepted design intent only in temporary notes, implementation reports, test reports, blocker reports, or repair reports.
 
 ## Compatibility Approval Gate
 
@@ -80,6 +83,7 @@ It integrates project-level skills for architecture, planning, local Docker Comp
 - For architecture design, PRD analysis, design document analysis, spec document analysis, technical stack selection, service decomposition, API/RPC/event design, data model design, scaffold planning, local environment requirements, observability architecture, resilience/security design, migration planning, or implementation planning, read `gonna-arch` from `.agents/skills/gonna-arch/SKILL.md`.
 - Let the architecture skill decide which go-zero workflow and knowledge references to load.
 - The expected user-facing workflow is `gonna-arch` only for architecture work; `ai-context` and `zero-skills` are internal references for `gonna-arch`.
+- `gonna-arch` must classify design-related inputs before use: maintained versioned design documents are authoritative; temporary/reference files are inputs only. Accepted decisions from temporary/reference files must be promoted into maintained design documents before downstream execution.
 
 ## Planning Workflow
 

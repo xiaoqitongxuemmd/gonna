@@ -138,7 +138,13 @@ skill、agent instructions、模板和内嵌 reference 这类框架指导材料�
 
 ## 设计文档约定
 
-`docs/design/` 只放当前项目已经通过 `gonna-arch` 生成并采纳的架构事实文档。初始仓库不预置 `*_vX.Y.Z.md` 设计文档。
+`docs/design/` 中受版本管理的 `*_vX.Y.Z.md` 正式设计文档是项目整体架构唯一信源。`gonna-plan`、`gonna-dev`、`gonna-test`、`gonna-deploy`、`gonna-selftest` 和 `gonna-yolo` 都应以这些正式设计文档为准。
+
+临时说明、参考材料、草稿、聊天摘要、截图、技术摘录或未按版本规则命名的文件，即使被临时放进 `docs/design/`，也不能直接被视为正式架构事实。它们只能作为 `gonna-arch` 的输入材料。
+
+如果临时材料中的技术细节需要被采纳，必须先由 `gonna-arch` 同步到对应的正式版本化设计文档中，再交给规划、开发、测试或部署流程使用。不要让设计意图只停留在临时文档、实现报告、测试报告、blocker 或 repair report 里。
+
+`docs/design/` 只应放当前项目已经通过 `gonna-arch` 生成并采纳的架构事实文档。初始仓库不预置 `*_vX.Y.Z.md` 设计文档。
 
 `gonna-arch` 可产出的架构文档模板位于 `.agents/skills/gonna-arch/templates/`。当用户提供 PRD、规格说明或设计文档后，`gonna-arch` 再基于这些模板生成对应的 `docs/design/*_vX.Y.Z.md`。
 
