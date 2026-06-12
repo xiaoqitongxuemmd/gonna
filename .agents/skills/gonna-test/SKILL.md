@@ -226,6 +226,28 @@ Avoid:
 - Tests that depend on execution order
 - Manual cleanup as a requirement for passing tests
 
+## Test File Naming Rules
+
+Name test files and test functions by the behavior, API/RPC contract, package, component, or quality attribute being verified. Do not name test code after Story, Epic, task, iteration, sprint, or temporary execution order identifiers.
+
+Invalid test code names include:
+
+- `story15_metrics_test.go`
+- `story_15_acceptance_test.go`
+- `epic3_user_api_test.go`
+- `TestStory15Metrics`
+- `TestTask12Cache`
+
+Prefer durable behavior names, for example:
+
+- `metrics_test.go`
+- `observability_metrics_test.go`
+- `request_metrics_test.go`
+- `TestMetricsCollectorRecordsRequestDuration`
+- `TestCachePolicyExpiresStaleEntries`
+
+Story IDs may be cited in test plans, reports, defect reports, acceptance evidence, and comments that explain traceability, but they must not be the primary naming source for test files, packages, or exported test helper types. Before recommending `Pass` or `COMPLETED`, inspect changed test code and flag or fix any Story/Epic/task/iteration-based test naming.
+
 ## Regression and Refactoring Validation
 
 For refactoring or bug-fix validation:

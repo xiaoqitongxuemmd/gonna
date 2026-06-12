@@ -186,6 +186,28 @@ Use go-zero helpers for HTTP responses and errors when applicable.
 
 Keep implementation scoped to the Story unless a shared change is required for correctness.
 
+## Code File Naming Rules
+
+Name code files by domain, feature, component, or behavior. Do not name repository code files after delivery process identifiers such as Story, Epic, task, iteration, sprint, or temporary implementation order.
+
+Invalid code file names include:
+
+- `story15_metrics_test.go`
+- `story_15_observability.go`
+- `epic3_user_api_test.go`
+- `task12_cache.go`
+- `iteration2_migration.go`
+
+Prefer durable functional names, for example:
+
+- `metrics_test.go`
+- `observability_metrics_test.go`
+- `request_metrics_test.go`
+- `cache_policy_test.go`
+- `migration_runner.go`
+
+Story IDs and Epic IDs may appear in planning documents, implementation reports, commit messages, PR/MR descriptions, and traceability notes, but they must not drive Go source file names, package names, or core function/type names. Before finishing implementation, inspect changed code files and rename any new or modified code artifact whose name is based on a Story/Epic/task/iteration identifier.
+
 ## Testing and Validation
 
 Prefer project-defined commands when present, such as Makefile targets.
