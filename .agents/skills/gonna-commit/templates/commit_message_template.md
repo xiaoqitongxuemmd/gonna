@@ -9,5 +9,5 @@ Summary:
 Validation:
 - {command}: {result}
 
-Submission notes:
+Commit notes:
 - {note}

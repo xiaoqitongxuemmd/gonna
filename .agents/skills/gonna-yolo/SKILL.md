@@ -1,17 +1,17 @@
 ---
 name: gonna-yolo
-description: Use this skill when the user explicitly asks to run planned Epics or Stories autonomously, execute yolo mode, iterate through docs/scrum Story files, drive gonna-dev to implement, gonna-test to verify, and gonna-submit to package commits within strict stop conditions for this ai-native go-zero microservice framework project.
-version: 1.0.0
+description: Use this skill when the user explicitly asks to run planned Epics or Stories autonomously, execute yolo mode, iterate through docs/scrum Story files, drive gonna-dev to implement, gonna-test to verify, and gonna-commit to package commits within strict stop conditions for this ai-native go-zero microservice framework project.
+version: 1.1.0
 license: MIT
 ---
 
 # YOLO Skill
 
-This skill is the authorized autonomous runner for `gonna`. It reads planned Epic and Story files, selects executable Stories, and drives the approved loop of `gonna-dev -> gonna-test -> gonna-submit -> gonna-selftest -> feedback repair` within strict stop conditions.
+This skill is the authorized autonomous runner for `gonna`. It reads planned Epic and Story files, selects executable Stories, and drives the approved loop of `gonna-dev -> gonna-test -> gonna-commit -> gonna-selftest -> feedback fix` within strict stop conditions.
 
 `gonna-yolo` means fewer confirmations inside an approved scope. It does not mean lower quality, skipped validation, unsafe Git behavior, uncontrolled scope expansion, merge approval, or deployment.
 
-`gonna-yolo` is an orchestrator, not a replacement author for downstream reports. It must not produce one broad yolo document that substitutes for `gonna-dev` implementation reports, `gonna-test` test reports, `gonna-submit` submission reports, or `gonna-selftest` selftest documents.
+`gonna-yolo` is an orchestrator, not a replacement author for downstream reports. It must not produce one broad yolo document that substitutes for `gonna-dev` implementation reports, `gonna-test` test reports, `gonna-commit` commit reports, or `gonna-selftest` selftest documents.
 
 ## Project Role
 
@@ -19,13 +19,13 @@ Use this skill as the execution orchestration layer:
 
 - `gonna-arch`: source documents to architecture and implementation handoff
 - `gonna-plan`: architecture handoff to AI-executable Epic and Story files
-- `gonna-yolo`: planned Stories to autonomous dev/test/submit iterations
+- `gonna-yolo`: planned Stories to autonomous dev/test/commit iterations
 - `gonna-deploy`: local Docker Compose deployment and dependency/service container setup when a Story requires it
 - `gonna-dev`: Story implementation
 - `gonna-test`: verification and completion recommendation
 - `gonna-selftest`: human contract selftest docs, prepared data, and push gate
-- `gonna-repair`: selftest-feedback repair iteration through arch, plan, yolo-submit, and selftest update
-- `gonna-submit`: commit and merge request packaging
+- `gonna-fix`: selftest-feedback fix iteration through arch, plan, yolo-commit, and selftest update
+- `gonna-commit`: commit and merge request packaging
 
 ## When to Use
 
@@ -35,10 +35,10 @@ Examples:
 
 - "run gonna-yolo for the next Story"
 - "yolo mode 按 plan 自动推进"
-- "按照 docs/scrum 的 Story 自动 dev test submit"
+- "按照 docs/scrum 的 Story 自动 dev test commit"
 - "自动执行 EPIC-1 的 TODO Stories"
 
-Do not infer yolo mode from a normal implementation request. Use `gonna-dev` for ordinary implementation and `gonna-submit` for ordinary commit/push requests.
+Do not infer yolo mode from a normal implementation request. Use `gonna-dev` for ordinary implementation and `gonna-commit` for ordinary commit/push requests.
 
 ## Authorization Modes
 
@@ -62,13 +62,13 @@ Not allowed:
 - Merge
 - Deploy
 
-### yolo-submit
+### yolo-commit
 
 Allowed:
 
 - Everything in `yolo-dev`
-- Use `gonna-submit` to create local commits
-- Use `gonna-submit` for Git safety, staging, commit, and branch-policy checks
+- Use `gonna-commit` to create local commits
+- Use `gonna-commit` for Git safety, staging, commit, and branch-policy checks
 - Generate or update selftest TODO docs when contract behavior changed
 
 Not allowed:
@@ -81,9 +81,9 @@ Not allowed:
 
 Allowed:
 
-- Everything in `yolo-submit`
+- Everything in `yolo-commit`
 - Push to the explicitly named remote and branch
-- Use `gonna-submit` to apply the team's required branch synchronization rule before push
+- Use `gonna-commit` to apply the team's required branch synchronization rule before push
 - Check required selftest cases are marked `符合预期` before push
 
 Not allowed:
@@ -158,13 +158,13 @@ For each selected Story:
 6. Use `gonna-test` to verify acceptance criteria and quality gates and produce its own test report, defect report, or completion recommendation.
 7. Move Story status according to `gonna-plan`; do not invent a separate status flow in this skill.
 8. Use `gonna-selftest` to generate or update human contract selftest docs and prepare data when the Story changes API, RPC, event, database-visible behavior, Redis/cache-visible behavior, scheduled jobs, webhooks, or user-visible behavior.
-9. If authorization is `yolo-submit` or `yolo-push`, use `gonna-submit` to create or amend a clean implementation commit. Completed selftest is not required for local commit.
+9. If authorization is `yolo-commit` or `yolo-push`, use `gonna-commit` to create or amend a clean implementation commit. Completed selftest is not required for local commit.
 10. Do not commit generated selftest artifacts with the implementation commit. Leave selftest files uncommitted until the user completes human selftest, unless the user explicitly asks for a dedicated selftest draft commit.
-11. If the user marks any selftest case `不符合预期`, stop normal progression and hand off to `gonna-repair`. `gonna-repair` must route feedback to `gonna-arch` and `gonna-plan` as needed, create or update an intent-alignment fix Epic, add fix Stories, run yolo-submit repair, and update selftest.
-12. When rerunning yolo for a selftest-feedback fix Epic, implement and verify the new Stories, then use `gonna-submit` to amend the local unpushed Epic implementation commit when it is safe to do so. Do not amend pushed commits unless explicitly authorized.
-13. After selftest is updated and the user confirms all required cases `符合预期`, use `gonna-submit` to create a dedicated selftest evidence commit.
-14. If authorization is `yolo-push`, use `gonna-submit` to apply Git safety checks and push only after accepted selftest artifacts are separately committed and only to the explicit target remote and branch.
-15. Mark the Story `COMPLETED` only when `gonna-plan` status rules, `gonna-test` verification, and required submission/selftest work for the authorization mode are satisfied.
+11. If the user marks any selftest case `不符合预期`, stop normal progression and hand off to `gonna-fix`. `gonna-fix` must route feedback to `gonna-arch` and `gonna-plan` as needed, create or update an intent-alignment fix Epic, add fix Stories, run yolo-commit fixes, and update selftest.
+12. When rerunning yolo for a selftest-feedback fix Epic, implement and verify the new Stories, then use `gonna-commit` to amend the local unpushed Epic implementation commit when it is safe to do so. Do not amend pushed commits unless explicitly authorized.
+13. After selftest is updated and the user confirms all required cases `符合预期`, use `gonna-commit` to create a dedicated selftest evidence commit.
+14. If authorization is `yolo-push`, use `gonna-commit` to apply Git safety checks and push only after accepted selftest artifacts are separately committed and only to the explicit target remote and branch.
+15. Mark the Story `COMPLETED` only when `gonna-plan` status rules, `gonna-test` verification, and required commit/selftest work for the authorization mode are satisfied.
 16. Update `docs/scrum/KANBAN.md`.
 17. If a hard stop occurs, write a blocker report under `docs/scrum/blocker/`. If no blocker occurs, do not create a yolo run report that summarizes development and testing content.
 
@@ -185,7 +185,7 @@ accepted selftest -> dedicated selftest commit -> push gate may pass
 If human selftest fails:
 
 ```text
-不符合预期 -> gonna-repair -> arch updates design if needed -> plan updates/creates intent-alignment Epic -> yolo-submit fixes Stories -> submit amends local Epic commit -> selftest updates -> repeat
+不符合预期 -> gonna-fix -> arch updates design if needed -> plan updates/creates intent-alignment Epic -> yolo-commit fixes Stories -> commit amends local Epic commit -> selftest updates -> repeat
 ```
 
 Rules:
@@ -251,7 +251,7 @@ Forbidden yolo artifacts:
 
 - A single yolo document that covers all implementation details and all test details.
 - Story iteration reports that duplicate `gonna-dev` and `gonna-test` reports.
-- Run reports that replace `gonna-submit` or `gonna-selftest` artifacts.
+- Run reports that replace `gonna-commit` or `gonna-selftest` artifacts.
 
 ## Handoff
 
@@ -263,6 +263,6 @@ At the end of a yolo run, report:
 - Stories blocked
 - Commits created, if any
 - Push target and result, if any
-- Paths to downstream reports produced by `gonna-dev`, `gonna-test`, `gonna-submit`, or `gonna-selftest`, if any
+- Paths to downstream reports produced by `gonna-dev`, `gonna-test`, `gonna-commit`, or `gonna-selftest`, if any
 - Blocker report path, if blocked
 - Next recommended action

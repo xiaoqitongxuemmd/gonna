@@ -7,7 +7,7 @@ Generated: `YYYY-MM-DD`
 
 ## Blocker
 
-- Type: `Readiness | Architecture | Environment | Development | Test | Git | Submission | Scope`
+- Type: `Readiness | Architecture | Environment | Development | Test | Git | Commit | Scope`
 - Severity: `P0 | P1 | P2 | P3`
 - Summary: {summary}
 

@@ -35,4 +35,4 @@ Generated: `YYYY-MM-DD`
 - To `gonna-arch`: {design-intent feedback or none}
 - To `gonna-dev`: {implementation feedback or none}
 - To `gonna-test`: {contract test update or none}
-- To `gonna-submit`: {push gate status}
+- To `gonna-commit`: {push gate status}

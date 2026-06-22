@@ -20,7 +20,7 @@
 ## Skill 链路
 
 ```text
-gonna-arch -> gonna-plan -> gonna-yolo -> gonna-deploy/gonna-dev/gonna-test/gonna-submit -> gonna-selftest -> gonna-repair
+gonna-arch -> gonna-plan -> gonna-yolo -> gonna-deploy/gonna-dev/gonna-test/gonna-commit -> gonna-selftest -> gonna-fix
 ```
 
 每个项目 skill 都有明确职责：
@@ -31,9 +31,9 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-deploy/gonna-dev/gonna-test/gonn
 - `gonna-dev` 基于 go-zero 约定、goctl 生成、ServiceContext 注入和聚焦验证来实现 Story。
 - `gonna-test` 验证验收标准、API/RPC 行为、集成路径和质量门禁。
 - `gonna-selftest` 根据本地未 push 的改动生成 HTTP、Kafka 等微服务输入输出契约自测清单，并准备数据库、Redis、Kafka 等测试数据；每个 required case 必须人工勾选 `符合预期` 才允许 push。
-- `gonna-repair` 在人工自测出现 `不符合预期` 后，读取自测反馈，协调 `gonna-arch` 更新设计意图，协调 `gonna-plan` 创建或追加意图对齐修复 Epic/Story，再用 `gonna-yolo` 的 `yolo-submit` 模式修复并更新 selftest。
-- `gonna-submit` 将已经实现并验证过的变更整理成可评审提交，包括 commit plan、commit message、MR 描述和 submission report。
-- `gonna-yolo` 在用户明确授权的 yolo mode 下，按 `gonna-plan` 的 Story 自动驱动 `gonna-dev -> gonna-test -> gonna-submit` 迭代，并在硬停止条件出现时中止；它只记录编排状态和阻塞点，不替代 `gonna-dev` 的实现报告或 `gonna-test` 的测试报告。
+- `gonna-fix` 在人工自测出现 `不符合预期` 后，读取自测反馈，协调 `gonna-arch` 更新设计意图，协调 `gonna-plan` 创建或追加意图对齐修复 Epic/Story，再用 `gonna-yolo` 的 `yolo-commit` 模式修复并更新 selftest。
+- `gonna-commit` 将已经实现并验证过的变更整理成可评审提交，包括 commit plan、commit message、MR 描述和 commit report。
+- `gonna-yolo` 在用户明确授权的 yolo mode 下，按 `gonna-plan` 的 Story 自动驱动 `gonna-dev -> gonna-test -> gonna-commit` 迭代，并在硬停止条件出现时中止；它只记录编排状态和阻塞点，不替代 `gonna-dev` 的实现报告或 `gonna-test` 的测试报告。
 
 ## 使用前建议
 
@@ -49,7 +49,7 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-deploy/gonna-dev/gonna-test/gonn
 - MR/PR 的 source branch 和 target branch 规则。
 - 多 remote 场景下，同一改动是否需要同步到多个远端，以及同步顺序。
 
-`gonna-submit` 只负责读取当前 Git 事实、遵循团队已经明确的分支规范、检查提交和 push 风险；它不应该在 skill 内部替团队发明固定的分支模型。若团队尚未建立分支管理规范，提交和 push 前应先停下来确认。
+`gonna-commit` 只负责读取当前 Git 事实、遵循团队已经明确的分支规范、检查提交和 push 风险；它不应该在 skill 内部替团队发明固定的分支模型。若团队尚未建立分支管理规范，提交和 push 前应先停下来确认。
 
 `gonna` 工程框架不内置通用 DevOps skill。CI/CD、合并门禁、发布策略、制品仓库、镜像标签、部署审批和回滚流程在不同项目和团队之间差异很大，应在具体项目中单独特化。
 
@@ -58,13 +58,13 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-deploy/gonna-dev/gonna-test/gonn
 `gonna-yolo` 适合在已经有 `gonna-arch` 和 `gonna-plan` 产物后，授权 AI 按 Epic/Story 自动推进。示例：
 
 ```text
-看下 epic-5 开发的 block 是不是已经解决，如果解决以 submit 模式继续推进到 epic-7，逐 Epic 本地提交，不 push；遇到测试失败、架构歧义、外部依赖阻塞时停止
+看下 epic-5 开发的 block 是不是已经解决，如果解决以 yolo-commit 模式继续推进到 epic-7，逐 Epic 本地提交，不 push；遇到测试失败、架构歧义、外部依赖阻塞时停止
 ```
 
 这条指令表达了几个关键约束：
 
 - 先检查 `EPIC-5` 的 blocker 是否解除，未解除则停止并说明原因。
-- 使用 `yolo-submit` 授权模式，可以本地 commit，但不能 push。
+- 使用 `yolo-commit` 授权模式，可以本地 commit，但不能 push。
 - 从 `EPIC-5` 继续推进到 `EPIC-7`，按 `gonna-plan` 的 Story 依赖和 `execution_order` 执行。
 - 每个 Epic 独立形成本地提交，方便回看和回滚。
 - 遇到测试失败、架构歧义、外部依赖阻塞等硬停止条件时立即中止。
@@ -89,7 +89,7 @@ gonna-arch -> gonna-plan -> gonna-yolo -> gonna-deploy/gonna-dev/gonna-test/gonn
 - `docs/scrum/selftest/**` 不能和开发代码、go-zero 生成代码、自动化测试或规划修复混在同一个提交里。
 - push 前必须完成 required selftest case。
 - 只有所有 required case 都勾选 `符合预期` 才允许 push。
-- 任何 `不符合预期` 都会阻止 push，并交给 `gonna-repair` 编排设计更新、修复规划、yolo-submit 修复和 selftest 更新。
+- 任何 `不符合预期` 都会阻止 push，并交给 `gonna-fix` 编排设计更新、修复规划、yolo-commit 修复和 selftest 更新。
 
 推荐闭环：
 
@@ -106,14 +106,14 @@ yolo 开发完成 -> 自动化测试 -> 提交实现改动 -> 生成 selftest ->
 如果人工自测不通过：
 
 ```text
-不符合预期反馈 -> gonna-repair -> gonna-arch 更新设计意图 -> gonna-plan 创建或更新意图对齐修复 Epic
--> gonna-yolo 以 yolo-submit 修复 Story -> submit amend 到本地未 push 的 Epic 实现提交
+不符合预期反馈 -> gonna-fix -> gonna-arch 更新设计意图 -> gonna-plan 创建或更新意图对齐修复 Epic
+-> gonna-yolo 以 yolo-commit 修复 Story -> commit amend 到本地未 push 的 Epic 实现提交
 -> gonna-selftest 更新自测文档 -> 再次人工自测
 ```
 
 同一个意图偏差反复修改时，新的修复 Story 应继续追加到同一个意图对齐修复 Epic 中。`amend` 只适用于本地未 push 的 Epic 实现提交；已经 push 的提交不默认改写历史。
 
-`gonna-repair` 的修复迭代报告写入 `docs/scrum/repair-reports/`。`gonna-yolo` 的阻塞报告写入 `docs/scrum/blocker/`。`docs/scrum/selftest/` 只保留人工契约自测文档和数据资产。
+`gonna-fix` 的修复迭代报告写入 `docs/scrum/fix-reports/`。`gonna-yolo` 的阻塞报告写入 `docs/scrum/blocker/`。`docs/scrum/selftest/` 只保留人工契约自测文档和数据资产。
 
 ## 内嵌参考资料
 
@@ -142,7 +142,7 @@ skill、agent instructions、模板和内嵌 reference 这类框架指导材料�
 
 临时说明、参考材料、草稿、聊天摘要、截图、技术摘录或未按版本规则命名的文件，即使被临时放进 `docs/design/`，也不能直接被视为正式架构事实。它们只能作为 `gonna-arch` 的输入材料。
 
-如果临时材料中的技术细节需要被采纳，必须先由 `gonna-arch` 同步到对应的正式版本化设计文档中，再交给规划、开发、测试或部署流程使用。不要让设计意图只停留在临时文档、实现报告、测试报告、blocker 或 repair report 里。
+如果临时材料中的技术细节需要被采纳，必须先由 `gonna-arch` 同步到对应的正式版本化设计文档中，再交给规划、开发、测试或部署流程使用。不要让设计意图只停留在临时文档、实现报告、测试报告、blocker 或 fix report 里。
 
 `docs/design/` 只应放当前项目已经通过 `gonna-arch` 生成并采纳的架构事实文档。初始仓库不预置 `*_vX.Y.Z.md` 设计文档。
 

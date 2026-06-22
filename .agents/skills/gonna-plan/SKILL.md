@@ -7,11 +7,11 @@ license: MIT
 
 # Planning Skill
 
-This skill turns architecture and design intent into AI-executable work items. It is responsible for Epic and Story decomposition, acceptance criteria, dependency order, handoff notes, readiness for `gonna-dev` and `gonna-test`, and progress tracking. It is not responsible for architecture design, code implementation, testing execution, submission, DevOps gates, or deployment execution.
+This skill turns architecture and design intent into AI-executable work items. It is responsible for Epic and Story decomposition, acceptance criteria, dependency order, handoff notes, readiness for `gonna-dev` and `gonna-test`, and progress tracking. It is not responsible for architecture design, code implementation, testing execution, commit packaging, DevOps gates, or deployment execution.
 
 ## Project Role
 
-`gonna` is an ai-native engineering framework for go-zero based microservice development. It integrates skills for architecture, planning, local Docker Compose deployment, development, testing, selftest, repair, and submission. It does not provide generic DevOps gates or online deployment workflows.
+`gonna` is an ai-native engineering framework for go-zero based microservice development. It integrates skills for architecture, planning, local Docker Compose deployment, development, testing, selftest, fix iteration, and commit packaging. It does not provide generic DevOps gates or online deployment workflows.
 
 Use this skill as the planning layer:
 
@@ -20,7 +20,7 @@ Use this skill as the planning layer:
 - `gonna-deploy`: deployment requirements to local Docker Compose deployment assets
 - `gonna-dev`: Stories to implementation tasks and code changes
 - `gonna-test`: Stories to verification plans and test evidence
-- `gonna-submit`: verified changes to commit and merge request packaging
+- `gonna-commit`: verified changes to commit and merge request packaging
 
 ## When to Use
 
@@ -40,7 +40,7 @@ Use this skill for:
 
 If the source document has not yet been mapped to go-zero architecture, use `.agents/skills/gonna-arch/SKILL.md` first. If the user explicitly asks to split the source document directly, perform a lightweight architecture extraction before writing planning items.
 
-This skill is not a traditional human team scheduling tool. Do not assume Sprint length, calendar dates, assignees, team capacity, or human delivery commitments unless the user explicitly asks for them. Prefer dependency order, execution sequence, acceptance criteria, and handoff evidence that `gonna-dev`, `gonna-test`, and `gonna-submit` can consume.
+This skill is not a traditional human team scheduling tool. Do not assume Sprint length, calendar dates, assignees, team capacity, or human delivery commitments unless the user explicitly asks for them. Prefer dependency order, execution sequence, acceptance criteria, and handoff evidence that `gonna-dev`, `gonna-test`, and `gonna-commit` can consume.
 
 ## Epic Granularity Strategy
 
@@ -50,7 +50,7 @@ Good Epic boundaries:
 
 - A complete domain capability that can be understood and accepted as one delivery goal.
 - A service capability with API/RPC/event/data/logic/test/selftest work under it.
-- A platform capability such as local observability, environment orchestration, or submission gates.
+- A platform capability such as local observability, environment orchestration, or commit gates.
 - An intent-alignment repair stream created from human selftest feedback.
 
 Poor Epic boundaries unless the user explicitly asks:
@@ -561,5 +561,5 @@ When Epic and Story files are ready:
 
 - Development work should use `.agents/skills/gonna-dev/SKILL.md`.
 - Test planning and evidence should use `.agents/skills/gonna-test/SKILL.md`.
-- Submission packaging should use `.agents/skills/gonna-submit/SKILL.md`.
+- Commit packaging should use `.agents/skills/gonna-commit/SKILL.md`.
 - Merge gates, CI/CD readiness, release workflows, and online deployment should use project-specific team instructions outside the generic `gonna` framework.

@@ -1,13 +1,13 @@
 ---
-name: gonna-submit
-description: Use this skill when the user asks to prepare, review, stage, commit, push, or package verified changes for merge request submission in this ai-native go-zero microservice framework project; create commit plans, commit messages, merge request descriptions, submission reports, or review handoff evidence.
-version: 1.0.0
+name: gonna-commit
+description: Use this skill when the user asks to prepare, review, stage, commit, push, or package verified changes for review in this ai-native go-zero microservice framework project; create commit plans, commit messages, merge request descriptions, commit reports, or review handoff evidence.
+version: 1.1.0
 license: MIT
 ---
 
-# Submit Skill
+# Commit Skill
 
-This skill packages verified local changes into reviewable submission units. `gonna-test` provides verification evidence, and `gonna-submit` creates clean commits, push evidence, merge request material, and submission reports.
+This skill packages verified local changes into reviewable commit units. `gonna-test` provides verification evidence, and `gonna-commit` creates clean commits, push evidence, merge request material, and commit reports.
 
 It is not responsible for writing feature code, designing tests, defining CI/CD gates, approving merges, online deployment, or release operations. Those rules must be specialized per project and team when needed.
 
@@ -15,13 +15,13 @@ It is not responsible for writing feature code, designing tests, defining CI/CD 
 
 `gonna` is an ai-native engineering framework for go-zero based microservice development.
 
-Use this skill as the submission layer:
+Use this skill as the Git packaging layer:
 
 - `gonna-dev`: Story to implementation, focused tests, validation, and implementation report
 - `gonna-test`: implementation to test plan, verification evidence, defect report, and completion recommendation
 - `gonna-selftest`: human contract acceptance and push-gate evidence
-- `gonna-repair`: selftest feedback to intent-alignment fix Epics, yolo-submit repairs, and updated selftest documents
-- `gonna-submit`: verified local changes to commit plan, commit, push, merge request description, and submission report
+- `gonna-fix`: selftest feedback to intent-alignment fix Epics, yolo-commit repairs, and updated selftest documents
+- `gonna-commit`: verified local changes to commit plan, commit, push, merge request description, and commit report
 
 ## When to Use
 
@@ -36,7 +36,7 @@ Use this skill for:
 - Running `git commit` when the user asks to commit
 - Pushing a branch when the user explicitly asks to push
 - Creating merge request or pull request descriptions
-- Producing submission reports for project-specific review, CI/CD, or release gates when the team defines them
+- Producing commit reports for project-specific review, CI/CD, or release gates when the team defines them
 - Packaging `gonna-dev` implementation evidence and `gonna-test` verification evidence into reviewable form
 - Checking `gonna-selftest` human acceptance before push
 - Keeping generated selftest artifacts out of development/test commits until the user has completed human selftest acceptance
@@ -46,7 +46,7 @@ Do not use this skill to decide whether a merge request is allowed to merge. Mer
 
 ## Language Policy
 
-Produce human-facing submission output in Simplified Chinese by default. This includes commit plans, merge request descriptions, submission reports, risk notes, review summaries, and user-facing explanations.
+Produce human-facing commit output in Simplified Chinese by default. This includes commit plans, merge request descriptions, commit reports, risk notes, review summaries, and user-facing explanations.
 
 Keep branch names, commit message subjects, commands, paths, Story IDs, Epic IDs, status values, remote names, URLs, and raw Git output in their required technical form. Skill instructions and templates may remain in English.
 
@@ -62,7 +62,7 @@ Prefer one or more of these inputs:
 - Current `git status`, `git diff --stat`, and relevant `git diff`
 - Existing branch and remote information
 
-When reports are missing but the user explicitly asks to submit, proceed with the available Git evidence and clearly record missing evidence as risk.
+When reports are missing but the user explicitly asks to commit or push, proceed with the available Git evidence and clearly record missing evidence as risk.
 
 ## Branch Policy Handling
 
@@ -78,14 +78,14 @@ Before commit, push, rebase, or MR/PR preparation:
 
 For multi-remote repositories, treat each local branch and its upstream independently. Do not infer that a branch name is a remote name, or that a remote name is a branch name.
 
-## Submission Workflow
+## Commit Workflow
 
 Use this workflow:
 
 1. Inspect current branch, remotes, and worktree status.
-2. Confirm the intended submission target from the team's branch policy, observed upstream mapping, or explicit user instruction.
+2. Confirm the intended commit or push target from the team's branch policy, observed upstream mapping, or explicit user instruction.
 3. Review `git diff --stat` and relevant diffs before staging.
-4. Identify the submission scope: Story, direct request, bug fix, scaffold change, documentation change, or framework change.
+4. Identify the commit scope: Story, direct request, bug fix, scaffold change, documentation change, or framework change.
 5. Separate unrelated changes. Do not stage unrelated files unless the user explicitly includes them.
 6. Check that generated go-zero files are consistent with `.api` or `.proto` changes when applicable.
 7. Check that validation evidence exists from `gonna-dev` or `gonna-test`, or record the gap.
@@ -95,19 +95,19 @@ Use this workflow:
 11. Before push or MR preparation, apply the team's required branch synchronization rule, such as rebase, only when the policy or user explicitly requires it.
 12. For push, check required `gonna-selftest` cases are completed and marked `符合预期`.
 13. Push only when the user explicitly asks to push and selftest push gate passes.
-14. Produce a submission report and MR/PR description when requested.
+14. Produce a commit report and MR/PR description when requested.
 
-## Selftest Artifact Submission Rules
+## Selftest Artifact Commit Rules
 
-Selftest artifacts are human acceptance materials. Treat them as a separate submission unit from implementation and automated test changes.
+Selftest artifacts are human acceptance materials. Treat them as a separate commit unit from implementation and automated test changes.
 
 Rules:
 
 - Do not include `docs/scrum/selftest/**` changes in the same commit as development, generated go-zero code, automated tests, or planning fixes unless the user explicitly asks.
-- When yolo or submit generates selftest documents before the user has executed them, leave those files uncommitted or commit them only in a dedicated selftest draft commit when explicitly requested.
+- When yolo or `gonna-commit` generates selftest documents before the user has executed them, leave those files uncommitted or commit them only in a dedicated selftest draft commit when explicitly requested.
 - After the user marks all required selftest cases `符合预期`, commit selftest documents and assets as a dedicated selftest evidence commit.
 - If the user marks any case `不符合预期`, do not commit the selftest result as final evidence. Preserve the feedback, route it back to `gonna-arch`/`gonna-plan`/`gonna-dev` as needed, and keep subsequent implementation commits separate from selftest artifacts.
-- When the user asks to iterate from `不符合预期` selftest feedback, use `gonna-repair` as the coordinating skill instead of handling arch, plan, yolo, and selftest updates ad hoc.
+- When the user asks to iterate from `不符合预期` selftest feedback, use `gonna-fix` as the coordinating skill instead of handling arch, plan, yolo, and selftest updates ad hoc.
 - If selftest feedback causes code/design changes, stage implementation/design/planning files separately from selftest files.
 - Push is blocked until accepted selftest artifacts have been committed separately or the user explicitly states that no selftest artifact commit is required for the push.
 
@@ -143,12 +143,12 @@ When selftest exposes an intent mismatch after a local Epic commit has already b
 - Do not change branch upstreams, add remotes, or push to an untracked target unless the user explicitly asks or the repository policy clearly requires it.
 - If the worktree contains user changes outside the requested scope, leave them untouched and report them.
 
-## Submission Readiness
+## Commit Readiness
 
-A submission is ready to commit when:
+A commit package is ready to commit when:
 
 - The branch is known.
-- The intended submission target is clear from policy, upstream mapping, or user instruction.
+- The intended commit or push target is clear from policy, upstream mapping, or user instruction.
 - The intended scope is clear.
 - Changed files match the intended scope.
 - No obvious secret or local-only file is included.
@@ -158,7 +158,7 @@ A submission is ready to commit when:
 
 Selftest is not required for local commit.
 
-A submission is ready to push when:
+A commit package is ready to push when:
 
 - Commit exists locally.
 - Target remote and branch are clear.
@@ -198,7 +198,7 @@ feat(story-1-01): implement user API scaffold
 For framework changes without a Story, use a clear project scope:
 
 ```text
-docs(submit): add submission workflow skill
+docs(commit): add commit workflow skill
 ```
 
 ## Output Modes
@@ -211,7 +211,7 @@ Use before staging or committing non-trivial changes.
 
 Use:
 
-- `.agents/skills/gonna-submit/templates/commit_plan_template.md`
+- `.agents/skills/gonna-commit/templates/commit_plan_template.md`
 
 ### 2. Commit Message
 
@@ -219,7 +219,7 @@ Use when the user asks for a commit message or when committing.
 
 Use:
 
-- `.agents/skills/gonna-submit/templates/commit_message_template.md`
+- `.agents/skills/gonna-commit/templates/commit_message_template.md`
 
 ### 3. Merge Request Description
 
@@ -227,23 +227,23 @@ Use when the user asks to prepare an MR/PR.
 
 Use:
 
-- `.agents/skills/gonna-submit/templates/merge_request_description_template.md`
+- `.agents/skills/gonna-commit/templates/merge_request_description_template.md`
 
-### 4. Submission Report
+### 4. Commit Report
 
 Use after commit or push, or when handing off to a project-specific review or release workflow.
 
 Use:
 
-- `.agents/skills/gonna-submit/templates/submission_report_template.md`
+- `.agents/skills/gonna-commit/templates/commit_report_template.md`
 
 ## Handoff to Project-Specific Review
 
-When submission is complete, provide:
+When commit or push work is complete, provide:
 
 - Branch and commit SHA
 - Remote and pushed branch when applicable
-- Submission scope
+- Commit scope
 - Validation evidence
 - Known risks or missing evidence
 - Selftest push-gate status

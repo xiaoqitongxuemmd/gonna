@@ -2,7 +2,7 @@
 
 This project is an ai-native engineering framework for go-zero based microservice development.
 
-It integrates project-level skills for architecture, planning, local Docker Compose deployment, development, testing, selftest, repair, and submission.
+It integrates project-level skills for architecture, planning, local Docker Compose deployment, development, testing, selftest, fix iteration, and commit packaging.
 
 ## Context Sources
 
@@ -12,8 +12,8 @@ It integrates project-level skills for architecture, planning, local Docker Comp
 - Development skill: `gonna-dev` at `.agents/skills/gonna-dev/SKILL.md`
 - Test skill: `gonna-test` at `.agents/skills/gonna-test/SKILL.md`
 - Selftest skill: `gonna-selftest` at `.agents/skills/gonna-selftest/SKILL.md`
-- Repair iteration skill: `gonna-repair` at `.agents/skills/gonna-repair/SKILL.md`
-- Submission skill: `gonna-submit` at `.agents/skills/gonna-submit/SKILL.md`
+- Fix iteration skill: `gonna-fix` at `.agents/skills/gonna-fix/SKILL.md`
+- Commit skill: `gonna-commit` at `.agents/skills/gonna-commit/SKILL.md`
 - YOLO runner skill: `gonna-yolo` at `.agents/skills/gonna-yolo/SKILL.md`
 - go-zero workflow reference for arch: `.agents/ai-context/00-instructions.md`
 - go-zero task workflow reference for arch: `.agents/ai-context/workflows.md`
@@ -25,13 +25,13 @@ It integrates project-level skills for architecture, planning, local Docker Comp
 
 - Use `gonna-arch` as the main entry for source document analysis, architecture design, technical stack decisions, service decomposition, API/RPC/event/data contracts, scaffold planning, environment contracts, observability architecture, resilience/security design, migration planning, and implementation handoff.
 - Use `gonna-plan` when the user asks to split architecture output, implementation handoff, PRDs, specifications, or design documents into Epics, Stories, acceptance criteria, dependency order, execution scope, or AI-readable backlog.
-- Use `gonna-deploy` when the user asks to create, update, run, or verify local deployment assets, Docker Compose topology, dependency containers, development microservice containers, environment variables, go-zero config mapping, health checks, or local observability with OpenTelemetry, Prometheus, Grafana, tracing, or logs. Do not use it to create generic online deployment assets; online deployment must be project-specific.
+- Use `gonna-deploy` when the user asks to create, update, run, or verify local deployment assets, Docker Compose topology, dependency containers, development microservice containers, environment variables, go-zero config mapping, health checks, local observability with OpenTelemetry, Prometheus, Grafana, tracing, or logs, or versioned release migration SQL under `deploy/sql/`. It may prepare reviewed migration artifacts but must not execute them against staging or production; other online deployment assets remain project-specific.
 - Use `gonna-dev` when the user asks to implement Stories, generate go-zero code, modify API/RPC/model/logic/config, fix bugs, add tests, run validation, or prepare implementation reports.
 - Use `gonna-test` when the user asks to design tests, verify Story acceptance criteria, validate implementations, evaluate coverage, run or interpret test/build output, produce test reports, report defects, or decide whether a Story can be completed.
 - Use `gonna-selftest` when the user asks to generate or verify human contract selftest docs from local unpushed changes, prepare local test data, create HTTP/RPC/Kafka/DB/Redis input-output probes, or check push readiness from human acceptance results.
-- Use `gonna-repair` when the user has completed human selftest, recorded `不符合预期` feedback, and wants to iterate repairs through arch intent updates, plan fix Epic/Stories, yolo-submit repair, and selftest document updates.
-- Use `gonna-submit` when the user asks to prepare, review, stage, commit, push, or package verified changes for merge request submission; create commit plans, commit messages, merge request descriptions, or submission reports.
-- Use `gonna-yolo` only when the user explicitly asks for yolo mode, autonomous iteration, or to automatically run planned Epics/Stories through dev, test, and submit loops.
+- Use `gonna-fix` when the user has completed human selftest, recorded `不符合预期` feedback, and wants to iterate fixes through arch intent updates, plan fix Epic/Stories, yolo-commit execution, and selftest document updates.
+- Use `gonna-commit` when the user asks to prepare, review, stage, commit, push, or package verified changes for review; create commit plans, commit messages, merge request descriptions, or commit reports.
+- Use `gonna-yolo` only when the user explicitly asks for yolo mode, autonomous iteration, or to automatically run planned Epics/Stories through dev, test, and commit loops.
 - Treat `.agents/ai-context/` and `.agents/skills/zero-skills/` as references that support the architecture skill.
 - Do not ask the user to invoke `ai-context` or `zero-skills` directly for normal project work.
 - Load the specific go-zero reference files only when the architecture task needs that level of detail.
@@ -64,11 +64,11 @@ It integrates project-level skills for architecture, planning, local Docker Comp
 - Repository facts include `git status`, `git branch -vv`, `git remote -v`, existing files, generated contracts, and current unpushed changes. Do not override these facts with a generic skill template.
 - Skills must not invent branch management policy. Branch naming, upstream mapping, rebase target, push target, and MR/PR target must come from the team's documented workflow, the user's explicit instruction, or observed Git tracking configuration.
 - When team policy is missing or conflicts with observed Git state, stop before commit, push, merge, rebase, or history rewrite and ask for clarification.
-- Keep a single owner for each rule area: `gonna-plan` owns Story status values and flow; `gonna-selftest` owns human contract selftest gates; `gonna-submit` owns staging, commit, push, and Git safety checks; `gonna-yolo` orchestrates these skills and must not duplicate their detailed rules.
+- Keep a single owner for each rule area: `gonna-plan` owns Story status values and flow; `gonna-selftest` owns human contract selftest gates; `gonna-commit` owns staging, commit, push, and Git safety checks; `gonna-yolo` orchestrates these skills and must not duplicate their detailed rules.
 - When a coordinating skill such as `gonna-yolo` calls another skill, the called skill's owned gate is authoritative for that gate.
-- `gonna-yolo` must not replace downstream artifacts. Implementation reports belong to `gonna-dev`; test plans, test reports, and defect reports belong to `gonna-test`; submission reports belong to `gonna-submit`; selftest documents belong to `gonna-selftest`.
+- `gonna-yolo` must not replace downstream artifacts. Implementation reports belong to `gonna-dev`; test plans, test reports, and defect reports belong to `gonna-test`; commit reports belong to `gonna-commit`; selftest documents belong to `gonna-selftest`.
 - `docs/scrum/blocker/` is for yolo orchestration blockers and abnormal stop reports. Do not use one yolo document to summarize or replace all development and testing work.
-- Architecture changes discovered during planning, development, testing, selftest, or repair must be synchronized back into the relevant maintained `docs/design/*_vX.Y.Z.md` document. Do not leave accepted design intent only in temporary notes, implementation reports, test reports, blocker reports, or repair reports.
+- Architecture changes discovered during planning, development, testing, selftest, or fix iteration must be synchronized back into the relevant maintained `docs/design/*_vX.Y.Z.md` document. Do not leave accepted design intent only in temporary notes, implementation reports, test reports, blocker reports, or fix reports.
 
 ## Compatibility Approval Gate
 
@@ -95,10 +95,10 @@ It integrates project-level skills for architecture, planning, local Docker Comp
 
 ## Deploy Workflow
 
-- For local Docker Compose deployment, dependency containers, development microservice containers, database/cache/queue/service discovery setup, go-zero config mapping, observability stack, or deployment health checks, read `gonna-deploy` from `.agents/skills/gonna-deploy/SKILL.md`.
+- For local Docker Compose deployment, dependency containers, development microservice containers, database/cache/queue/service discovery setup, go-zero config mapping, observability stack, deployment health checks, or release migration SQL preparation, read `gonna-deploy` from `.agents/skills/gonna-deploy/SKILL.md`.
 - Prefer using `gonna-arch` deployment/environment contract and observability architecture as the input to `gonna-deploy`.
 - Let `gonna-deploy` materialize deployment files and reports without making architecture technology choices on its own.
-- `gonna-deploy` only provides local Docker Compose deployment in the framework. Online deployment, release workflows, CI/CD, merge gates, and production operations are intentionally outside the generic framework and must be specialized per project/team.
+- `gonna-deploy` provides local Docker Compose deployment and may prepare versioned release migration SQL as reviewed artifacts. Online deployment execution, release orchestration, CI/CD, merge gates, and production operations are intentionally outside the generic framework and must be specialized per project/team.
 
 ## Development Workflow
 
@@ -122,34 +122,34 @@ It integrates project-level skills for architecture, planning, local Docker Comp
 - The assistant should prepare selftest data whenever possible; the user should validate HTTP/RPC/Kafka and other contract behavior, check `符合预期` or `不符合预期` for each required case, and write feedback when behavior differs from intent.
 - Local commit does not require completed selftest.
 - Do not commit generated `docs/scrum/selftest/**` artifacts together with implementation, generated go-zero code, automated tests, or planning fixes. Commit accepted selftest artifacts separately after the user finishes human selftest.
-- Push requires all required selftest cases to be marked `符合预期`; any `不符合预期` feedback blocks push and is routed to `gonna-repair` for coordinated arch, plan, yolo-submit, and selftest updates.
+- Push requires all required selftest cases to be marked `符合预期`; any `不符合预期` feedback blocks push and is routed to `gonna-fix` for coordinated arch, plan, yolo-commit, and selftest updates.
 
-## Repair Workflow
+## Fix Workflow
 
-- For selftest-feedback repair iteration, read `gonna-repair` from `.agents/skills/gonna-repair/SKILL.md`.
-- `gonna-repair` starts only after the user has run human selftest and recorded one or more `不符合预期` cases.
-- `gonna-repair` must coordinate `gonna-arch` for design-intent updates when needed, `gonna-plan` for intent-alignment fix Epic/Stories, `gonna-yolo` in `yolo-submit` mode for repair implementation and automated verification, and `gonna-selftest` for updated selftest documents.
-- `gonna-repair` must not push. It stops after updating selftest and asks the user to run human selftest again.
-- Repeated selftest repair attempts for the same feature should reuse the same intent-alignment fix Epic and append new Stories.
-- Write repair iteration artifacts under `docs/scrum/repair-reports/`, not under `docs/scrum/blocker/` or `docs/scrum/selftest/`.
+- For selftest-feedback fix iteration, read `gonna-fix` from `.agents/skills/gonna-fix/SKILL.md`.
+- `gonna-fix` starts only after the user has run human selftest and recorded one or more `不符合预期` cases.
+- `gonna-fix` must coordinate `gonna-arch` for design-intent updates when needed, `gonna-plan` for intent-alignment fix Epic/Stories, `gonna-yolo` in `yolo-commit` mode for fix implementation and automated verification, and `gonna-selftest` for updated selftest documents.
+- `gonna-fix` must not push. It stops after updating selftest and asks the user to run human selftest again.
+- Repeated selftest fix attempts for the same feature should reuse the same intent-alignment fix Epic and append new Stories.
+- Write fix iteration artifacts under `docs/scrum/fix-reports/`, not under `docs/scrum/blocker/` or `docs/scrum/selftest/`.
 
-## Submission Workflow
+## Commit Workflow
 
-- For commit planning, staging review, commit creation, branch push, merge request descriptions, or submission reports, read `gonna-submit` from `.agents/skills/gonna-submit/SKILL.md`.
-- Prefer using `gonna-dev` implementation reports, `gonna-test` test reports, and `gonna-selftest` push-gate status as input to `gonna-submit`.
-- Keep `gonna-submit` focused on packaging verified changes. Merge gate policy, CI/CD readiness, release workflows, and production operations are not provided by the generic framework and must be specialized per project/team when needed.
-- Submission must follow the team's documented branch management policy and the observed Git upstream mapping. If those are missing or inconsistent, stop before push, rebase, or MR preparation and ask for clarification.
-- Keep implementation commits and selftest evidence commits separate. If selftest feedback causes repeated repair work before push, plan the work under an intent-alignment fix Epic and amend the local unpushed Epic implementation commit when safe.
+- For commit planning, staging review, commit creation, branch push, merge request descriptions, or commit reports, read `gonna-commit` from `.agents/skills/gonna-commit/SKILL.md`.
+- Prefer using `gonna-dev` implementation reports, `gonna-test` test reports, and `gonna-selftest` push-gate status as input to `gonna-commit`.
+- Keep `gonna-commit` focused on packaging verified changes. Merge gate policy, CI/CD readiness, release workflows, and production operations are not provided by the generic framework and must be specialized per project/team when needed.
+- Commit and push work must follow the team's documented branch management policy and the observed Git upstream mapping. If those are missing or inconsistent, stop before push, rebase, or MR preparation and ask for clarification.
+- Keep implementation commits and selftest evidence commits separate. If selftest feedback causes repeated fix work before push, plan the work under an intent-alignment fix Epic and amend the local unpushed Epic implementation commit when safe.
 - Do not push unless the user explicitly asks and required human contract selftests are marked `符合预期`.
 
 ## YOLO Workflow
 
 - For authorized autonomous execution of planned Stories, read `gonna-yolo` from `.agents/skills/gonna-yolo/SKILL.md`.
 - `gonna-yolo` must use existing `docs/scrum/prd/` and `docs/scrum/story/` planning artifacts as the execution source of truth.
-- `gonna-yolo` may drive `gonna-deploy`, `gonna-dev`, `gonna-test`, `gonna-selftest`, and `gonna-submit` within the requested authorization mode.
-- Default authorization mode is `yolo-dev`; committing requires `yolo-submit`, and pushing requires `yolo-push` plus an explicit target remote and branch.
-- `yolo-submit` may create local commits without completed selftest; `yolo-push` must stop until required human selftests are marked `符合预期`.
-- If human selftest reports `不符合预期`, `gonna-yolo` should stop normal progression and hand off to `gonna-repair`.
+- `gonna-yolo` may drive `gonna-deploy`, `gonna-dev`, `gonna-test`, `gonna-selftest`, and `gonna-commit` within the requested authorization mode.
+- Default authorization mode is `yolo-dev`; committing requires `yolo-commit`, and pushing requires `yolo-push` plus an explicit target remote and branch.
+- `yolo-commit` may create local commits without completed selftest; `yolo-push` must stop until required human selftests are marked `符合预期`.
+- If human selftest reports `不符合预期`, `gonna-yolo` should stop normal progression and hand off to `gonna-fix`.
 - `gonna-yolo` must stop on missing acceptance criteria, incomplete dependencies, unresolved architecture/environment decisions, test failure, P0/P1 defects, unrelated worktree changes, secret risk, destructive Git needs, merge needs, or deploy needs.
 - Write only yolo blocker and abnormal-stop artifacts under `docs/scrum/blocker/`, not development or test reports.
 
