@@ -1,13 +1,13 @@
 ---
 name: gonna-deploy
-description: Use this skill when the user asks to create, update, run, or verify local deployment assets or versioned release migration SQL for this ai-native go-zero microservice framework project. It provides local Docker Compose deployment and release-ready database migration asset planning.
-version: 1.1.0
+description: Use this skill when the user asks to create, update, run, or verify local deployment assets, local database state SQL, or versioned online migration SQL for this ai-native go-zero microservice framework project. It maintains deploy/local/sql as the local database target and derives deploy/sql migrations for release handoff.
+version: 1.2.0
 license: MIT
 ---
 
 # Deploy Skill
 
-This skill materializes deployment contracts for `gonna`: Docker Compose files, dependency containers, go-zero microservice containers, local env files, go-zero config mapping, observability wiring, health checks, local deployment runbooks, and versioned database migration assets for release handoff.
+This skill materializes deployment contracts for `gonna`: Docker Compose files, dependency containers, go-zero microservice containers, local env files, go-zero config mapping, observability wiring, health checks, local deployment runbooks, local database state SQL, and versioned online migration assets for release handoff.
 
 The generic `gonna` framework does not provide online deployment execution, production release execution, CI/CD, or DevOps behavior because those rules vary heavily by project and team. It may prepare versioned migration SQL as release artifacts, but it must not execute them against staging or production.
 
@@ -40,9 +40,10 @@ Use this skill for:
 - Producing local deployment runbooks or healthcheck reports
 - Updating local deployment when a feature adds infrastructure dependencies or new microservices
 - Updating local deployment assets when a project-specific online deployment workflow requires local parity inputs
-- Preparing versioned database migration SQL for a reviewed and accepted schema change
-- Organizing release migration assets under `deploy/sql/{engine}/`
-- Verifying migration ordering, dependency checks, and local migration rehearsal instructions
+- Updating the desired local database state under `deploy/local/sql/{engine}/` for an approved schema change
+- Comparing local database state with the versioned online database state to prepare the missing release migration
+- Organizing versioned online migration assets under `deploy/sql/{engine}/`
+- Verifying migration ordering, state comparison, dependency checks, and local migration rehearsal instructions
 
 If the required stack, service list, or local deployment target is unclear, ask `gonna-arch` to produce or update the deployment/environment contract first. Do not choose major infrastructure technologies or online deployment platforms inside this generic skill.
 
@@ -56,8 +57,8 @@ Prefer one of these inputs:
 - `gonna-arch` go-zero scaffold plan
 - `gonna-dev` implementation needs
 - `gonna-test` integration or observability needs
-- Existing `deploy/local/`, `docker-compose*.yaml`, `.env*`, or `etc/*.yaml` files
-- Existing `deploy/sql/` migration files and the database engine in use
+- Existing `deploy/local/`, `deploy/local/sql/`, `docker-compose*.yaml`, `.env*`, or `etc/*.yaml` files
+- Existing `deploy/sql/` online migration files and the database engine in use
 - Existing service directories under `services/`
 
 When input is incomplete, produce a deployment proposal and clearly mark assumptions.
@@ -111,6 +112,7 @@ Create or update:
 - `deploy/local/docker-compose.yaml`
 - `deploy/local/.env.example`
 - `deploy/local/README.md`
+- `deploy/local/sql/{engine}/` for local database initialization state when a SQL database is used
 - Optional observability config files under `deploy/local/observability/`
 - Optional Dockerfiles or service build references for development microservices when the project has not already defined them
 
@@ -119,6 +121,7 @@ Use templates in:
 - `.agents/skills/gonna-deploy/templates/docker_compose_template.yaml`
 - `.agents/skills/gonna-deploy/templates/env_template.md`
 - `.agents/skills/gonna-deploy/templates/observability_config_template.md`
+- `.agents/skills/gonna-deploy/templates/postgres_local_state_template.sql` when initializing PostgreSQL local state
 
 ### 3. Healthcheck and Debug Report
 
@@ -139,44 +142,66 @@ Use:
 
 ### 4. Release Migration Package
 
-Use when an accepted architecture or Story changes a database schema, persistent data shape, index, constraint, seed baseline, or other database state that must be prepared before application rollout.
+Use when the user explicitly asks to prepare an online release and an accepted architecture or Story has changed the desired local database schema, persistent data shape, index, constraint, seed baseline, or other database state.
 
 Create or update:
 
+- `deploy/local/sql/{engine}/` first when the local target state is missing or stale
 - `deploy/sql/{engine}/{NNNNNN}_{action}_{subject}.sql`
-- Local migration runner or Compose mount only when the existing local deployment needs it
+- Local Compose initialization mount for `deploy/local/sql/{engine}/` when the existing local deployment needs it
 - Release migration notes in the relevant implementation, test, or commit artifact when requested
 
 Use:
 
 - `.agents/skills/gonna-deploy/templates/postgres_migration_template.sql` for PostgreSQL migrations
 
-Do not create a migration from an unapproved schema idea. The accepted versioned design document, `.api`/`.proto` contract, Story, or explicit user instruction must define the current-intent data change first.
+Do not create local state SQL or a migration from an unapproved schema idea. The accepted versioned design document, `.api`/`.proto` contract, Story, or explicit user instruction must define the current-intent data change first.
 
-## Release Migration Rules
+## Database State and Release Migration Rules
 
-Treat `deploy/sql/{engine}/` as the release migration source of truth for SQL databases. Use a database-specific subdirectory such as `deploy/sql/postgres/` or `deploy/sql/mysql/`; do not mix database engines in one directory.
+Maintain two repository database views for each SQL engine:
+
+- `deploy/local/sql/{engine}/` is the desired local database state. Its scripts initialize an empty local Docker volume to the schema and baseline data required by current development.
+- `deploy/sql/{engine}/` is the versioned representation of the online database state. Its ordered scripts are the online migrations already released or prepared for the next approved release.
+
+The two roots must have the same database-engine and domain subdirectory structure, for example `deploy/local/sql/postgres/auth/` and `deploy/sql/postgres/auth/`. They do not need identical files: local SQL describes the current target state, while online SQL records incremental transitions. Do not copy a full local schema file into `deploy/sql/` as a substitute for a migration.
+
+When development changes a database schema:
+
+1. `gonna-dev` hands the approved change to `gonna-deploy`.
+2. `gonna-deploy` updates `deploy/local/sql/{engine}/` so a fresh local database reaches the new target state.
+3. Do not create an online migration merely because local development changed the schema.
+
+When the user asks to prepare an online release:
+
+1. Read both `deploy/local/sql/{engine}/` and `deploy/sql/{engine}/`.
+2. Reconstruct the repository online baseline from the ordered `deploy/sql/{engine}/` migrations and the desired target from `deploy/local/sql/{engine}/`, using an engine-native schema dump or introspection command. Do not rely on a text diff alone and do not access a real production database.
+3. Generate only the next incremental `deploy/sql/{engine}/{NNNNNN}_{action}_{subject}.sql` needed to bring the online baseline to the local target.
+4. Apply the generated migration to the reconstructed online baseline in a local or approved test environment and verify that its normalized schema matches the local target state.
 
 Migration file rules:
 
 - Use a six-digit, monotonically increasing sequence and a concise functional name: `000001_init_schema.sql`, `000002_add_vehicle_status.sql`, `000003_drop_legacy_ota_tables.sql`.
-- Derive the next sequence from the highest committed migration in the same engine directory. Do not use Story, Epic, task, sprint, or iteration IDs in migration file names.
+- Derive the next sequence from the highest committed online migration in the same engine directory. Do not use Story, Epic, task, sprint, or iteration IDs in migration file names.
 - A released migration is immutable. Never edit, reorder, rename, or delete an already applied migration; create a new incremental migration instead.
 - Include only the current approved change. Do not add reserved columns, speculative indexes, compatibility tables, dual-write helpers, or migration-only fallbacks without explicit user approval.
 - Use idempotent DDL only when it does not conceal an invalid schema state. When an expected predecessor is required, add an explicit precondition and fail with a clear message instead of silently proceeding.
 - For destructive or data-changing operations, state and verify prerequisites, preserve transaction boundaries when the engine supports them, and abort before destructive DDL when data validation fails.
 - Do not add a rollback migration by default. Prepare one only when the user explicitly requests and approves that rollback contract.
 
-Local parity rules:
+Local state rules:
 
-- Reuse the release migration files for local verification whenever practical. Mount `deploy/sql/{engine}/` read-only into a local migration runner or database container rather than maintaining a divergent copy.
-- If an existing repository intentionally has `deploy/local/sql/`, update it in the same change only when its local runner requires separate bootstrap SQL; document how it stays synchronized with `deploy/sql/{engine}/`.
-- Database image initialization hooks are for a fresh local volume only. Do not represent them as a substitute for applying incremental release migrations to an existing environment.
+- Keep `deploy/local/sql/{engine}/` mounted into the local database image initialization directory, or use an equivalent local initializer, so a fresh local volume reaches the desired development state.
+- Keep local engine and domain subdirectories aligned with `deploy/sql/{engine}/`; create the matching empty directory when one side needs a new domain area.
+- Local SQL must be safe to initialize a fresh local volume. It is not an online migration history and must not contain production credentials, hostnames, or release-only operational steps.
+- Database image initialization hooks run only for a fresh local volume. When verifying a local state change against an existing volume, use an explicit local reset or engine-specific update procedure; do not represent fresh initialization as proof that an online migration will work.
 
 Before handing off a migration package, verify:
 
 - The migration sequence is unique and ordered.
+- The local target and online baseline use matching engine/domain directory structures.
 - The target engine and schema contract are clear.
+- The generated online migration closes the verified difference between the repository online baseline and local target.
 - Precondition, data-validation, and transaction behavior are suitable for the operation.
 - Local rehearsal command or runner is documented when local deployment exists.
 - Application code and generated models/config expect the post-migration schema.
@@ -275,7 +300,7 @@ Inspect existing `etc/*.yaml` files before editing or recommending exact fields.
 
 Local Docker Compose deployment is the default. Do not create Kubernetes, Helm, Terraform, cloud, production, staging, or CI/CD deployment assets by default.
 
-Versioned files under `deploy/sql/{engine}/` are allowed as reviewed release migration artifacts. They are not permission to connect to, execute against, or verify a staging or production database. Remote execution, release ordering, backups, approvals, and rollback operations remain project-specific responsibilities.
+Versioned files under `deploy/sql/{engine}/` are allowed as reviewed release migration artifacts derived from the repository database-state comparison. They are not permission to connect to, execute against, or verify a staging or production database. Remote execution, release ordering, backups, approvals, and rollback operations remain project-specific responsibilities.
 
 Do not add other online deployment assets from this generic skill. When a project needs online deployment, require a project-specific workflow or skill that defines:
 
@@ -387,12 +412,13 @@ When answering without writing files, use this format:
 When local deployment files are ready:
 
 - `gonna-dev` uses them to run and debug services.
+- `gonna-dev` hands every approved database schema change to `gonna-deploy` so `deploy/local/sql/{engine}/` remains the current local target state.
 - `gonna-test` uses them for integration and observability verification.
 - `gonna-commit` may include local deployment changes in the commit scope when requested.
 
 When release migration files are ready:
 
-- `gonna-dev` keeps models, queries, and service logic aligned with the post-migration schema.
+- `gonna-dev` keeps models, queries, and service logic aligned with the local target state and generated post-migration schema.
 - `gonna-test` verifies migration preconditions and post-migration behavior in a local or approved test environment.
 - `gonna-selftest` prepares human-facing database-visible contract checks when applicable.
 - `gonna-commit` includes migration files in the implementation commit unit and records any missing execution evidence.

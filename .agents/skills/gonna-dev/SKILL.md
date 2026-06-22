@@ -1,7 +1,7 @@
 ---
 name: gonna-dev
 description: Use this skill when the user asks to implement a Story, build or modify go-zero services, generate API/RPC/model code with goctl, write business logic, add middleware, wire ServiceContext dependencies, fix bugs, add tests, run validation, prepare commits, or produce implementation reports for this ai-native go-zero microservice framework project.
-version: 1.0.0
+version: 1.1.0
 license: MIT
 ---
 
@@ -21,7 +21,7 @@ Use this skill as the implementation layer:
 - `gonna-plan`: architecture handoff to Epics, Stories, acceptance criteria, and KANBAN
 - `gonna-dev`: Story to go-zero code, tests, validation, and implementation report
 - `gonna-test`: verification plans and independent test evidence
-- `gonna-deploy`: local Docker Compose deployment assets
+- `gonna-deploy`: local Docker Compose deployment assets, local database state SQL, and release migration preparation
 
 ## When to Use
 
@@ -207,6 +207,20 @@ Prefer durable functional names, for example:
 - `migration_runner.go`
 
 Story IDs and Epic IDs may appear in planning documents, implementation reports, commit messages, PR/MR descriptions, and traceability notes, but they must not drive Go source file names, package names, or core function/type names. Before finishing implementation, inspect changed code files and rename any new or modified code artifact whose name is based on a Story/Epic/task/iteration identifier.
+
+## Database Change Handoff
+
+When an approved Story or direct request changes a database table, column, index, constraint, view, seed baseline, or other persistent schema state, hand the change to `gonna-deploy` before relying on the changed schema in application code.
+
+`gonna-deploy` owns the database SQL assets:
+
+- It updates `deploy/local/sql/{engine}/` so a fresh local Docker database reaches the current development target state.
+- It keeps the engine and domain directory structure aligned with `deploy/sql/{engine}/`.
+- Only when the user asks to prepare an online release does it compare the local target with the repository online baseline and generate the missing incremental migration under `deploy/sql/{engine}/`.
+
+Do not create a Story-, task-, or iteration-named SQL file. Do not hand-write an online migration in `deploy/sql/` as part of normal feature development unless the user explicitly asks for release migration preparation.
+
+Record the `gonna-deploy` handoff and affected `deploy/local/sql/{engine}/` paths in the implementation report. If the schema change is not approved in the Story, design document, or current conversation, stop under the compatibility approval gate instead of changing database state.
 
 ## Testing and Validation
 
